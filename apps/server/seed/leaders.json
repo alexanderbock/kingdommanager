@@ -1,0 +1,10 @@
+[
+  { "role": "ruler", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" },
+  { "role": "counselor", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" },
+  { "role": "general", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" },
+  { "role": "emissary", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" },
+  { "role": "magister", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" },
+  { "role": "marshal", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" },
+  { "role": "treasurer", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" },
+  { "role": "viceroy", "holderName": "", "isPC": false, "invested": false, "vacant": true, "activitiesPerTurn": null, "notes": "" }
+]

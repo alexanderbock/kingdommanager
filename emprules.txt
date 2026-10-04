@@ -1,0 +1,407 @@
+window['ppConfig'] = {productName: '26981ed0d57bbad37e728ff58134270c', deleteIsEnforced:  false , sealIsEnforced:  false , heartbeatRate:  0.5 , periodicReportingRateMillis:  60000.0 , disableAllReporting:  false };(function(){'use strict';function k(a){var b=0;return function(){return bVance and Kerenshara's 2e Kingdom Building Rule Changes
+html {
+  overflow: auto;
+}
+body {
+  margin: 0;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+.app-container {
+  height: 100%;
+  /* Height of mobileweb header + 1 px vertical shadow. */
+  margin-top: 57px;
+  overflow: auto;
+}
+.doc {
+  padding: 20px 12px 0 12px;
+  position: relative;
+}
+.doc .doc-content {
+  margin: auto;
+  /* Override the inline style that is set on the .doc-content div, which is used to store layout
+     data for roundtripping. */
+  padding: 24px 0 !important;
+  max-width: 770px !important;
+}
+@import url(https://fonts.googleapis.com/css?family=Google+Sans);.docs-ml-promotion{z-index:1002}.docs-ml-header{z-index:1}.docs-ml-icon{direction:ltr;display:inline-block;text-align:left;overflow:hidden;position:relative;vertical-align:middle}.docs-ml-img:before{content:url(https://ssl.gstatic.com/docs/common/mobileweb_sprite1.png)}.docs-ml-img-container{height:156px;position:absolute;width:36px}.docs-ml-docs-logo-icon{left:0;top:-36px}.docs-ml-sheets-logo-icon{left:0;top:0}.docs-ml-slides-logo-icon{left:0;top:-96px}.docs-ml-arrow-back-icon{left:0;top:-132px}.docs-ml-edit-icon{left:0;top:-72px}@media screen and (-webkit-min-device-pixel-ratio:2){.docs-ml-img{content:url(https://ssl.gstatic.com/docs/common/mobileweb_sprite1.png)}.docs-ml-img-container{height:156px;position:absolute;width:36px}.docs-ml-docs-logo-icon{left:0;top:-36px}.docs-ml-sheets-logo-icon{left:0;top:0}.docs-ml-slides-logo-icon{left:0;top:-96px}.docs-ml-arrow-back-icon{left:0;top:-132px}.docs-ml-edit-icon{left:0;top:-72px}}.docs-ml-header{background:var(--gm3-sys-color-surface-container-low,#f8fafd);border-bottom:1px solid var(--gm3-sys-color-outline-variant,#c4c7c5);box-shadow:0 1px 1px color-mix(in sRGB,var(--gm3-sys-color-shadow,#000) 10%,transparent);box-sizing:border-box;font-family:Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;padding:4px 0;position:fixed;left:0;top:0;width:100%}.docs-ml-header-icon{height:24px;opacity:.6;width:24px}.docs-ml-header-icon-container{padding:12px}.docs-ml-header-item{display:inline-block;vertical-align:middle}.docs-ml-header-drive-link{padding-left:4px}body[dir=rtl] .docs-ml-arrow-back-dir{transform:scaleX(-1)}.docs-ml-header-document-title{box-sizing:border-box;line-height:1.5rem;padding:0 12px;width:60%;width:calc(100% - 104px)}.docs-ml-header-document-title-text{font-size:20px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.docs-ml-header-edit-button{float:right;padding-right:4px}.docs-ml-promotion{background:var(--gm3-sys-color-surface,#fff);bottom:0;box-shadow:0 4px 12px color-mix(in sRGB,var(--gm3-sys-color-shadow,#000) 40%,transparent);font-family:Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;left:0;position:fixed;width:100%}.docs-ml-promotion-off-screen{transform:translateY(100%)}.docs-ml-promotion-shown{transform:translateY(0);transition:transform 333ms cubic-bezier(.4,0,.2,1)}.docs-ml-promotion-dismissed{transform:translateY(100%);box-shadow:none}.docs-ml-promotion-no-horizontal-scroll{overflow-x:hidden}.docs-ml-promotion-header{display:table;padding:24px 24px 0 24px}.docs-ml-promotion-app-icon-container{display:table-cell}.docs-ml-promotion-app-icon{height:36px;width:36px}@media (min-width:600px){.docs-ml-promotion-app-icon{transform:scale(1.33)}}.docs-ml-promotion-text{display:table-cell;padding-left:20px;vertical-align:top}.docs-ml-promotion-text-heading{color:var(--gm3-sys-color-on-surface,#1f1f1f);font-size:1rem;font-weight:700;padding-bottom:7px}.docs-ml-promotion-text-body{color:var(--gm3-sys-color-on-surface,#1f1f1f);font-size:.875rem}.docs-ml-promotion-action-row{float:right;margin-top:6px;padding:8px 24px}.docs-ml-promotion-action-row-desktop{margin-top:6px}.docs-ml-promotion-action-container{display:inline-block;height:48px;margin:6px 4px;vertical-align:middle}.docs-ml-promotion-action-button{display:inline-block;font-size:.875rem;font-weight:500;padding:9px 12px;vertical-align:middle}.docs-ml-promotion-action-button-wrapper:focus{outline-color:var(--gm3-sys-color-outline-variant,#c4c7c5)}.docs-ml-promotion-action-button.docs-ml-promotion-yes-button{background-color:var(--gm3-sys-color-primary,#0b57d0);border-radius:4px;color:var(--gm3-sys-color-on-primary,#fff);border:1px solid transparent}.docs-ml-promotion-action-button.docs-ml-promotion-yes-button:active{background-color:color-mix(in srgb,var(--gm3-sys-color-on-primary,#fff) 10%,var(--gm3-sys-color-primary,#0b57d0))}.docs-ml-promotion-action-button.docs-ml-promotion-no-button{background-color:var(--gm3-sys-color-surface-container-low,#f8fafd);color:var(--gm3-sys-color-on-surface-variant,#444746);border-radius:4px;border:1px solid var(--gm3-sys-color-outline-variant,#c4c7c5)}.docs-ml-promotion-action-button.docs-ml-promotion-no-button:active{background-color:color-mix(in srgb,var(--gm3-sys-color-on-surface,#1f1f1f) 10%,var(--gm3-sys-color-surface-container-low,#f8fafd))}.docs-ml-promotion.desktop{text-align:center}@media (orientation:portrait){.docs-ml-promotion.desktop{padding-top:56px;padding-bottom:80px}}@media (orientation:landscape){.docs-ml-promotion.desktop{padding-top:36px;padding-bottom:56px}}.docs-ml-promotion-heading-desktop{font-family:Google Sans;font-size:18px;font-weight:700;color:var(--gm3-sys-color-on-surface,#1f1f1f);padding-top:18px;padding-bottom:10px;line-height:1.5;max-width:360px;margin:0 auto}@media (orientation:landscape){.docs-ml-promotion-heading-desktop{padding-top:0;max-width:none}}.docs-ml-promotion-text-body-desktop{font-size:.875rem;line-height:1.5;color:var(--gm3-sys-color-on-surface-variant,#444746);padding-bottom:10px}.docs-icon.docs-ml-promotion-desktop-icon{height:40px;width:40px;transform:scale(2.5);transform-origin:top}.docs-icon-ml-promotion-icon-container-desktop{height:100px;width:100px;margin-left:auto;margin-right:auto}@media (orientation:landscape){.docs-icon-ml-promotion-icon-container-desktop{display:inline-block;vertical-align:top}.docs-ml-promotion-description-desktop{display:inline-block;vertical-align:top;text-align:left;padding-left:39px;max-width:645px}}@media (orientation:landscape){.docs-ml-promotion-action-row-desktop{margin-left:-8px}}.docs-ml-promotion-action-row-desktop .docs-ml-promotion-action-container{margin:6px 8px;font-family:Google Sans}.docs-ml-promotion-action-row-desktop .docs-ml-promotion-action-button-wrapper:focus{outline:none}.docs-ml-promotion-action-button.docs-ml-promotion-yes-button.docs-ml-promotion-app-themed{background-image:none;border:1px solid transparent!important;border-radius:4px;box-shadow:none;box-sizing:border-box;font-family:Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;font-weight:500;font-size:.875rem;height:36px;letter-spacing:.00625rem;line-height:1rem;padding:9px 24px 11px;background:var(--gm3-sys-color-primary,#0b57d0);color:var(--gm3-sys-color-on-primary,#fff)}.docs-ml-promotion-action-button.docs-ml-promotion-no-button.docs-ml-promotion-app-themed{background-image:none;border:1px solid transparent!important;border-radius:4px;box-shadow:none;box-sizing:border-box;font-family:Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;font-weight:500;font-size:.875rem;height:36px;letter-spacing:.00625rem;line-height:1rem;padding:9px 24px 11px;background:var(--gm3-sys-color-surface,#fff);border:1px solid var(--gm3-sys-color-outline-variant,#c4c7c5)!important;color:var(--gm3-sys-color-primary,#0b57d0)}.docs-ml-promotion-action-button-wrapper:focus .docs-ml-promotion-action-button.docs-ml-promotion-yes-button.docs-ml-promotion-app-themed{background:var(--gm3-sys-color-primary,#0b57d0);color:var(--gm3-sys-color-on-primary,#fff);background:linear-gradient(rgba(var(--gm3-sys-color-on-primary-rgb,255,255,255),.1),rgba(var(--gm3-sys-color-on-primary-rgb,255,255,255),.1)),var(--gm3-sys-color-primary,#0b57d0);box-shadow:0 1px 3px 1px rgba(var(--gm3-sys-color-primary-rgb,11,87,208),.15)}.docs-ml-promotion-action-button-wrapper:focus .docs-ml-promotion-action-button.docs-ml-promotion-no-button.docs-ml-promotion-app-themed{background-image:none;border:1px solid transparent!important;border-radius:4px;box-shadow:none;box-sizing:border-box;font-family:Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;font-weight:500;font-size:.875rem;height:36px;letter-spacing:.00625rem;line-height:1rem;padding:9px 24px 11px;background:var(--gm3-sys-color-surface,#fff);border:1px solid var(--gm3-sys-color-outline-variant,#c4c7c5)!important;background:linear-gradient(rgba(var(--gm3-sys-color-on-primary-container-rgb,8,66,160),.1),rgba(var(--gm3-sys-color-on-primary-container-rgb,8,66,160),.1)),var(--gm3-sys-color-primary-container,#d3e3fd);border:1px solid var(--gm3-sys-color-primary-container,#d3e3fd)!important}.docsshared-no-download .docsshared-no-select-when-no-download,.docsshared-no-select{-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;-webkit-user-select:none;user-select:none}.docsshared-disable-image-copy canvas,.docsshared-disable-image-copy image,.docsshared-disable-image-copy img{pointer-events:none}window.WIZ_global_data = {"K1cgmc":"%.@.[null,null,null,[3,1,[1791022190,698933000],4],null,18]]","TSDtV":"%.@.[[null,[[45736426,null,null,0.5,null,null,\"AtjTse\"],[45798333,null,false,null,null,null,\"bk3LGf\"],[45759550,null,false,null,null,null,\"ipHXZe\"],[45833707,null,false,null,null,null,\"Y5BYb\"],[45755088,null,false,null,null,null,\"fzPMYc\"],[45796590,null,false,null,null,null,\"rFDJvb\"],[45776074,null,false,null,null,null,\"H0kCgf\"],[45702908,0,null,null,null,null,\"YUmR1e\"],[45794381,null,false,null,null,null,\"mPb5ue\"],[45808609,null,false,null,null,null,\"SY6Rxb\"],[45736423,null,false,null,null,null,\"KdGYpb\"],[45657263,null,false,null,null,null,\"ByEExb\"],[45769604,null,false,null,null,null,\"h14wf\"],[45822231,null,false,null,null,null,\"CwJ3S\"],[45760386,null,false,null,null,null,\"B22Yae\"],[45678214,null,null,null,\"qYGgY5L4A0suK1NZr2K0QusvQmcX\",null,\"VL579e\"],[45791957,null,true,null,null,null,\"yYo5Mc\"],[45644642,null,null,null,\"X-WS exp!\",null,\"rsrxGc\"],[45748088,null,false,null,null,null,\"KLuwTc\"],[45749331,null,true,null,null,null,\"JQs3De\"],[45696305,null,false,null,null,null,\"Uujhbc\"],[45775833,null,true,null,null,null,\"bRlUw\"],[45677009,null,false,null,null,null,\"JkUdKe\"],[45678187,null,false,null,null,null,\"OrvCpd\"],[45831222,null,false,null,null,null,\"CVzrEc\"],[45643359,null,false,null,null,null,\"GcxuKe\"],[45691859,null,false,null,null,null,\"p9TOQ\"],[45717711,null,false,null,null,null,\"lhxHkd\"],[45775398,null,false,null,null,null,\"ejP0Cd\"],[45673686,null,false,null,null,null,\"TVdkuc\"],[45850231,null,null,null,\"\",null,\"y2TLhf\"],[45673687,null,false,null,null,null,\"OQKgkd\"],[45762063,null,true,null,null,null,\"WlmQwb\"],[45743516,null,false,null,null,null,\"C3mEk\"],[45801628,null,false,null,null,null,\"HAOZVe\"],[45724030,null,false,null,null,null,\"V0bNGd\"],[45725105,null,true,null,null,null,\"VQN2ac\"],[45800462,null,false,null,null,null,\"ggsQnc\"],[45844594,null,false,null,null,null,\"HVEeXb\"],[45672211,null,true,null,null,null,\"Wgtd8c\"],[45797816,null,true,null,null,null,\"HLGpcd\"],[45693258,null,null,null,null,null,\"BrCRse\",[\"[[\\\"en\\\",\\\"en-US\\\",\\\"en-GB\\\",\\\"en-CA\\\",\\\"en-AU\\\",\\\"en-IN\\\",\\\"en-IE\\\",\\\"en-NZ\\\",\\\"en-ZA\\\"]]\"]],[45782633,null,false,null,null,null,\"CfqILe\"],[45789952,null,false,null,null,null,\"GY0Vfe\"],[45757913,null,false,null,null,null,\"qmNm7d\"],[45769936,null,false,null,null,null,\"FXtIgb\"],[45800797,null,false,null,null,null,\"oilzpb\"],[45811663,null,false,null,null,null,\"HDt2pc\"],[45668197,null,true,null,null,null,\"pReYPb\"],[45822166,null,null,null,\"Generate the draft based on these details.\",null,\"K2uSgc\"],[45674975,null,false,null,null,null,\"sBUhfc\"],[45810515,null,false,null,null,null,\"ZQkAB\"],[45830368,null,false,null,null,null,\"L0LqSd\"],[45828446,null,false,null,null,null,\"gwwDYd\"],[45706188,null,true,null,null,null,\"OF1zrd\"],[45706819,null,false,null,null,null,\"aPAx2b\"],[45664242,null,false,null,null,null,\"o4hKqd\"],[45700150,null,false,null,null,null,\"RLRykc\"],[45678679,null,true,null,null,null,\"HbebVe\"],[45785527,null,false,null,null,null,\"Vgzmac\"],[45772218,null,false,null,null,null,\"KV2rCe\"],[45818826,null,false,null,null,null,\"j5G1xf\"],[45822533,null,false,null,null,null,\"xXn8Hd\"],[45700770,null,false,null,null,null,\"Mk7a4d\"],[45823999,null,true,null,null,null,\"Ql2ieb\"],[45681147,null,true,null,null,null,\"pgDArb\"],[45658949,null,true,null,null,null,\"NfShlf\"],[45788232,null,false,null,null,null,\"zMXnKc\"],[45807357,null,false,null,null,null,\"IQZOkd\"],[45765896,null,false,null,null,null,\"Gl5aM\"],[45749214,null,null,null,\"\",null,\"HkDBBd\"],[45729467,null,false,null,null,null,\"kKLGLb\"],[45769154,null,false,null,null,null,\"OPleEe\"],[45677526,null,null,null,\"hZeGRZs5p0suK1NZr2K0V3syYPHo\",null,\"KtCfwd\"],[45825198,null,null,null,\"en\",null,\"u0wH3b\"],[45813075,null,false,null,null,null,\"aq7kZe\"],[45762489,null,false,null,null,null,\"cqFBGe\"],[45775102,null,null,null,\"\",null,\"patyy\"],[45672206,null,true,null,null,null,\"qxTK9b\"],[45709238,null,false,null,null,null,\"jQTN0e\"],[45729422,null,false,null,null,null,\"OOSdib\"],[45769440,null,false,null,null,null,\"usHrq\"],[45672527,null,false,null,null,null,\"LIKBre\"],[45654291,null,false,null,null,null,\"rhP5uf\"],[45725182,null,null,null,\"\",null,\"McLXzc\"],[45744297,null,false,null,null,null,\"HAj7Mb\"],[45754280,null,false,null,null,null,\"j636ic\"],[45796009,null,true,null,null,null,\"CUiBhe\"],[45813099,null,false,null,null,null,\"j4o8qe\"],[45744918,null,false,null,null,null,\"f9HMbb\"],[45672213,null,true,null,null,null,\"BfWTle\"],[45829940,null,true,null,null,null,\"XNW1dd\"],[45848876,null,false,null,null,null,\"ew0wUe\"],[45801776,null,false,null,null,null,\"p9rqpc\"],[45730792,null,false,null,null,null,\"m0Fg3c\"],[45830404,null,true,null,null,null,\"Cb1wM\"],[45769023,null,false,null,null,null,\"z66fFe\"],[45690176,null,false,null,null,null,\"qF6xVc\"],[45686663,null,true,null,null,null,\"KGh4Cc\"],[45697234,null,false,null,null,null,\"cUoIXb\"],[45748868,null,false,null,null,null,\"HraNse\"],[45848862,null,false,null,null,null,\"RsejLe\"],[45751187,null,false,null,null,null,\"OuEQae\"],[45718842,null,false,null,null,null,\"Ywwwdb\"],[45811075,null,false,null,null,null,\"hdbTPe\"],[45846410,null,false,null,null,null,\"SIOvH\"],[45806833,null,false,null,null,null,\"zKilSe\"],[45813683,null,false,null,null,null,\"OJ6fQc\"],[45833738,null,false,null,null,null,\"pqXscb\"],[45752852,null,false,null,null,null,\"Pdqiud\"],[45823523,null,true,null,null,null,\"L8Gquf\"],[45752686,null,false,null,null,null,\"mi0YMb\"],[45729830,null,false,null,null,null,\"DCV6If\"],[45712870,null,false,null,null,null,\"J04FPb\"],[45762802,null,false,null,null,null,\"zcN1ic\"],[45848042,null,false,null,null,null,\"eJEtae\"],[45769980,null,true,null,null,null,\"GcH8If\"],[45658679,null,true,null,null,null,\"qdTkee\"],[45720792,null,false,null,null,null,\"NFUw0c\"],[45771617,null,false,null,null,null,\"Blimsc\"],[45825422,null,true,null,null,null,\"Jy7koe\"],[45783804,null,false,null,null,null,\"BBtrjb\"],[45724459,null,null,null,\"rHrAD6ykh0suK1NZr2K0TB6fPtWB\",null,\"CE91jd\"],[45779204,null,false,null,null,null,\"yC3ALe\"],[45844828,null,false,null,null,null,\"Bw2tvf\"],[45812171,null,false,null,null,null,\"eKX1Fe\"],[45776409,null,false,null,null,null,\"G5gJw\"],[45660690,null,false,null,null,null,\"ovKHsb\"],[45816614,null,null,null,null,null,\"y9Fone\",[\"[[\\\"en\\\"]]\"]],[45792493,null,false,null,null,null,\"fYmo4c\"],[45808544,null,false,null,null,null,\"EteYEb\"],[45769474,null,false,null,null,null,\"u2dq9e\"],[45821527,null,false,null,null,null,\"Rqnnh\"],[45691858,null,false,null,null,null,\"rWzu0d\"],[45751415,null,false,null,null,null,\"fJBcbd\"],[45699017,null,null,null,\"rffTE8sLk0suK1NZr2K0RtLUVxzE\",null,\"tWGWgc\"],[45728785,null,false,null,null,null,\"UPAJB\"],[45826514,null,false,null,null,null,\"l7Tcz\"],[45826219,null,false,null,null,null,\"fW98r\"],[45788422,null,false,null,null,null,\"biLVcb\"],[45686664,null,true,null,null,null,\"P0fSX\"],[45692064,null,false,null,null,null,\"wZ64Sb\"],[45773613,null,true,null,null,null,\"tDmOYe\"],[45826856,null,false,null,null,null,\"uW29Ab\"],[45711477,null,false,null,null,null,\"Rnlerd\"],[45831192,null,false,null,null,null,\"oqUgTb\"],[45676996,null,false,null,null,null,\"KFVYtf\"],[45799901,null,false,null,null,null,\"hxZa7b\"],[45802547,null,false,null,null,null,\"MSDC3c\"],[45699204,null,true,null,null,null,\"XWRwod\"],[45776401,null,false,null,null,null,\"VdeTBe\"],[45769147,null,false,null,null,null,\"DFM4ae\"],[45729696,null,null,1,null,null,\"UeMd4b\"],[45736179,null,false,null,null,null,\"LIe8ub\"],[45803550,null,false,null,null,null,\"G2853c\"],[45677729,null,false,null,null,null,\"wzZQPd\"],[45804726,null,false,null,null,null,\"jtTPA\"],[45826864,null,false,null,null,null,\"R8ENRd\"],[45742079,null,false,null,null,null,\"awHj9\"],[45676754,null,false,null,null,null,\"YwbU8\"],[45678215,null,null,null,\"6PSdkFYUx0suK1NZr2K0SmPPgaGe\",null,\"JR8rtc\"],[45767159,0,null,null,null,null,\"yDErgc\"],[45700504,null,false,null,null,null,\"u6ksOd\"],[45783852,1,null,null,null,null,\"Ygmeod\"],[45672085,null,true,null,null,null,\"FJbUAf\"],[45703717,null,false,null,null,null,\"ZfxSFe\"],[45762425,null,false,null,null,null,\"l5Ziqe\"],[45737769,null,false,null,null,null,\"C4gACf\"],[45774501,null,false,null,null,null,\"flYjKf\"],[45766771,null,false,null,null,null,\"aCW0Qd\"],[45729695,null,false,null,null,null,\"tYEdHb\"],[45736482,null,false,null,null,null,\"DAnsv\"],[45812345,null,false,null,null,null,\"pArP2c\"],[45795492,null,false,null,null,null,\"WLRPhf\"],[45798772,null,true,null,null,null,\"Wa5bQc\"],[45747879,null,false,null,null,null,\"kZsK5\"],[45840174,null,false,null,null,null,\"lvSxBd\"],[45772691,null,false,null,null,null,\"A6J3Xb\"],[45834344,null,false,null,null,null,\"iOLQ9b\"],[45746685,null,true,null,null,null,\"Q3KBSd\"],[45794745,null,false,null,null,null,\"tVjQye\"],[45737207,null,false,null,null,null,\"Kw5UUd\"],[45757707,null,false,null,null,null,\"yZYBLb\"],[45752219,null,false,null,null,null,\"QIG0Je\"],[45780893,null,false,null,null,null,\"sRGemf\"],[45736425,null,null,null,\"Z7vabQzZ0Bn3gbW4AcZC0TfvmSab\",null,\"fFl01\"],[45772141,null,true,null,null,null,\"jXHT1d\"],[45772275,null,false,null,null,null,\"oqsMtf\"],[45683718,null,true,null,null,null,\"zQUS6d\"],[45787122,null,false,null,null,null,\"gVnA9d\"],[45788942,null,false,null,null,null,\"Nm6g8e\"],[45751476,null,false,null,null,null,\"gwKlXb\"],[45746766,null,true,null,null,null,\"a6khDf\"],[45854100,null,false,null,null,null,\"L5kTme\"],[45657471,null,null,null,null,null,\"kMR5pc\",[\"[[\\\"es\\\",\\\"pt\\\",\\\"ja\\\",\\\"ko\\\",\\\"fr\\\",\\\"it\\\",\\\"de\\\",\\\"zh-CN\\\",\\\"nl\\\",\\\"tr\\\",\\\"cs\\\",\\\"sv\\\",\\\"da\\\",\\\"no\\\",\\\"pl\\\",\\\"vi\\\",\\\"th\\\",\\\"fi\\\",\\\"uk\\\",\\\"ru\\\",\\\"hu\\\",\\\"ro\\\",\\\"ms\\\",\\\"el\\\",\\\"ca\\\",\\\"ar\\\",\\\"iw\\\",\\\"he\\\"]]\"]],[45777878,null,false,null,null,null,\"Se84Kc\"],[45658716,null,true,null,null,null,\"Fa3cob\"],[45685754,null,true,null,null,null,\"OyPt5\"],[45666088,null,false,null,null,null,\"MgfT5\"],[45771289,null,false,null,null,null,\"s7fdUc\"],[45826972,null,false,null,null,null,\"kS4SR\"],[45677456,null,false,null,null,null,\"pyUPD\"],[45658644,null,true,null,null,null,\"ZdwoD\"],[45812933,null,false,null,null,null,\"UK5Jkd\"],[45696263,null,null,null,null,null,\"W12Bse\",[\"[[\\\"feature named `pageObserver` was not found\\\",\\\"feature named `hover` was not found\\\"]]\"]],[45653615,null,null,null,null,null,\"lwF00d\",[\"[[\\\"es\\\",\\\"pt\\\",\\\"ja\\\",\\\"ko\\\",\\\"fr\\\",\\\"it\\\",\\\"de\\\",\\\"zh\\\",\\\"nl\\\",\\\"iw\\\",\\\"he\\\",\\\"tr\\\",\\\"cs\\\",\\\"sv\\\",\\\"da\\\",\\\"no\\\",\\\"pl\\\",\\\"vi\\\",\\\"th\\\",\\\"fi\\\",\\\"uk\\\",\\\"ar\\\",\\\"ru\\\",\\\"hu\\\",\\\"ro\\\",\\\"ms\\\",\\\"el\\\",\\\"ca\\\",\\\"id\\\",\\\"in\\\"]]\"]],[45689771,null,true,null,null,null,\"dkdoVc\"],[45811127,null,false,null,null,null,\"J6h2ze\"],[45716368,null,false,null,null,null,\"Rd9FMb\"],[45834803,null,false,null,null,null,\"ubvAHf\"],[45820644,null,false,null,null,null,\"J2lTmb\"],[45743085,null,true,null,null,null,\"Ph5VH\"],[45795480,null,true,null,null,null,\"UDqFgb\"],[45647060,null,true,null,null,null,\"uYjPWb\"],[45736698,null,false,null,null,null,\"nhgo9c\"],[45810643,null,false,null,null,null,\"qH1kDb\"],[45686666,null,true,null,null,null,\"dZ9mjb\"],[45696552,null,false,null,null,null,\"f1ZShc\"],[45777794,null,false,null,null,null,\"E1AmL\"],[45773680,null,false,null,null,null,\"rgqUee\"],[45820148,null,false,null,null,null,\"RySIqb\"],[45765567,null,false,null,null,null,\"Gu5Dg\"],[45805719,null,false,null,null,null,\"ZZrh9e\"],[45681910,null,true,null,null,null,\"OKXfNb\"],[45662509,null,true,null,null,null,\"fLCtnf\"],[45842356,null,false,null,null,null,\"CAStjc\"],[45744490,null,false,null,null,null,\"luHWB\"],[45699018,null,null,null,\"hoiy8M2zL0suK1NZr2K0T7URFV3w\",null,\"evsAs\"],[45677726,null,false,null,null,null,\"C5oZKe\"],[45727616,null,true,null,null,null,\"qNQRAf\"],[45727273,null,false,null,null,null,\"dMkROb\"],[45843815,null,false,null,null,null,\"JCaewf\"],[45744236,null,false,null,null,null,\"Rnque\"],[45747674,null,false,null,null,null,\"uwvdNc\"],[45833494,null,false,null,null,null,\"FJbXjf\"],[45778211,null,false,null,null,null,\"W7jxNc\"],[45676183,null,false,null,null,null,\"EpABPb\"],[45833132,null,false,null,null,null,\"zROeLc\"],[45807852,null,false,null,null,null,\"O7AOQd\"],[45831194,null,false,null,null,null,\"Y12ffb\"],[45699426,null,false,null,null,null,\"qWUOSd\"],[45679175,null,false,null,null,null,\"OETeme\"],[45747909,null,false,null,null,null,\"uTkAWb\"],[45822250,null,false,null,null,null,\"mtSDUb\"],[45672203,null,true,null,null,null,\"jDBBvd\"],[45672066,null,true,null,null,null,\"E1A5lb\"],[45751947,null,false,null,null,null,\"sT6Vl\"],[45725181,null,null,null,\"\",null,\"QOhO3d\"],[45828448,null,false,null,null,null,\"eXA28b\"],[45670693,null,false,null,null,null,\"V7Wemb\"],[45730498,null,false,null,null,null,\"ZycXJf\"],[45674760,null,null,null,\"Q2udpf42g0suK1NZr2K0SS4sTYE7\",null,\"E55iCf\"],[45775584,0,null,null,null,null,\"bjSjmf\"],[45712967,null,false,null,null,null,\"rZW8ld\"],[45681145,null,true,null,null,null,\"hV6kcd\"],[45828444,null,false,null,null,null,\"H2Gcgc\"],[45678265,null,false,null,null,null,\"P7qpdc\"],[45801475,null,false,null,null,null,\"f7P4A\"],[45729447,null,false,null,null,null,\"hjIR6e\"],[45768846,null,false,null,null,null,\"rwPWxf\"],[45754885,null,true,null,null,null,\"rKnVYd\"],[45752217,null,false,null,null,null,\"N9LDI\"],[45808613,null,false,null,null,null,\"Ln6bt\"],[45686665,null,true,null,null,null,\"xGJelc\"],[45723911,null,false,null,null,null,\"e77Z7d\"],[45824069,null,false,null,null,null,\"Ufe4Y\"],[45770955,null,true,null,null,null,\"GYvfVc\"],[45815724,null,false,null,null,null,\"Uj8fhe\"],[45816821,null,false,null,null,null,\"mvTBld\"],[45827919,null,false,null,null,null,\"hE5Ssf\"],[45805063,null,false,null,null,null,\"Oc8xre\"],[45834117,null,false,null,null,null,\"SdbbEd\"],[45851607,null,false,null,null,null,\"PWeWi\"],[45715074,null,true,null,null,null,\"xxxPgb\"],[45834630,null,false,null,null,null,\"stSgvb\"],[45776812,null,true,null,null,null,\"SX5Atc\"],[45677445,null,true,null,null,null,\"rPYk8\"],[45841783,null,false,null,null,null,\"ACK6Wd\"],[45805064,null,false,null,null,null,\"c02c9e\"],[45722047,null,null,null,null,null,\"D6k5oe\",[\"[[\\\"af\\\",\\\"am\\\",\\\"ar\\\",\\\"ar-EG\\\",\\\"ar-001\\\",\\\"az\\\",\\\"be\\\",\\\"bg\\\",\\\"bn\\\",\\\"ca\\\",\\\"ceb\\\",\\\"cs\\\",\\\"da\\\",\\\"de\\\",\\\"el\\\",\\\"en\\\",\\\"es\\\",\\\"es-419\\\",\\\"es-ES\\\",\\\"es-MX\\\",\\\"es-US\\\",\\\"et\\\",\\\"eu\\\",\\\"fa\\\",\\\"fi\\\",\\\"fil\\\",\\\"fr\\\",\\\"fr-FR\\\",\\\"fr-CA\\\",\\\"gl\\\",\\\"gu\\\",\\\"hi\\\",\\\"hr\\\",\\\"ht\\\",\\\"hu\\\",\\\"hy\\\",\\\"id\\\",\\\"is\\\",\\\"it\\\",\\\"iw\\\",\\\"ja\\\",\\\"jv\\\",\\\"ka\\\",\\\"kn\\\",\\\"ko\\\",\\\"kok\\\",\\\"la\\\",\\\"lt\\\",\\\"lv\\\",\\\"mai\\\",\\\"mk\\\",\\\"ml\\\",\\\"mr\\\",\\\"ms\\\",\\\"my\\\",\\\"ne\\\",\\\"nl\\\",\\\"no\\\",\\\"nb-NO\\\",\\\"nn-NO\\\",\\\"or\\\",\\\"pa\\\",\\\"pl\\\",\\\"ps\\\",\\\"pt\\\",\\\"pt-BR\\\",\\\"pt-PT\\\",\\\"ro\\\",\\\"ru\\\",\\\"sd\\\",\\\"si\\\",\\\"sk\\\",\\\"sl\\\",\\\"sq\\\",\\\"sr\\\",\\\"sv\\\",\\\"sw\\\",\\\"ta\\\",\\\"te\\\",\\\"th\\\",\\\"tr\\\",\\\"uk\\\",\\\"ur\\\",\\\"vi\\\",\\\"zh\\\",\\\"zh-Hans-CN\\\",\\\"zh-Hant-TW\\\",\\\"zh-CN\\\",\\\"zh-TW\\\",\\\"zh-Hans\\\",\\\"zh-Hant\\\",\\\"nl-NL\\\"]]\"]],[45803148,null,true,null,null,null,\"xwAAZc\"],[45748403,null,false,null,null,null,\"XYCTRc\"],[45816397,null,false,null,null,null,\"ZrB7zb\"],[45699702,null,false,null,null,null,\"Xo3sI\"],[45852411,null,false,null,null,null,\"pwqVNc\"],[45710394,null,false,null,null,null,\"ZsDmSd\"],[45789804,null,false,null,null,null,\"ymRI8\"],[45836775,null,false,null,null,null,\"T6iBid\"],[45812735,null,false,null,null,null,\"Yk2s0e\"],[45823385,null,false,null,null,null,\"Bj7Brf\"],[45760024,null,false,null,null,null,\"iKoeab\"],[45774956,null,false,null,null,null,\"rhB3ee\"],[45721408,null,false,null,null,null,\"smbAqe\"],[45778396,null,false,null,null,null,\"iIQBF\"],[45739155,null,false,null,null,null,\"Ljfylf\"],[45855123,null,false,null,null,null,\"Kl6LDd\"],[45812940,null,false,null,null,null,\"O22Sge\"],[45728555,null,null,null,\"\",null,\"ptUmFe\"],[45850488,null,false,null,null,null,\"Bdtaae\"],[45653421,null,true,null,null,null,\"K2C7od\"],[45644639,null,true,null,null,null,\"GoJCRc\"],[45672202,null,true,null,null,null,\"CyvTSb\"],[45726382,null,true,null,null,null,\"QUY3\"],[45724458,null,false,null,null,null,\"MRpQbd\"],[45621619,null,false,null,null,null,\"PfkIr\"],[45773994,null,false,null,null,null,\"dADOHe\"],[45850212,null,false,null,null,null,\"X83Zfd\"],[45826806,null,true,null,null,null,\"VOiqz\"],[45735186,null,false,null,null,null,\"SIvvz\"],[45791678,null,false,null,null,null,\"AX1Zl\"],[45822286,null,null,null,\"The draft looks good and covers everything. Finalize it.\",null,\"pwGLae\"],[45771189,null,true,null,null,null,\"N8Zn3e\"],[45802962,null,true,null,null,null,\"jVyASe\"],[45810797,null,false,null,null,null,\"mwxF4b\"],[45758631,null,false,null,null,null,\"kGhHOe\"],[45818531,null,false,null,null,null,\"UmzKbc\"],[45724460,null,null,0.5,null,null,\"U6t0Ob\"],[45730506,null,false,null,null,null,\"qhuWUc\"],[45752216,null,false,null,null,null,\"EJg6N\"],[45841806,null,false,null,null,null,\"pIr1z\"],[45725770,null,false,null,null,null,\"yRc2q\"],[45708298,null,false,null,null,null,\"T4IN0c\"],[45812992,null,false,null,null,null,\"OYyUS\"],[45746067,null,true,null,null,null,\"wK00sd\"],[45806359,null,false,null,null,null,\"Hc7m4c\"],[45770251,null,false,null,null,null,\"ugtdaf\"],[45821188,null,false,null,null,null,\"kIO20c\"],[45840724,null,false,null,null,null,\"ABCZV\"],[45788792,null,false,null,null,null,\"NYGVYd\"],[45804556,null,false,null,null,null,\"uGfKYc\"],[45812932,null,true,null,null,null,\"cEao8\"],[45814566,null,true,null,null,null,\"UtIL3e\"],[45785103,null,false,null,null,null,\"mywtHd\"],[45703610,null,false,null,null,null,\"UtcGCc\"],[45753332,null,false,null,null,null,\"s7RHUb\"],[45767102,null,true,null,null,null,\"SFyMwf\"],[45848729,null,false,null,null,null,\"E2Ccve\"],[45770188,null,false,null,null,null,\"JMBoZe\"],[45840827,null,false,null,null,null,\"xnqlEf\"],[45725154,null,false,null,null,null,\"WbzTGf\"],[45842713,null,false,null,null,null,\"GrekHd\"],[45801648,null,false,null,null,null,\"mxFwrf\"],[45800085,null,false,null,null,null,\"Wi7jZ\"],[45825060,null,false,null,null,null,\"sO2mXc\"],[45837894,null,false,null,null,null,\"RyJQZ\"],[45840817,null,false,null,null,null,\"bCNzwb\"],[45641838,null,false,null,null,null,\"fLPxhf\"],[45773554,null,false,null,null,null,\"twqoIf\"],[45826905,null,false,null,null,null,\"O4cAwc\"],[45723283,null,false,null,null,null,\"SoWiLc\"],[45723104,null,true,null,null,null,\"EkiEee\"],[45747769,null,true,null,null,null,\"pkwVub\"],[45841028,null,false,null,null,null,\"fy3l5b\"],[45725720,null,false,null,null,null,\"ZBeYxd\"],[45820980,null,false,null,null,null,\"SCHNtf\"],[45755277,null,false,null,null,null,\"kHLD6e\"],[45798803,null,true,null,null,null,\"cLNSBb\"],[45686662,null,true,null,null,null,\"go03Eb\"],[45746367,null,false,null,null,null,\"GFsSZ\"],[45773549,null,false,null,null,null,\"Xo7q9d\"],[45770837,null,false,null,null,null,\"FJ461c\"],[45677461,null,null,null,null,null,\"qb66hd\",[\"[[\\\"fr\\\",\\\"es\\\",\\\"pt\\\",\\\"it\\\",\\\"de\\\",\\\"ja\\\",\\\"ko\\\"]]\"]],[45819588,9,null,null,null,null,\"wbzdub\"],[45836552,null,false,null,null,null,\"Yuf3O\"],[45746380,null,false,null,null,null,\"fkqxGb\"],[45793906,null,false,null,null,null,\"yLhhJb\"],[45725110,null,true,null,null,null,\"ElheSd\"],[45679439,null,false,null,null,null,\"DNzQwe\"],[45765410,null,true,null,null,null,\"CaEMO\"],[45780927,null,false,null,null,null,\"rThdVb\"],[45660287,null,false,null,null,null,\"nIuPDe\"],[45676780,null,false,null,null,null,\"GSMsUe\"],[45797188,null,false,null,null,null,\"bHmAwd\"],[45674758,null,false,null,null,null,\"ZHtfUc\"],[45672205,null,true,null,null,null,\"E7dKkc\"],[45841706,null,false,null,null,null,\"lcpL7c\"],[45806947,300,null,null,null,null,\"b0rpgd\"],[45752655,null,false,null,null,null,\"NsOFEe\"],[45730222,null,null,30000,null,null,\"qnlClb\"],[45796246,null,false,null,null,null,\"N0Rqe\"],[45818026,null,false,null,null,null,\"TvCGU\"],[45644640,42,null,null,null,null,\"xbuGR\"],[45846560,null,false,null,null,null,\"y5ZVse\"],[45829997,null,false,null,null,null,\"qcSLCe\"],[45752218,null,false,null,null,null,\"Gktqke\"],[45801316,null,false,null,null,null,\"EOyv4b\"],[45715626,null,false,null,null,null,\"ERq70c\"],[45831046,null,false,null,null,null,\"RaITsd\"],[45796251,null,false,null,null,null,\"Fdalgf\"],[45770249,null,false,null,null,null,\"cUUSDf\"],[45726852,null,false,null,null,null,\"qgjRgd\"],[45678217,null,null,0.01,null,null,\"RL6SLc\"],[45742759,null,true,null,null,null,\"hc5Fic\"],[45838812,null,false,null,null,null,\"Cwbjuf\"],[45750887,null,false,null,null,null,\"WTvwUd\"],[45765314,null,false,null,null,null,\"jNI7Hb\"],[45684108,null,false,null,null,null,\"IHwhDb\"],[45674285,null,false,null,null,null,\"zRoGXc\"],[45775440,null,false,null,null,null,\"LBBJ2e\"],[45746176,null,false,null,null,null,\"atfOHe\"],[45750646,null,false,null,null,null,\"ZsLlE\"],[45779046,null,false,null,null,null,\"wYy78\"],[45674761,null,null,0.5,null,null,\"GpQcOb\"],[45804808,null,false,null,null,null,\"hV66bc\"],[45684730,null,true,null,null,null,\"aW7Ggd\"],[45677444,null,true,null,null,null,\"WYEV9b\"],[45661802,null,false,null,null,null,\"I09lfd\"],[45709342,null,false,null,null,null,\"Ab7Nmd\"],[45814269,null,false,null,null,null,\"USiRue\"],[45847148,null,false,null,null,null,\"DNNTfc\"],[45778160,null,false,null,null,null,\"oWcm2d\"],[45639541,null,false,null,null,null,\"LHinid\"],[45736727,null,false,null,null,null,\"JJHfwf\"],[45768825,null,false,null,null,null,\"pf4r3c\"],[45748983,null,true,null,null,null,\"s0d1Kd\"],[45719766,null,false,null,null,null,\"A3eSQd\"],[45696085,null,false,null,null,null,\"g3Gc7d\"],[45707719,null,false,null,null,null,\"GtbvFd\"],[45793966,null,false,null,null,null,\"ev0hBf\"],[45682655,null,false,null,null,null,\"riQMFe\"],[45762174,null,false,null,null,null,\"eUI0gb\"],[45785853,null,false,null,null,null,\"pRgIoc\"],[45798771,null,true,null,null,null,\"qgvf6d\"],[45811102,null,false,null,null,null,\"HedPKb\"],[45820748,null,false,null,null,null,\"ZyMUec\"],[45686667,null,true,null,null,null,\"ek81nf\"],[45658731,null,true,null,null,null,\"zMe6ub\"],[45756433,null,false,null,null,null,\"Zb8rLd\"],[45847995,null,null,null,\"\",null,\"BlD9Vb\"],[45661086,null,false,null,null,null,\"wfVdS\"],[45774508,null,false,null,null,null,\"h5ZSZb\"],[45768710,null,false,null,null,null,\"a6GDme\"],[45658291,null,true,null,null,null,\"OSuRGd\"],[45779090,null,false,null,null,null,\"hCbIKb\"],[45843083,null,false,null,null,null,\"XU2MQ\"],[45681790,null,true,null,null,null,\"uPCxtc\"],[45644641,null,null,3.14159,null,null,\"FX1FL\"],[45747887,null,true,null,null,null,\"BvfvHb\"],[45806844,null,false,null,null,null,\"kNAKY\"],[45694562,null,false,null,null,null,\"D50qNc\"],[45838425,null,true,null,null,null,\"iotb5\"],[45850008,null,false,null,null,null,\"V0vtgb\"],[45674759,null,null,null,\"nHWnsqMqi0suK1NZr2K0QMJZfKqX\",null,\"xH7haf\"],[45825209,null,null,null,\"1.0\",null,\"gTDjxd\"]],\"CAMSqgIdoAXV+c4oA5y+bwP+BgOsmgIDtPsNA74GA/imAQOE4wQD+bAjA9ejBQPrBgPc5gUDyIUEA+i0BgOcBAOJZwOGAwPILwOEBQOR1AaAEgP+NwPZjgUDpIAOA56LBQPMBgNOA3sDgwYDdwOH0wUDZQOrBQOkBgO7rhUDTgO82UzZ5gUDiwYDXQOUBQP7sQ0D0IaWAgPQtg4DRAOFjQ8D8rYBA53fHQPmxx4Dj68GA9AiA+e7BAPeIAPqiQORvxkD5t0O+KkDA5buCwOzkgADjsoOA5LhBAPopA+E5AAD0OEDnYQdA/y8CQOAigADltYE1fIFA6uRBQNVA+4LArOrDg61NQP4pQYDyfoXA5niBAPfpxPGzwUD6LkEqq8KA7ueBg/BCwPu0g36yBUD\"]]]","gnD3ee":"%.@.null,null,null,\"https://drive-qa.corp.google.com/viewer/main\"]","nQyAE":{}};_docs_flag_initialData={"docs-daflia":true,"docs-cclt":56,"docs-mwid":true,"docs-smheo":false,"info_params":{"includes_info_params":true},"docs-ecci":true,"ilcm":{"eui":"ADFN-cutwtlPdkrI-Af89tq3i-X-jV81_LnCAyAgINjJ0YMvALtavUnfTBtN0ZdcvgHkJU9g4Qm6","je":1,"sstu":1791052019532287,"si":"CICEmNu8npcDFRwfqQEdUbwFhQ","gsc":0,"ei":[5703839,5704571,5704621,5704883,5705891,5706270,5707047,5707075,5707204,5708365,5708566,5709476,5710587,5713195,5713554,5714310,5715711,5715791,5717567,5723473,5724880,5724896,5725855,5727701,5729076,5729092,5734616,5734632,5737784,5737800,5742636,5742652,5743771,5743787,5746708,5746724,5753665,5753681,5754922,5754938,5758658,5758674,5760151,5760167,5760454,5760470,5763814,5763830,5781974,5781990,5787796,5792429,5799435,5799443,5799571,5799579,5799592,5799600,5799644,5799652,5799728,5799736,5799875,5799883,5799906,5799914,13702623,48966234,48966242,49398661,49398669,49472103,49472111,49491737,49491745,49498973,49498981,49623441,49623449,49629214,49629222,49644055,49644063,49661340,49661348,49769417,49769425,49822841,49822849,49833562,49833570,49842875,49842883,49894860,49894868,49904439,49904447,49924626,49924634,49926153,49926161,49943099,49943107,49971993,49972001,49974154,49974162,49979538,49979546,50223794,50223802,50266102,50266110,50273468,50273476,50293588,50293596,50297136,50297144,50389210,50389218,50438805,50439240,50439248,50513094,50538784,50538792,50550111,50550119,50561463,50561471,50562741,50562752,50578543,50578551,50587122,50587130,50596469,50602181,50602189,70971116,70971124,70973202,70973210,71061468,71079958,71079966,71085281,71085289,71120928,71120936,71145354,71145365,71200383,71200391,71289801,71289809,71291305,71291313,71316507,71316515,71330194,71330202,71331358,71331366,71376156,71376164,71387387,71387398,71387809,71387817,71406857,71406865,71451142,71451150,71465967,71505700,71505708,71520490,71520498,71528637,71528645,71530223,71530231,71544794,71544802,71546405,71558484,71558492,71608300,71608308,71628337,71628345,71628357,71628365,71628377,71628385,71628457,71628465,71628517,71628525,71638483,71638491,71641603,71641619,71657940,71657948,71659933,71659941,71675235,71679620,71679628,71681950,71689900,71689908,71710060,71710068,71710693,71710709,71825483,71825491,71832992,71833032,71854107,71854123,71854940,71854948,71897947,71897955,71899323,71899334,71960420,71960428,94326699,94327571,94327579,94353348,94353356,94386894,94394912,94394920,94409697,94434317,94434325,94460799,94460815,94461479,94629737,94629745,94640319,94640327,94661722,94661730,94692338,94692346,94729386,94729394,94733477,94733485,94813624,94813635,94871310,94871318,94904209,94919072,94919080,94940334,95087166,95087174,95093652,95093668,95099833,95099841,95104414,95104425,95111885,95111893,95112733,95112741,95113216,95113224,95131173,95131181,95260593,95261532,95261548,95299606,95299614,95309227,95309235,95314722,95314730,99251823,99251831,99257767,99257775,99291459,99338860,99338868,99342838,99342846,99343448,99343456,99368732,99368740,99393819,99400262,99400270,99402231,99402239,99440933,99440941,99457586,99457594,99457827,99457835,99778386,99778391,100640000,101448020,101448275,101448280,101478056,101478064,101489651,101489656,101489906,101489911,101492831,101492839,101540517,101540525,101561672,101561680,101562346,101562354,101575587,101575592,101631231,101631239,101632054,101632070,101672701,101687057,101687065,101718603,101739377,101755356,101755361,101755547,101755552,101781895,101781911,101788143,101788151,101793871,101823263,101823271,101847134,101858208,101858213,101860627,101860635,101867803,101867811,101868111,101868133,101887634,101887642,101889011,101896291,101896379,101917205,101917213,101919498,101919506,101920169,101920174,101922599,101922607,101922980,101922988,101933591,101933599,101962010,101962022,101962589,102013387,102013395,102030502,102030510,102059460,102059468,102070596,102070604,102070890,102070898,102083186,102083194,102146707,102146715,102161225,102161233,102161587,102161595,102178362,102178370,102198442,102198450,102201965,102205353,102205361,102205628,102205636,102208252,102208260,102236046,102236054,102244469,102244477,102280748,102280756,102287344,102287352,102292136,102292144,102322635,102322651,102343360,102343368,102388302,102388307,102399901,102399909,102402779,102402787,102448099,102448115,102449888,102449896,102469780,102469788,102517165,102517170,102548661,102548669,102554627,102554632,102554869,102554874,102586133,102586149,102587753,102587761,102600150,102600155,102618668,102618676,102628048,102641327,102641332,102649643,102649648,102649928,102649933,102672672,102672677,102673089,102673094,102673355,102685397,102685402,102685916,102685921,102691121,102691126,102691386,102691391,102718422,102721118,102721123,102727389,102727394,102752415,102761409,102761414,102762335,102762343,102783389,102783397,102787523,102807730,102807738,102811903,102811911,102858946,102858954,102864324,102864332,102867795,102867803,102883798,102883806,102902676,102902684,102903580,102903588,102909802,102909807,102925899,102925907,102926483,102926491,102932527,102934198,102944137,102944142,102944346,102944351,102944425,102944430,102944555,102944560,102944693,102944698,102944811,102944816,102956645,102956653,102972729,102972737,102986867,102986875,102988337,102988342,102988441,102988446,102988747,102988752,102988916,102988921,103011599,103011607,103015173,103018775,103018781,103020595,103020603,103039154,103039162,103163004,103163012,103175930,103175938,103209325,103209333,103285926,103285934,103286093,103286101,103286424,103286432,103288266,103288274,103289142,103289147,103289221,103289226,103299198,103299206,103326447,103326455,103339776,103339784,103343810,103343818,104530118,104574039,104574047,104575397,104575402,104575543,104575548,104575639,104575644,104575920,104575925,104615555,104615563,104627936,104627942,104654326,104654334,104699524,104699532,104746802,104746807,104761731,104761739,104790721,104794503,104798707,104798723,104907771,104907779,104963462,104963470,104976557,104976565,104983089,104983097,105032492,105082057,105082065,105083768,105083776,105084989,105084997,105087628,105087636,105101007,105101015,105101390,105101398,105111908,105111916,105125337,105125345,105180813,105180821,105197504,105250945,105250953,105255698,105255706,105283747,105283755,105292976,105292984,105345084,105345089,105346125,105346133,105360298,105360306,105371963,105374004,105374012,105393831,105393839,105439291,105439299,115492195,115492211,115511311,115511316,115601169,115601177,115626338,115626346,115626399,115626407,115665132,115665137,115665205,115665210,115666017,115666025,115669418,115669426,115680658,115738038,115738046,115748334,115748340,115755264,115755272,115780021,115780029,115780478,115780486,115797565,115797570,115821547,115821555,115822485,115822493,115849188,115849193,115854828,115854836,115902264,115902269,115909781,115909789,115916250,115916255,115917358,115917366,115928899,115928907,115986507,115986513,116036386,116036402,116062770,116062778,116068758,116068766,116076809,116076825,116076925,116076931,116091118,116150705,116150713,116176889,116176897,116214049,116214057,116221354,116221362,116229714,116229722,116250785,116250793,116276281,116276289,116307750,116339544,116339549,116361234,116372457,116372465,116407665,116416014,116416022,116418247,116418255,116425644,116426540,116448407,116449517,116459613,116470832,116479751,116480001,116495787,116496398,116502867,116508642,116508647,116514183,116514189,116524154,116538556,116538564,116542683,116550348,116567535,116567540,116593749,116609391,116609399,116613094,116613710,116685399,116685789,116697553,116697559,116699409,116699417,116704082,116704120,116714309,116714312,116731449,116731455,116731463,116731469,116731477,116731483,116731491,116731497,116731505,116731511,116731519,116731525,116757124,116757439,116757444,116771270,116771276,116778957,116778962,116780649,116780655,116780663,116780669,116780677,116780683,116780691,116780697,116780705,116780711,116780719,116780725,116783786,116783791,116840720,116840725,116845807,116845812,116874389,116874397,116874913,116877099,116913250,116918027,116919494,116923675,116924992,116980527,116980535,116981869,116981877,116982432,116982440,116982914,116982922,116988224,116988232,117010853,117010861,117026763,117026878,117026880,117037168,117037176,117037622,117037626,117091085,117124349,117124356,117136347,117143742,117143747,117145792,117145800,117148946,117148952,117166647,117224099,117224107,117236066,117236354,117249330,117249338,117269057,117269065,117284159,117284164,117286731,117286739,117290310,117290318,117297869,117297874,117309234,117309242,117310170,117310178,117367088,117367094,117382832,117387079,117387085,117411961,117411966,117457918,117457926,117474409,117474414,117503097,117503105,117504343,117504351,117528468,117528471,117530142,117547521,117547529,117556935,117557280,117571040,117586569,117586574,117605990,117605995,117617889,117623323,117623329,117632590,117642488,117642592,117642597,117642980,117642988,117643748,117643756,117683635,117706016,117711597,117728473,117728481,117736031,117740479,117740485,117752075,117752081,117755703,117755716,117755820,117756394,117756755,117756763,117775368,117782123,117792032,117840094,117852663,117852668,117855973,117855979,117879413,117879418,117895920,117895928,117930842,117930847,117952935,117970097,117970102,117983432,117983437,117995685,117997204,117999163,118010935,118026977,118029473,118029479,118043880,118043885,118044535,118048893,118048900,118057575,118057581,118086120,118086126,118094462,118094467,118098329,118098337,118109056,118110654,118110662,118119539,118119545,118127424,118127429,118132041,118132049,118144499,118144504,118144972,118144980,118155108,118155115,118155211,118155217,118155411,118171214,118172011,118179259,118181389,118181395,118183989,118189659,118189664,118199432,118199438,118210158,118210163,118213586,118213591,118219914,118224732,118224739,118227602,118227608,118237155,118237163,118240038,118240044,118240393,118246247,118254619,118255415,118255420,118269184,118275356,118281124,118281132,118285295,118291746,118291754,118292262,118292268,118292276,118292282,118311122,118311127,118325328,118342369,118347706,118349323,118349325,118349356,118364657,118367501,118367507,118367791,118368037,118368045,118368696,118368704,118373667,118399838,118419982,118419988,118427971,118427977,118449075,118452692,118452697,118462069,118489188,118494713,118497529,118497535,118509496,118511786,118517998,118518004,118519229,118521972,118521977,118528660,118528668,118531377,118532140,118532142,118541625,118541633,118544270,118544277,118555977,118555985,118566888,118566900,118567234,118567242,118567305,118567312,118575738,118575744,118576741,118579779,118579784,118596018,118596023,118599481,118599489,118627810,118627821,118654314,118656213,118656218,118656880,118656885,118669236,118683648,118683653,118717392,118728532,118728537,118736897,118753224,118753232,118780368,118781276,118781281,118792272,118795502,118795508,118803374,118803380,118807052,118809999,118810531,118824720,118824725,118825246,118830481,118830620,118830622,118830624,118830626,118830628,118830630,118830632,118830634,118830636,118830640,118855606,118884772,118925905,118925913,118938363,118938369,118952709,118952717,118957772,118957777,118960868,118960876,118965149,118965154,118970617,119001820,119001825,119022212,119022220,119038738,119038746,119058017,119058022,119061297,119062070,119062078,119070701,119071842,119071848,119076486,119076502,119077195,119077203,119078243,119087275,119092108,119096521,119096529,119106920,119126674,119127375,119140584,119140592,119142923,119164990,119164992,119164995,119168749,119170344,119170349,119178779,119187339,119188542,119188550,119189027,119189032,119194829,119194834,119202558,119202566,119207531,119207537,119209341,119209378,119220909,119220911,119220913,119220915,119220917,119220919,119221438,119235564,119235569,119237704,119237709,119249911,119255437,119262908,119265733,119275421,119287095,119287101,119290941,119290946,119311194,119311199,119317348,119317356,119335774,119335779,119346365,119346731,119350203,119350208,119370737,119374110,119374116,119382576,119389297,119389305,119412195,119418564,119418569,119419025,119419030,119419128,119419133,119422183,119422199,119431313,119453373,119454198,119454203,119454286,119454291,119455933,119455939,119464287,119464292,119465389,119465397,119471146,119474814,119474822,119486429,119494600,119494616,119497026,119497031,119499586,119499594,119520106,119525128,119525133,119528282,119528290,119530180,119530188,119538769,119538776,119546473,119546479,119546487,119546493,119552616,119566068,119566076,119577670,119588321,119588326,119590765,119590807,119590821,119590826,119590935,119592860,119592868,119595187,119595195,119598473,119598478,119599143,119605170,119605178,119608194,119608200,119609080,119609090,119612419,119612423,119614697,119614703,119615541,119615546,119621403,119621408,119621918,119621936,119621944,119621949,119636046,119636410,119636415,119643427,119643433,119651526,119651534,119666107,119666115,119671610,119671618,119680681,119680688,119684295,119684301,119684496,119685915,119685921,119702649,119702657,119707152,119707157,119707161,119727973,119727978,119741495,119741503,119745075,119768442,119770485,119770493,119773246,119773713,119776352,119794118,119804024,119804032,119804531,119805088,119805096,119807183,119809651,119809656,119820261,119826320,119826325,119836044,119840989,119854007,119854012,119869960,119869968,119885476,119894207,119894212,119908989,119908997,119914240,119914248,119914253,119914638,119914643,119919341,119919349,119930504,119930509,119932762,119932767,119941748,119941750,119942992,119944463,119976754,119976759,119989281,120001462,120001478,120015306,120024054,120025498,120025503,120049011,120049019,120050610,120050618,120074338,120074344,120082244,120082249,120098782,120098787,120107754,120118521,120118527,120120566,120120575,120120580,120129974,120129980,120129988,120129994,120130002,120130008,120138309,120138317,120140748,120140753,120140755,120142704,120142711,120142990,120142997,120143451,120143457,120146756,120146772,120156652,120156657,120157452,120157457,120161430,120161435,120163559,120163564,120169620,120169628,120175687,120175695,120179202,120179208,120182621,120182626,120184009,120190036,120190041,120191501,120191506,120195953,120222179,120226251,120226258,120226267,120226273,120232064,120250425,120250430,120256334,120256340,120257682,120257690,120272513,120275434,120275439,120286666,120286671,120292177,120296816,120296821,120300729,120308624,120336736,120350674,120350679,120362079,120362087,120388576,120395666,120407879,120408009,120408014,120426040,120426046,120426054,120426060,120426068,120426074,120426082,120426088,120426096,120426102,120426110,120426116,120426124,120426130,120437412,120439867,120439872,120446673,120459269,120465957,120465965,120466220,120466226,120531938,120531943,120533175,120533751,120533756,120540098,120573340,120576484,120603282,120603287,120612086,120612091,120614405,120614412,120619846,120619851,120626037,120626042,120640043,120645687,120645696,120647303,120647308,120652083,120652090,120661041,120661046,120666070,120666077,120666798,120672603,120674439,120674441,120674443,120674444,120674447,120674449,120676584,120678228,120690287,120690294,120691424,120691429,120705172,120705431,120705439,120711524,120711531,120712193,120712199,120713456,120715203,120715208,120716393,120730647,120730652,120730864,120730872,120731452,120731459,120732417,120732422,120735852,120735857,120760941,120760947,120768560,120768565,120772099,120772105,120772217,120773177,120773182,120773710,120777465,120777470,120794198,120794203,120797277,120797284,120798524,120798529,120812945,120822134,120827764,120827769,120844732,120844737,120864326,120864331,120887325,120887330,120894578,120900492,120900500,120917333,120917339,120917742,120917748,120917774,120917780,120933033,120941650,120941658,120942808,120942813,120953430,120954533,120957398,120958460,120958476,120965194,120965199,120969795,120969800,120982222,120982230,120985567,120985574,121008560,121021725,121021731,121028022,121028027,121029649,121029654,121031511,121031517,121032480,121045313,121045318,121047672,121047677,121055777,121055783,121066270,121066276,121088725,121088731,121091268,121091273,121091684,121091690,121092123,121092128,121118930,121118935,121119696,121119706,121123088,121123093,121123843,121124540,121124546,121125642,121125649,121127284,121127289,121133813,121133819,121134698,121134704,121142013,121180357,121198375,121198381,121200622,121200627,121208627,121208634,121242967,121255404,121255411,121277052,121277057,121345838,121350884,121350890,121351755,121358030,121372719,121377262,121377267,121381430,121381432,121381433,121381436,121381437,121381439,121381441,121381444,121381445,121381447,121381450,121381452,121381454,121381471,121381950,121383013,121387573,121398715,121411541,121411546,121474444],"crc":0,"cvi":[]},"drive_url":"//drive.google.com?usp\u003ddocs_web","docs-liap":"/naLogImpressions","docs-sup":"/document"}; _docs_flag_cek=''; if (window['DOCS_timing']) {DOCS_timing['ifdld']=new Date().getTime();}if ((!this['DOCS_initDocsMobileWeb']) ||  false ) {if (window.navigator && window.navigator.sendBeacon) {var DOCS_hasSentJsNotLoadedError=window['DOCS_hasSentJsNotLoadedError']||false; var perfContext = '';var severityContext = DOCS_hasSentJsNotLoadedError?'&context.severity=postmortem':'&context.severity=warning';const isServiceWorkerControlled = !!(window.origin !== 'null' && navigator.serviceWorker && navigator.serviceWorker.controller); window.navigator.sendBeacon('\/document\/jserror?jobset\x3dprod\x26error\x3dJS+binary+load+failure&context.functionName=DOCS_initDocsMobileWeb' + '&context.serviceWorkerControlled=' + isServiceWorkerControlled + '\x26context.actionName\x3dMobileBasic' + severityContext + perfContext); DOCS_hasSentJsNotLoadedError=true;}(window.enterCoreJsErrorDialog ? enterCoreJsErrorDialog() : (window.location.href = 'https:\/\/support.google.com\/accounts\/answer\/32050'))}DOCS_initDocsMobileWeb( true ,  true , 'Vance and Kerenshara\x27s 2e Kingdom Building Rule Changes', 'intent:\/\/docs.google.com\/document\/d\/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo\/edit#Intent;scheme\x3dhttps;package\x3dcom.google.android.apps.docs.editors.docs;S.browser_fallback_url\x3dmarket:\/\/details?id\x3dcom.google.android.apps.docs.editors.docs;end', 'googledocs:\/\/docs.google.com\/document\/d\/1NHksCXkXbjtrv-26VgFHNbyYldatVwag9lM44IWxIXo\/edit',  false );Vance and Kerenshara's Comprehensive 
+Pathfinder 2e Kingdom Building Rule Changes 
+
+Kingmaker 2e is a massive tome and it took herculean effort to produce, most of it the work of one man, James Jacobs. So before anything else I want to give my heartfelt thanks to Paizo and James Jacobs for giving us this wonderful campaign! 
+
+The Kingmaker 2e Kingdom Building Rules, however, need some work. Paizo has admitted that there simply wasn’t the time or resources to playtest. The basic chassis of the system is sound but there are some issues that aren’t obvious without testing. Kerenshara and I have been testing these rules for months, doing simulations of kingdom building, including one sim to double digit levels. Below are the rules changes we recommend to address the problems we’ve found. All of our changes are designed to work as seamlessly as possible with the existing rules and be relatively easily integrated into Tomeric’s Kingdom Building Sheet. This document will only have the changes and brief commentary. If you’d like more details on the problems check out our Kingdom Building Rules Problems Analysis doc.
+
+Page numbers for both the Kingmaker Adventure Path (KAP) and Kingmaker Player’s Guide (KPG) are provided.
+
+Quick Links to this document’s topics:
+Kingdom Creation
+Kingdom Advancement
+Kingdom Feats
+Kingdom Rules
+Misc. Rules Clarifications
+
+KINGDOM CREATION
+We have added more trained skills to start. A Kingdom’s Charter and Heartland now give both a set trained skill and a free one. This is intended to help address the issue with the Math at higher levels for non-invested skills. If you were already trained in a skill granted by your Charter or Homeland choice, you instead become trained in another skill of your choice.
+
+Step 2: Select a Charter (KAP 508, KPG 12)
+
+ Step 3: Choose a Heartland (KAP 509, KPG 13)
+
+Step 5: Finalize Ability Scores (KAP 510, KPG 14)
+We’ve increased the number of free boosts by 1. This is intended to help address the issue with the Math at higher levels for non-invested skills.
+
+Change the text “First, choose two different kingdom abilities to receive additional boosts.” to “First, choose three different kingdom abilities to receive additional boosts.”
+KINGDOM ADVANCEMENT (KAP 512, KPG 16)
+We have added Skill Increases at every level from 2+ and the number of ability boosts from 2 to 3 at 5/10/15/20. In addition the Kingdom now gains Untrained Improvisation at 2nd level. 
+KINGDOM ADVANCEMENT
+
+Level
+Control DC
+Kingdom features
+
+1
+14
+Charter, government, heartland, initial proficiencies, favored land, settlement construction (village)
+
+2
+15
+Kingdom feat, skill increase, Untrained Improvisation
+
+3
+16
+Settlement construction (town), skill increase
+
+4
+18
+Expansion expert, fine living, Kingdom feat, skill increase
+
+5
+20
+Ability boosts, ruin resistance, skill increase
+
+6
+22
+Kingdom feat, skill increase
+
+7
+23
+Skill increase, Untrained Improvisation (full level)
+
+8
+24
+Experienced leadership +2, Kingdom feat, ruin resistance, skill increase
+
+9
+26
+Expansion expert (Claim Hex 3 times/turn), settlement construction (city), skill increase
+
+10
+27
+Ability boosts, Kingdom feat, life of luxury, skill increase
+
+11
+28
+Ruin resistance, skill increase
+
+12
+30
+Civic planning, Kingdom feat, skill increase
+
+13
+31
+Skill increase
+
+14
+32
+Kingdom feat, ruin resistance, skill increase
+
+15
+34
+Ability boosts, settlement construction (metropolis), skill increase
+
+16
+35
+Experienced leadership +3, Kingdom feat, skill increase
+
+17
+36
+Ruin resistance, skill increase
+
+18
+38
+Kingdom feat, skill increase
+
+19
+39
+Skill increase
+
+20
+40
+Ability boosts, envy of the world, Kingdom feat, ruin resistance, skill increase
+
+Skill Increase: Change the text “At 3rd level and every 2 levels thereafter, your kingdom gains a skill increase.” to “At 2nd level and every level thereafter, you gain a skill increase.” (KAP 513, KPG 17)
+
+Untrained Improvisation: Your Kingdom has learned how to handle situations when it’s out of its depth. Your proficiency bonus to untrained skill checks is equal to half your level instead of +0. If you’re 7th level or higher, the bonus increases to your full level instead. This doesn’t allow you to use the skill’s trained actions.
+
+Ability Boosts: Change the text “At 5th level and every 5 levels thereafter, you boost two different kingdom ability scores.” to “At 5th level and every 5 levels thereafter, you boost three different kingdom ability scores.” (KAP 513, KPG 17)
+
+Activities
+Kingdom Skill Activities
+We have made changes to a few Kingdom Skill Activities and created two of our own. The intent of these changes is to have more regularly useful Leadership Activities as well as fill in a hole in the integration of the Kingdom Building Rules with the Hexploration rules.
+
+Capital Investment Activity:
+Change the requirement from “You must be within the influence of a settlement that contains at least one Bank.” to “You must be in the Capital or within the influence of a settlement that contains at least one Bank.” (KAP 529, KPG 34)
+
+Request Foreign Aid Activity:
+Change the text “When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check is equal to the other group’s Negotiation DC +2” to “When disaster strikes, you send out a call for help to another nation with whom you have diplomatic relations. The DC of this check starts at the other group’s Negotiation DC +2, but every subsequent Kingdom turn you Request Foreign Aid from the same group, the DC increases by 2. Every Kingdom turn that passes without Requesting Foreign Aid from that Group reduces the DC by 1 (until you reach the other group’s Negotiation DC +2). You may only attempt to request Foreign Aid with a given group once per Kingdom turn regardless of the number of leaders pursuing activities.” (KAP 528, KPG 33)
+New General Activity
+Take Charge (Trained):
+You spend some time getting directly involved in helping your kingdom. Choose a skill that your Kingdom is at least Trained in, then attempt a basic check. You can never use the same skill for this activity twice in the same Kingdom turn.
+Critical Success: Gain 1 RP. In addition you get a +1 Circumstance Bonus to the next Check you make this turn with the chosen skill.
+Success: Gain 1 RP
+Failure: You fail to generate RP.
+Critical Failure: You take a -1 Circumstance Penalty to the next Check you make this turn with the chosen skill.
+
+New Wilderness Activity
+Reconnoiter Hex:
+You send a team to spend time surveying and exploring a specific hex, getting the lay of the land and looking for unusual features and specific sites. Spend 1 RP and then attempt a Basic check. 
+Critical Success: Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. Your team automatically finds one Special or Hidden feature if the hex contains one. If the hex contains multiple Special or Hidden Features the GM chooses one. If the hex contains an Encounter or Hazard, the team avoids it and reports back useful and detailed information on it. In addition, your team's reconnaissance of the hex goes so smoothly you may immediately attempt an additional Reconnoiter Hex activity on an adjacent hex. Treat a Critical Success on this additional check as a Success instead.
+Success: Your team successfully explores the hex and it is now Reconnoitered for the purpose of Claim Hex. If the hex contains a Special feature your team may find it if your GM wishes. If the hex contains an Encounter or Hazard, the team avoids it and reports basic information on it.
+Failure: Your team fails to explore the hex sufficiently. If the hex contains an Encounter or Hazard, the team escapes it and reports basic information on it. 
+Critical Failure: Your team fails to explore the hex sufficiently and a number of the team are lost, causing you to take a -1 circumstance penalty to Loyalty-based checks until the end of your next Kingdom turn. If the hex contains an Encounter or Hazard, the team members were lost to it and the survivors can report back basic information on it.
+KINGDOM FEATS
+We made a change to allow Status Bonuses from Kingdom feats to actually function and reigned in one glaringly overpowered feat.
+
+Under the general rules for Kingdom Feats add the following: “Status bonuses granted by Kingdom feats are cumulative with status bonuses granted by invested Leadership Roles.”
+
+Practical Magic Feat: Change the text “and you can use Magic checks in place of Engineering checks.” to “and if you have Expert Magic you gain a +1 circumstance bonus to Engineering checks. If you have Master Magic, this bonus increases to +2.” (KAP 532, KPG 37)
+
+KINGDOM RULES
+Running a Kingdom
+We have added additional Kingdom Milestone XP Awards, changed the XP rewards for claiming new hexes, adjusted the leftover RP to XP conversion ratio, and tied Random Kingdom Event XP rewards to Event level. All of this is intended to help address the issue with Early Kingdom XP. If your group uses Automatic or Milestone leveling for the Kingdom you should ignore this section.
+XP Gain
+Milestones
+New Milestones are highlighted in blue
+
+XP Award
+Milestone
+
+20
+Build Roads for the first time
+
+20
+Celebrate your first successful Holiday
+
+20
+Claim your first new Hex (2nd hex overall)
+
+20
+Complete your First successful Infiltration
+
+20
+Create your first Masterpiece
+
+20
+Establish your first Farmland
+
+20
+Establish your first Lumber Camp
+
+20
+Establish your first Mine
+
+20
+Establish your first Quarry
+
+20
+Fortify your first hex
+
+20
+Successfully use your first Creative Solution
+
+20
+Successfully use your first Supernatural Solution
+
+40
+Build your first Structure requiring Expert in a Kingdom Skill
+
+40
+Build your first Famous/Infamous Structure
+
+40
+Build your first seat of government (Town Hall, Castle, or Palace)
+
+40
+Claim your first Landmark hex
+
+40
+Claim your first Refuge hex
+
+40
+Establish your first Village
+
+40
+Establish your second Village
+
+40
+Reach Kingdom Size 10
+
+40
+Recruit your first regular Army
+
+40
+Successfully resolve a random Kingdom Event
+
+60
+All eight leadership roles are assigned
+
+60
+Build your first Structure requiring Master in a Kingdom Skill
+
+60
+Establish Diplomatic Relations for the first time
+
+60
+Expand a Village into your first Town
+
+60
+Reach Kingdom size 25
+
+60
+Recruit your first Specialized Army
+
+60
+Win your first War Encounter
+
+80
+Achieve your first successful Pledge of Fealty
+
+80
+Establish your first Trade Agreement
+
+80
+Expand a town into your first City
+
+80
+Reach Kingdom size 50
+
+80
+Spend 100 RP during a Kingdom turn
+
+120
+Expand a city into your first Metropolis
+
+120
+Reach Kingdom size 100
+
+XP Rewards for claiming hexes
+Size 1-9:        100 XP per Hex claimed
+Size 10-24:        50 XP per Hex claimed
+Size 25-49:        25 XP per Hex claimed
+Size 50-99:         10 XP per Hex claimed
+Size 100+:         5 XP per Hex claimed
+RP to XP Conversion ratio
+Kingdom Level:        RP to XP Conversion:
+1-4                        10
+5-8                         7
+9-12                         5
+13-16                         2
+17+                         1
+Event XP Rewards
+XP is rewarded based on the event level and the Pathfinder 2e XP rewards by level chart (Table 10-2, page 489 CRB).
+Changes to Settlement Rules
+We’ve changed a little regarding the Capital. These changes are intended to address the issue with the Capital not being able to expand due to Level limits on Settlement size. If your group uses Automatic or Milestone leveling for the Kingdom you can ignore this section. There’s also a minor change in determining Maximum Item Bonus.
+
+Capital: The Capital is allowed to grow one (and only one) size Category bigger than the normal restrictions. This does not increase the Max. Item Bonus or Influence of the Capital until the normal Level requirement is met. In addition, the Capital’s influence is minimum 1. 
+
+Maximum Item Bonus: Change “Normally, item bonuses do not stack, but if you build multiple
+structures of the same type in the same settlement, their item bonuses stack up to this limit.” to “Normally, item bonuses do not stack, but if you build multiple structures that grant an Item Bonus to a specific Kingdom Skill Activity, their item bonuses stack up to this limit.” (KAP 543, KPG 47)
+
+Structures:
+We’ve added item bonuses for some Kingdom Skill Activities that do not currently have Structures that grant Item bonuses to that activity. These changes are intended to fix the math as PF2e rules and Kingdom Rules assume Item Bonuses are available. 
+
+Add the following Item Bonuses to Structures:
+Bank
++1 Item Bonus to Capital Investment and Collect Taxes
+
+Castle
++2 Item Bonus to Manage Trade Agreements and Relocate Capital
+
+Construction Yard
++1 Item Bonus to Build Roads and Irrigation
+
+Festival Hall
++1 Item Bonus to Quell Unrest (Arts)
+
+Garrison
++1 Item Bonus to Fortify Hex
+
+Granary
++1 Item Bonus to Establish Farmland, Granary now requires Agriculture (Trained)
+
+Inn
++1 Item Bonus to Clear Hex (Exploration)
+
+Library
++1 Item Bonus to Creative Solution
+
+Magic Shop
++1 Item Bonus to Prognostication
+
+Monument
++1 Item Bonus to Create A Masterpiece
+
+Occult Shop
++2 Item Bonus to Supernatural Solution
+
+Palace
++3 Item Bonus to Manage Trade Agreements and Relocate Capital
+
+Smithy
++1 Item Bonus to Clear Hex (Engineering)
+
+Tavern, Dive
++1 Item Bonus to Clear Hex (Exploration)
+
+Tavern, Luxury
++2 Item Bonus to Reconnoiter Hex*
+
+Tavern, Popular
++1 Item Bonus to Reconnoiter Hex*
+
+Tavern, World-Class
++3 Item Bonus to Reconnoiter Hex*
+
+Town Hall 
++1 Item Bonus to Manage Trade Agreements
+
+*New Kingdom Skill Activity detailed above
+
+MISC RULES CLARIFICATIONS
+Freeholds:
+Problem: The situation where A Freehold that resides in an unclaimed hex and joins the Kingdom (becoming a Settlement) via Pledge of Fealty isn’t covered in the rules.
+
+Solution: All Kingdom skill checks made to resolve issues associated within the unconnected Settlement take a –4 circumstance penalty. When a kingdom starts a turn with any number of secondary territories including such a settlement, increase Unrest by 1. Note that the -4 wouldn't apply to claiming the hex the settlement is in as the -4 only applies to checks related to the settlement. Not the hex.
+
+Terrain Features:
+Problem:
+The Kingdom Building Rules state that a single hex can only contain one Terrain Feature but this is clearly not the case for all of the features.
+
+Solution:
+These Terrain Features can overlap with any and all other features: Bridge, Landmark, Refuge, Resource
+A hex can have at most one of these: Farmland, Freehold, Ruins, Settlement, Structure, Work Site. We’ll call this the Restricted list.
+A Settlement can be built in a hex that contains Ruins or a Structure. The Ruins/Structure are incorporated into the Settlement and once a Settlement is built the hex ceases to have the Ruins or Structure feature. 
+A Free Hold can be brought into your kingdom in which case it becomes a Settlement instead. 
+
+To switch between any of the Terrain Features in the Restricted list the existing Feature must first be removed with the Clear Hex Activity before the new Terrain Feature can be constructed.
+
+Structure level stacking for purchasing limits:
+Problem:
+It’s not fully clear how Structures stack when determining available item level for purchase.
+
+Solution:
+All Structures that treat a settlement’s level as higher for determining the level of a specific type of magic item for purchase do not stack with each other. (Ex: Luxury Store’s effect does not stack with Arcanist’s tower). They do stack with Structures that give a more general increase.
+Magic Shop’s effect and Occult Shop’s effect only stack together up to +3.
+All other such effects stack as written.
+
+window.setTimeout(function() { window.scrollTo(0, 1); }, 0)

@@ -1,0 +1,224 @@
+{
+  "phases": [
+    { "key": "upkeep", "name": "Upkeep", "order": 1 },
+    { "key": "commerce", "name": "Commerce", "order": 2 },
+    { "key": "activity", "name": "Activity", "order": 3 },
+    { "key": "event", "name": "Event", "order": 4 }
+  ],
+  "steps": [
+    {
+      "key": "assign-leadership-roles",
+      "phaseKey": "upkeep",
+      "order": 1,
+      "title": "Assign Leadership Roles",
+      "guidance": "Confirm who holds each of the 8 leadership roles. Mark roles invested by a PC, and note vacancies (each vacancy adds Unrest at the Adjust Unrest step). The kingdom gains 1 Fame or Infamy point this step - record it in the log.\nHouse rule: status bonuses from kingdom feats stack with status bonuses from invested leadership roles.",
+      "checklist": [
+        { "key": "holders", "label": "Confirm each role's holder" },
+        { "key": "invested", "label": "Mark invested roles" },
+        { "key": "vacancies", "label": "Note vacancies" },
+        { "key": "fame", "label": "Gain 1 Fame/Infamy point" }
+      ],
+      "allowsActivities": "leadership",
+      "enabled": true
+    },
+    {
+      "key": "adjust-unrest",
+      "phaseKey": "upkeep",
+      "order": 2,
+      "title": "Adjust Unrest",
+      "guidance": "Add Unrest from vacancies, overcrowding, secondary territories and war. Check the kingdom's Unrest thresholds and the Ruin thresholds, and note any effects.\nHouse rule: +1 Unrest if the kingdom's secondary territories include an unconnected settlement (freehold rule).",
+      "checklist": [
+        { "key": "vacancies", "label": "Unrest from vacancies" },
+        { "key": "overcrowding", "label": "Unrest from overcrowding" },
+        { "key": "secondary", "label": "Unrest from secondary territories" },
+        { "key": "war", "label": "Unrest from war" },
+        { "key": "unrest-thresholds", "label": "Check Unrest thresholds" },
+        { "key": "ruin-thresholds", "label": "Check Ruin thresholds" }
+      ],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "resource-collection",
+      "phaseKey": "upkeep",
+      "order": 3,
+      "title": "Resource Collection",
+      "guidance": "Roll the kingdom's resource dice and enter the RP gained. Collect commodities produced by work sites, respecting storage capacity.",
+      "checklist": [
+        { "key": "roll-dice", "label": "Roll Resource Dice, enter RP gained" },
+        { "key": "commodities", "label": "Collect commodities from work sites" },
+        { "key": "capacity", "label": "Respect storage capacity" }
+      ],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "pay-consumption",
+      "phaseKey": "upkeep",
+      "order": 4,
+      "title": "Pay Consumption",
+      "guidance": "The kingdom's consumption is a typed value on the kingdom sheet. Pay it in Food; if food is short, record the shortfall and the resulting Unrest.",
+      "checklist": [
+        { "key": "pay", "label": "Enter consumption paid in Food" },
+        { "key": "shortfall", "label": "Record any shortfall and resulting Unrest" }
+      ],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "collect-taxes",
+      "phaseKey": "commerce",
+      "order": 5,
+      "title": "Collect Taxes",
+      "guidance": "Log the Collect Taxes Trade check.\nHouse rule: the Bank gives a +1 item bonus to Collect Taxes.",
+      "checklist": [{ "key": "trade-check", "label": "Log the Trade check" }],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "approve-expenses",
+      "phaseKey": "commerce",
+      "order": 6,
+      "title": "Approve Expenses",
+      "guidance": "Improve Lifestyle or Tap Treasury, if chosen.",
+      "checklist": [{ "key": "lifestyle", "label": "Improve Lifestyle or Tap Treasury, if chosen" }],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "tap-commodities",
+      "phaseKey": "commerce",
+      "order": 7,
+      "title": "Tap Commodities",
+      "guidance": "Trade Commodities, if chosen.",
+      "checklist": [{ "key": "trade", "label": "Trade Commodities, if chosen" }],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "manage-trade-agreements",
+      "phaseKey": "commerce",
+      "order": 8,
+      "title": "Manage Trade Agreements",
+      "guidance": "Log a check per trade agreement. Town Hall/Castle/Palace item bonuses apply (see the structure catalog).",
+      "checklist": [{ "key": "checks", "label": "Log check per agreement" }],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "leadership-activities",
+      "phaseKey": "activity",
+      "order": 9,
+      "title": "Leadership Activities",
+      "guidance": "Each leader acts up to their activities-per-turn count (typed on the Leader card).\nHouse rules: Take Charge - the same skill cannot be used twice per turn; Request Foreign Aid - once per group per turn, use the faction's current Foreign Aid DC.",
+      "checklist": [{ "key": "each-leader", "label": "Each leader logs their activities" }],
+      "allowsActivities": "leadership",
+      "enabled": true
+    },
+    {
+      "key": "region-activities",
+      "phaseKey": "activity",
+      "order": 10,
+      "title": "Region Activities",
+      "guidance": "Region activities: Claim Hex, Build Roads, Establish Work Site, Reconnoiter Hex, etc.\nHouse rules: Reconnoiter Hex is a new activity (costs 1 RP, marks the hex reconnoitered); from kingdom level 9 the kingdom can Claim Hex 3 times per turn; see the hex-claim XP table in Reference.",
+      "checklist": [
+        { "key": "claim", "label": "Claim Hex" },
+        { "key": "roads", "label": "Build Roads" },
+        { "key": "worksite", "label": "Establish Work Site" },
+        { "key": "recon", "label": "Reconnoiter Hex" }
+      ],
+      "allowsActivities": "region",
+      "enabled": true
+    },
+    {
+      "key": "civic-activities",
+      "phaseKey": "activity",
+      "order": 11,
+      "title": "Civic Activities",
+      "guidance": "One civic activity per settlement; tick the settlement's civic flag when it is used (flags reset when the turn completes).\nHouse rule: checks for an unconnected settlement take a -4 circumstance penalty.",
+      "checklist": [
+        { "key": "one-per-settlement", "label": "One civic activity per settlement" },
+        { "key": "tick-flags", "label": "Tick each settlement's flag" }
+      ],
+      "allowsActivities": "civic",
+      "enabled": true
+    },
+    {
+      "key": "army-activities",
+      "phaseKey": "activity",
+      "order": 12,
+      "title": "Army Activities",
+      "guidance": "Log army actions when at war.",
+      "checklist": [{ "key": "log", "label": "Log army actions when at war" }],
+      "allowsActivities": "army",
+      "enabled": false
+    },
+    {
+      "key": "check-for-event",
+      "phaseKey": "event",
+      "order": 13,
+      "title": "Check for Event",
+      "guidance": "Make the flat check against the kingdom's event DC (typed on the kingdom sheet) and record the result.",
+      "checklist": [
+        { "key": "dc", "label": "Enter the flat-check DC and roll" },
+        { "key": "result", "label": "Record result" }
+      ],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "resolve-events",
+      "phaseKey": "event",
+      "order": 14,
+      "title": "Resolve Events",
+      "guidance": "Open or update kingdom events and log their checks. Event XP is awarded by event level (CRB Table 10-2, p. 489).",
+      "checklist": [
+        { "key": "open", "label": "Open or update events" },
+        { "key": "log", "label": "Log checks" }
+      ],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "apply-kingdom-xp",
+      "phaseKey": "event",
+      "order": 15,
+      "title": "Apply Kingdom XP",
+      "guidance": "Enter XP gained from milestones, hex claims, events and leftover RP. See the house-rule RP-to-XP and hex-claim XP tables in Reference.",
+      "checklist": [{ "key": "xp", "label": "Enter XP from milestones, hexes, events, leftover RP" }],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "increase-kingdom-level",
+      "phaseKey": "event",
+      "order": 16,
+      "title": "Increase Kingdom Level",
+      "guidance": "If the kingdom levels up, record the new level, Control DC, skill increase, feat and boosts (see the advancement table in Reference).\nHouse rules: a skill increase every level from 2; three ability boosts at levels 5/10/15/20; Untrained Improvisation at 2 (full level at 7).",
+      "checklist": [
+        { "key": "level", "label": "Record new level" },
+        { "key": "dc", "label": "Record new Control DC" },
+        { "key": "skill", "label": "Skill increase" },
+        { "key": "feat", "label": "Feat" },
+        { "key": "boosts", "label": "Boosts" }
+      ],
+      "allowsActivities": null,
+      "enabled": true
+    },
+    {
+      "key": "end-of-turn",
+      "phaseKey": "event",
+      "order": 17,
+      "title": "End of Turn",
+      "guidance": "Review modifiers expiring this turn and untick them. Reset per-turn flags. Confirm final RP and commodities, then complete the turn.",
+      "checklist": [
+        { "key": "modifiers", "label": "Review modifiers expiring this turn" },
+        { "key": "flags", "label": "Reset per-turn flags" },
+        { "key": "final", "label": "Confirm final RP and commodities" },
+        { "key": "close", "label": "Close turn" }
+      ],
+      "allowsActivities": null,
+      "enabled": true
+    }
+  ]
+}

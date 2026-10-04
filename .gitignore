@@ -1,0 +1,11 @@
+node_modules/
+dist/
+apps/server/data/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+.env
+test-results/
+playwright-report/
+*.log

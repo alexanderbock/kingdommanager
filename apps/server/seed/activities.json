@@ -1,0 +1,192 @@
+[
+  {
+    "key": "take-charge",
+    "name": "Take Charge",
+    "category": "leadership",
+    "source": "house-rule",
+    "summary": "Choose a skill the kingdom is at least trained in and make a basic check; success gains 1 RP. The same skill cannot be used twice in the same kingdom turn.",
+    "details": "",
+    "page": "House rule (new general activity)",
+    "enabled": true
+  },
+  {
+    "key": "request-foreign-aid",
+    "name": "Request Foreign Aid",
+    "category": "leadership",
+    "source": "house-rule",
+    "summary": "Ask a faction with diplomatic relations for aid. DC starts at the faction's Negotiation DC +2, rises +2 per repeat request, falls -1 per turn unused; once per group per turn.",
+    "details": "",
+    "page": "KAP 528, KPG 33 (changed)",
+    "enabled": true
+  },
+  {
+    "key": "capital-investment",
+    "name": "Capital Investment",
+    "category": "leadership",
+    "source": "house-rule",
+    "summary": "Invest in the kingdom's future. House rule: allowed in the Capital, or within the influence of a settlement with at least one Bank.",
+    "details": "",
+    "page": "KAP 529, KPG 34 (changed)",
+    "enabled": true
+  },
+  {
+    "key": "claim-hex",
+    "name": "Claim Hex",
+    "category": "region",
+    "source": "core",
+    "summary": "Claim an unclaimed hex adjacent to the kingdom; gain XP by kingdom size (see Reference). From level 9: 3 times per turn (house rule).",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "build-roads",
+    "name": "Build Roads",
+    "category": "region",
+    "source": "core",
+    "summary": "Build a road connecting two adjacent claimed hexes.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "establish-work-site",
+    "name": "Establish Work Site",
+    "category": "region",
+    "source": "core",
+    "summary": "Establish a work site (farmland, lumber camp, mine, quarry) on a hex with the matching resource.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "reconnoiter-hex",
+    "name": "Reconnoiter Hex",
+    "category": "region",
+    "source": "house-rule",
+    "summary": "Spend 1 RP and make a basic check to survey a hex; success marks it reconnoitered for Claim Hex and may reveal features.",
+    "details": "",
+    "page": "House rule (new wilderness activity)",
+    "enabled": true
+  },
+  {
+    "key": "build-settlement",
+    "name": "Build Settlement",
+    "category": "region",
+    "source": "core",
+    "summary": "Build a new settlement in a claimed hex.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "upgrade-settlement",
+    "name": "Upgrade Settlement",
+    "category": "region",
+    "source": "core",
+    "summary": "Increase a settlement's level.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "abandon-settlement",
+    "name": "Abandon Settlement",
+    "category": "region",
+    "source": "core",
+    "summary": "Abandon a settlement, freeing its hex.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "build-structure",
+    "name": "Build Structure",
+    "category": "civic",
+    "source": "core",
+    "summary": "Build a structure on empty lots in a settlement.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "upgrade-structure",
+    "name": "Upgrade Structure",
+    "category": "civic",
+    "source": "core",
+    "summary": "Upgrade a structure to the next level.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "repair-structure",
+    "name": "Repair Structure",
+    "category": "civic",
+    "source": "core",
+    "summary": "Repair a damaged or destroyed structure.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "demolish-structure",
+    "name": "Demolish Structure",
+    "category": "civic",
+    "source": "core",
+    "summary": "Demolish a structure, freeing its lots.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "expand-settlement",
+    "name": "Expand Settlement",
+    "category": "civic",
+    "source": "core",
+    "summary": "Expand a settlement's size (more blocks and lots).",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "recruit-army",
+    "name": "Recruit Army",
+    "category": "army",
+    "source": "core",
+    "summary": "Recruit a new army or add units to an existing one.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "train-army",
+    "name": "Train Army",
+    "category": "army",
+    "source": "core",
+    "summary": "Train an army to improve its statistics.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "move-army",
+    "name": "Move Army",
+    "category": "army",
+    "source": "core",
+    "summary": "Move an army to a new location.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  },
+  {
+    "key": "army-battle",
+    "name": "Army Battle",
+    "category": "army",
+    "source": "core",
+    "summary": "Use an army in battle or to defend a border.",
+    "details": "",
+    "page": "KAP 520-524",
+    "enabled": true
+  }
+]

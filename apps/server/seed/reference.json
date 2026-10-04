@@ -1,0 +1,69 @@
+[
+  {
+    "key": "advancement",
+    "name": "Kingdom Advancement",
+    "description": "Control DC and features per kingdom level (house-rule table). Display only - the Control DC is always typed in on the kingdom sheet.",
+    "columns": ["Level", "Control DC", "Kingdom features"],
+    "rows": [
+      ["1", "14", "Charter, government, heartland, initial proficiencies, favored land, settlement construction (village)"],
+      ["2", "15", "Kingdom feat, skill increase, Untrained Improvisation"],
+      ["3", "16", "Settlement construction (town), skill increase"],
+      ["4", "18", "Expansion expert, fine living, Kingdom feat, skill increase"],
+      ["5", "20", "Ability boosts (three), ruin resistance, skill increase"],
+      ["6", "22", "Kingdom feat, skill increase"],
+      ["7", "23", "Skill increase, Untrained Improvisation (full level)"],
+      ["8", "24", "Experienced leadership +2, Kingdom feat, ruin resistance, skill increase"],
+      ["9", "26", "Expansion expert (Claim Hex 3 times/turn), settlement construction (city), skill increase"],
+      ["10", "27", "Ability boosts (three), Kingdom feat, life of luxury, skill increase"],
+      ["11", "28", "Ruin resistance, skill increase"],
+      ["12", "30", "Civic planning, Kingdom feat, skill increase"],
+      ["13", "31", "Skill increase"],
+      ["14", "32", "Kingdom feat, ruin resistance, skill increase"],
+      ["15", "34", "Ability boosts (three), settlement construction (metropolis), skill increase"],
+      ["16", "35", "Experienced leadership +3, Kingdom feat, skill increase"],
+      ["17", "36", "Ruin resistance, skill increase"],
+      ["18", "38", "Kingdom feat, skill increase"],
+      ["19", "39", "Skill increase"],
+      ["20", "40", "Ability boosts (three), envy of the world, Kingdom feat, ruin resistance, skill increase"]
+    ],
+    "source": "house-rule"
+  },
+  {
+    "key": "rp-to-xp",
+    "name": "Leftover RP to XP Conversion",
+    "description": "Ratio of leftover Resource Points per 1 XP by kingdom level (house rule). Display only - XP is always typed in.",
+    "columns": ["Kingdom Level", "RP per 1 XP"],
+    "rows": [
+      ["1-4", "10"],
+      ["5-8", "7"],
+      ["9-12", "5"],
+      ["13-16", "2"],
+      ["17+", "1"]
+    ],
+    "source": "house-rule"
+  },
+  {
+    "key": "hex-xp",
+    "name": "XP for Claiming Hexes",
+    "description": "XP gained per claimed hex by kingdom size (house rule). Display only.",
+    "columns": ["Kingdom Size", "XP per Hex Claimed"],
+    "rows": [
+      ["1-9", "100"],
+      ["10-24", "50"],
+      ["25-49", "25"],
+      ["50-99", "10"],
+      ["100+", "5"]
+    ],
+    "source": "house-rule"
+  },
+  {
+    "key": "event-xp",
+    "name": "Event XP Rewards",
+    "description": "XP is rewarded based on the event level using the Pathfinder 2e XP rewards by level chart (CRB Table 10-2, p. 489).",
+    "columns": ["Event Level", "XP Reward"],
+    "rows": [
+      ["See CRB Table 10-2 (p. 489)", "Type in the XP awarded"]
+    ],
+    "source": "house-rule"
+  }
+]
