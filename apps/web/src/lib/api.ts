@@ -12,7 +12,9 @@ export class ApiError extends Error {
 
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    // Only advertise a JSON body when there is one; an empty body with
+    // content-type application/json is rejected by Fastify (400).
+    ...(init?.body != null ? { headers: { 'Content-Type': 'application/json' } } : {}),
     ...init,
   });
   if (!res.ok) {

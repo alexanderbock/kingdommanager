@@ -89,6 +89,32 @@ export function usePatch<T>(entity: string, id: string) {
   });
 }
 
+/** POST a new record of a list entity. */
+export function useCreate<T>(entity: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: T) =>
+      apiFetch<StoredRecord<T>>(`/${entity}`, { method: 'POST', body: JSON.stringify({ data }) }),
+    onSuccess: (rec) => {
+      qc.setQueryData<StoredRecord<T>[]>([entity], (list) => (list ? [...list, rec] : [rec]));
+    },
+  });
+}
+
+/** DELETE one record of a list entity. */
+export function useDelete(entity: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiFetch<void>(`/${entity}/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+    onSuccess: (_res, id) => {
+      qc.setQueryData<StoredRecord<any>[]>([entity], (list) =>
+        list ? list.filter((r) => r.id !== id) : list,
+      );
+    },
+  });
+}
+
 /**
  * Local draft of a record's data. Adopts new server values while the draft
  * is clean; keeps user edits while dirty. `baseVersion` is the version the

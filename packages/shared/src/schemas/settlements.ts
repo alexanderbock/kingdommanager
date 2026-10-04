@@ -3,40 +3,51 @@ import { Num, Int, Source } from './common.js';
 
 export const SettlementType = z.enum(['village', 'town', 'city', 'metropolis']);
 
-export const LotSchema = z.object({
-  index: Int,
-  structureInstanceId: z.string().nullable(),
-});
-
-export const BlockSchema = z.object({
-  index: Int,
-  lots: z.array(LotSchema),
-  streetNotes: z.string(),
-});
+/**
+ * A building placed on the settlement's urban grid as a w×h rectangle of
+ * lots (squares) whose top-left lot is `anchor` (row-major index).
+ * The legacy shape (row-major run of `size` lots in `cells`) is still
+ * accepted so existing records stay saveable; the UI rewrites it to the
+ * rectangle shape when the building is next edited.
+ */
+export const BuildingSchema = z.union([
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    /** Width (x) in lots. */
+    w: Int,
+    /** Height (y) in lots. */
+    h: Int,
+    /** Top-left lot of the rectangle (row-major). */
+    anchor: Int,
+    notes: z.string(),
+    residential: z.boolean(),
+    /** Optional image URL; assumed to match the building's aspect ratio. */
+    image: z.string().optional(),
+    /** Optional external link (e.g. an Archives of Nethys page). */
+    link: z.string().optional(),
+  }),
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    size: Int,
+    notes: z.string(),
+    residential: z.boolean(),
+    image: z.string().optional(),
+    link: z.string().optional(),
+    cells: z.array(Int),
+  }),
+]);
+export type Building = z.infer<typeof BuildingSchema>;
 
 export const SettlementSchema = z.object({
   name: z.string(),
+  /** village = 1 block, town = 4, city = 9, metropolis = 9 per grid. */
   type: SettlementType,
-  level: Num,
-  influence: Num,
-  maxItemBonus: Num,
-  consumption: Num,
-  isCapital: z.boolean(),
-  /** false = unconnected settlement (house-rule freehold: -4 to related checks, +1 Unrest) */
-  isConnected: z.boolean(),
-  hex: z.string(),
-  waterBorders: z.object({
-    n: z.boolean(),
-    e: z.boolean(),
-    s: z.boolean(),
-    w: z.boolean(),
-  }),
-  walls: z.string(),
-  civicActivityUsedThisTurn: z.boolean(),
-  notes: z.string(),
-  gmNotes: z.string(),
-  /** 3x3 urban grid of blocks, each with 4 lots. */
-  blocks: z.array(BlockSchema),
+  /** Number of 9-block urban grids; only used for metropolis (min 1). */
+  grids: Int,
+  location: z.string(),
+  buildings: z.array(BuildingSchema),
 });
 export type Settlement = z.infer<typeof SettlementSchema>;
 

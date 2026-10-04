@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { initDb, closeDb } from '../src/db.js';
-import { seedIfEmpty } from '../src/seed.js';
+import { seedIfEmpty, seedSettlementsIfEmpty } from '../src/seed.js';
 import { buildApp } from '../src/app.js';
 
 let app: FastifyInstance;
@@ -9,6 +9,7 @@ let app: FastifyInstance;
 beforeAll(async () => {
   initDb(':memory:');
   seedIfEmpty();
+  seedSettlementsIfEmpty();
   app = await buildApp({
     port: 0,
     host: '127.0.0.1',
@@ -210,6 +211,78 @@ describe('export and import', () => {
 
   it('rejects an invalid backup document', async () => {
     const res = await app.inject({ method: 'POST', url: '/api/import', payload: { app: 'nope' } });
+    expect(res.statusCode).toBe(400);
+  });
+});
+
+describe('settlements', () => {
+  it('seeds a starting village', async () => {
+    const res = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
+    expect(res).toHaveLength(1);
+    expect(res[0].data.name).toBe('New Halvong');
+    expect(res[0].data.type).toBe('village');
+    expect(res[0].data.buildings).toEqual([]);
+  });
+
+  it('POST /api/settlements creates a settlement', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/settlements',
+      payload: {
+        data: {
+          name: 'Test Town',
+          type: 'town',
+          grids: 1,
+          location: 'near the river',
+          buildings: [
+            { id: 'b1', name: 'Tavern', w: 2, h: 1, anchor: 0, notes: '', residential: false, image: '', link: '' },
+          ],
+        },
+      },
+    });
+    expect(res.statusCode).toBe(201);
+    expect(json(res).data.name).toBe('Test Town');
+    expect(json(res).data.buildings).toHaveLength(1);
+
+    const list = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
+    expect(list).toHaveLength(2);
+  });
+
+  it('PATCH updates, and a stale version returns 409', async () => {
+    const list = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
+    const town = list.find((s: any) => s.data.name === 'Test Town');
+    const ok = await app.inject({
+      method: 'PATCH',
+      url: `/api/settlements/${town.id}`,
+      payload: { data: { ...town.data, location: 'moved' }, version: town.version },
+    });
+    expect(ok.statusCode).toBe(200);
+    expect(json(ok).data.location).toBe('moved');
+
+    const stale = await app.inject({
+      method: 'PATCH',
+      url: `/api/settlements/${town.id}`,
+      payload: { data: { ...town.data, location: 'stale' }, version: town.version },
+    });
+    expect(stale.statusCode).toBe(409);
+    expect(json(stale).current.version).toBe(town.version + 1);
+  });
+
+  it('DELETE removes a settlement', async () => {
+    const list = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
+    const town = list.find((s: any) => s.data.name === 'Test Town');
+    const res = await app.inject({ method: 'DELETE', url: `/api/settlements/${town.id}` });
+    expect(res.statusCode).toBe(204);
+    const after = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
+    expect(after).toHaveLength(1);
+  });
+
+  it('rejects an invalid settlement', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/settlements',
+      payload: { data: { name: 'Nope' } },
+    });
     expect(res.statusCode).toBe(400);
   });
 });

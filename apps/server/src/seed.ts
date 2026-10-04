@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getDb } from './db.js';
-import { createRecord, getById } from './store.js';
-import type { Kingdom } from '@kingdom/shared';
+import { createRecord, getById, listAll } from './store.js';
+import type { Kingdom, Settlement } from '@kingdom/shared';
 
 function defaultKingdom(): Kingdom {
   const zero = { score: null, modifier: null };
@@ -79,4 +80,17 @@ export function seedIfEmpty(): void {
     }
     db.prepare("INSERT INTO meta (key, value) VALUES ('seeded', '1')").run();
   })();
+}
+
+/** Every database gets a starting village (also runs on already-seeded DBs). */
+export function seedSettlementsIfEmpty(): void {
+  if (listAll('settlements').length > 0) return;
+  const settlement: Settlement = {
+    name: 'New Halvong',
+    type: 'village',
+    grids: 1,
+    location: '',
+    buildings: [],
+  };
+  createRecord('settlements', 'settlements', randomUUID(), settlement);
 }

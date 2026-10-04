@@ -3,6 +3,12 @@ import { readFileSync, readdirSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+/**
+ * Bump when a change makes existing databases incompatible. The app is not
+ * deployed, so instead of migrating, the local database file is deleted.
+ */
+export const SCHEMA_VERSION = 1;
+
 let db: Database.Database;
 
 export function initDb(dbPath: string): Database.Database {
@@ -13,7 +19,25 @@ export function initDb(dbPath: string): Database.Database {
   db.pragma('journal_mode = WAL');
   db.pragma('foreign_keys = ON');
   runMigrations(db);
+  checkSchemaVersion(db, dbPath);
   return db;
+}
+
+function checkSchemaVersion(db: Database.Database, dbPath: string): void {
+  const row = db.prepare("SELECT value FROM meta WHERE key = 'schema_version'").get() as
+    | { value: string }
+    | undefined;
+  if (!row) {
+    db.prepare("INSERT INTO meta (key, value) VALUES ('schema_version', ?)").run(String(SCHEMA_VERSION));
+    return;
+  }
+  if (Number(row.value) !== SCHEMA_VERSION) {
+    console.error(
+      `Database schema is incompatible (stored v${row.value}, code expects v${SCHEMA_VERSION}).\n` +
+        `The app is not deployed: delete ${dbPath} to start fresh.`,
+    );
+    process.exit(1);
+  }
 }
 
 function runMigrations(db: Database.Database): void {

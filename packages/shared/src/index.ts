@@ -1,6 +1,7 @@
 export * from './schemas/common.js';
 export * from './schemas/kingdom.js';
 export * from './schemas/settlements.js';
+export * from './settlements.js';
 export * from './schemas/armies.js';
 export * from './schemas/events.js';
 export * from './schemas/hexes.js';

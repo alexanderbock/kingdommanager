@@ -4,6 +4,8 @@ interface Props {
   open: boolean;
   title: string;
   current: StoredRecord<any> | null;
+  /** Non-conflict error from a failed overwrite (e.g. a validation 400). */
+  error?: string | null;
   onAcceptServer: () => void;
   onForce: () => void;
 }
@@ -11,8 +13,10 @@ interface Props {
 /**
  * Shown when a save is rejected with a 409: the server copy changed since
  * the user started editing. Offers loading the server copy or overwriting.
+ * If the overwrite itself fails (e.g. the local data is invalid), the error
+ * is shown here instead of looping silently.
  */
-export function ConflictDialog({ open, title, current, onAcceptServer, onForce }: Props) {
+export function ConflictDialog({ open, title, current, error, onAcceptServer, onForce }: Props) {
   if (!open || !current) return null;
   const updated = current.updatedAt ? new Date(current.updatedAt).toLocaleString() : 'unknown time';
   return (
@@ -26,6 +30,11 @@ export function ConflictDialog({ open, title, current, onAcceptServer, onForce }
         <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-300">
           Load the server copy and discard your edits, or overwrite it with yours.
         </p>
+        {error && (
+          <p className="mb-4 rounded-md bg-red-600/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">
+            Overwrite failed: {error}
+          </p>
+        )}
         <div className="flex justify-end gap-2">
           <button className="btn-ghost" onClick={onAcceptServer}>
             Load server copy

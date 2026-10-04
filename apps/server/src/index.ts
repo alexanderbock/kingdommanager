@@ -1,7 +1,7 @@
 import { rmSync } from 'node:fs';
 import { loadConfig } from './config.js';
 import { initDb, closeDb } from './db.js';
-import { seedIfEmpty } from './seed.js';
+import { seedIfEmpty, seedSettlementsIfEmpty } from './seed.js';
 import { buildApp } from './app.js';
 
 const config = loadConfig();
@@ -12,6 +12,7 @@ if (config.freshDb) {
 }
 initDb(config.dbPath);
 seedIfEmpty();
+seedSettlementsIfEmpty();
 
 const app = await buildApp(config);
 
