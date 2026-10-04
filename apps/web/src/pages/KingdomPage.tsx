@@ -4,17 +4,25 @@ import type { Kingdom, StoredRecord } from '@kingdom/shared';
 import { ConflictDialog } from '../components/ConflictDialog';
 import { EditableText } from '../components/EditableText';
 import { NumberField } from '../components/NumberField';
-import { ConflictError, useDraft, useKingdom, usePatchKingdom } from '../hooks/useRecords';
+import {
+  ConflictError,
+  useAutoRefetchOnError,
+  useAutosave,
+  useDraft,
+  useKingdom,
+  usePatchKingdom,
+} from '../hooks/useRecords';
 
 type AbilityKey = keyof Kingdom['abilities'];
 type RuinKey = keyof Kingdom['ruin'];
 type CommodityKey = keyof Kingdom['commodities'];
-type WorkSiteKey = keyof Kingdom['workSites'];
+type WorkSiteType = Kingdom['workSites'][number]['type'];
 
 const ABILITIES: AbilityKey[] = ['culture', 'economy', 'loyalty', 'stability'];
 const RUINS: RuinKey[] = ['corruption', 'crime', 'decay', 'strife'];
 const COMMODITIES: CommodityKey[] = ['food', 'lumber', 'luxuries', 'ore', 'stone'];
-const WORK_SITES: WorkSiteKey[] = ['farmland', 'lumber', 'mine', 'quarry'];
+const WORK_SITE_TYPES: WorkSiteType[] = ['farmland', 'lumber', 'mine', 'quarry'];
+const GOVERNMENTS = ['Despotism', 'Feudalism', 'Oligarchy', 'Republic', 'Thaumocracy', 'Yeomanry'];
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -27,16 +35,54 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+/** Number field for kingdom values: never negative. */
+function NumField({
+  value,
+  onChange,
+  title,
+}: {
+  value: number | null;
+  onChange: (v: number | null) => void;
+  title?: string;
+}) {
+  return <NumberField min={0} value={value} onChange={onChange} title={title} />;
+}
+
 export function KingdomPage() {
   const qc = useQueryClient();
-  const { data: rec, isLoading, error } = useKingdom();
-  const { draft, setDraft, dirty, baseVersion } = useDraft(rec?.data, rec?.version);
+  const { data: rec, isLoading, error, isFetching, refetch } = useKingdom();
+  useAutoRefetchOnError(error, isFetching, refetch);
+  const { draft, setDraft, dirty, baseVersion, bumpBaseVersion } = useDraft(rec?.data, rec?.version);
   const mutate = usePatchKingdom();
   const [conflict, setConflict] = useState<StoredRecord<Kingdom> | null>(null);
+  const [newWorkSiteType, setNewWorkSiteType] = useState<WorkSiteType>('farmland');
+
+  const save = () => {
+    if (!draft || !rec) return;
+    mutate.mutate(
+      { data: draft, version: baseVersion ?? rec.version },
+      {
+        // A successful save means the server now holds exactly what we sent,
+        // so it is safe to rebase newer local edits onto the new version.
+        onSuccess: (saved) => bumpBaseVersion(saved.version),
+        onError: (e) => e instanceof ConflictError && setConflict(e.current),
+      },
+    );
+  };
+  useAutosave({ draft, dirty, isPending: mutate.isPending, paused: conflict !== null, save });
 
   if (isLoading) return <p className="text-sm text-zinc-500">Loading kingdom…</p>;
   if (error || !rec || !draft) {
-    return <p className="text-sm text-red-600 dark:text-red-400">Could not load the kingdom record.</p>;
+    return (
+      <div className="card mx-auto max-w-md text-center">
+        <p className="mb-3 text-sm text-red-600 dark:text-red-400">
+          Could not load the kingdom record. Is the server running?
+        </p>
+        <button className="btn-primary" onClick={() => refetch()}>
+          Retry
+        </button>
+      </div>
+    );
   }
 
   const up = <K extends keyof Kingdom>(key: K, value: Kingdom[K]) =>
@@ -51,16 +97,31 @@ export function KingdomPage() {
     setDraft((d) =>
       d ? { ...d, commodities: { ...d.commodities, [k]: { ...d.commodities[k], ...patch } } } : d,
     );
-  const upWorkSite = (k: WorkSiteKey, patch: Partial<Kingdom['workSites'][WorkSiteKey]>) =>
+  const upWorkSite = (i: number, patch: Partial<Kingdom['workSites'][number]>) =>
     setDraft((d) =>
-      d ? { ...d, workSites: { ...d.workSites, [k]: { ...d.workSites[k], ...patch } } } : d,
+      d ? { ...d, workSites: d.workSites.map((s, j) => (j === i ? { ...s, ...patch } : s)) } : d,
     );
+  const addWorkSite = () =>
+    setDraft((d) =>
+      d
+        ? {
+            ...d,
+            workSites: [
+              ...d.workSites,
+              {
+                id: crypto.randomUUID(),
+                type: newWorkSiteType,
+                resourceHexes: null,
+                location: '',
+                comments: '',
+              },
+            ],
+          }
+        : d,
+    );
+  const removeWorkSite = (i: number) =>
+    setDraft((d) => (d ? { ...d, workSites: d.workSites.filter((_, j) => j !== i) } : d));
 
-  const save = () =>
-    mutate.mutate(
-      { data: draft, version: baseVersion ?? rec.version },
-      { onError: (e) => e instanceof ConflictError && setConflict(e.current) },
-    );
   const acceptServer = () => {
     if (!conflict) return;
     qc.setQueryData(['kingdom'], conflict);
@@ -72,7 +133,10 @@ export function KingdomPage() {
     mutate.mutate(
       { data: draft, version: conflict.version, force: true },
       {
-        onSuccess: () => setConflict(null),
+        onSuccess: (saved) => {
+          bumpBaseVersion(saved.version);
+          setConflict(null);
+        },
         onError: (e) => e instanceof ConflictError && setConflict(e.current),
       },
     );
@@ -81,7 +145,7 @@ export function KingdomPage() {
   const num = (label: string, key: keyof Kingdom) => (
     <div>
       <span className="label">{label}</span>
-      <NumberField value={draft[key] as number | null} onChange={(v) => up(key, v as never)} />
+      <NumField value={draft[key] as number | null} onChange={(v) => up(key, v as never)} />
     </div>
   );
 
@@ -89,12 +153,9 @@ export function KingdomPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Kingdom</h1>
-        <div className="flex items-center gap-2">
-          {dirty && <span className="text-xs text-amber-600 dark:text-amber-400">Unsaved changes</span>}
-          <button className="btn-primary" disabled={!dirty || mutate.isPending} onClick={save}>
-            {mutate.isPending ? 'Saving…' : 'Save'}
-          </button>
-        </div>
+        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          {dirty || mutate.isPending ? 'Saving…' : 'Saved'}
+        </span>
       </div>
 
       <Section title="Basics">
@@ -113,40 +174,75 @@ export function KingdomPage() {
           </div>
           <div>
             <span className="label">Government</span>
-            <EditableText value={draft.government} onChange={(v) => up('government', v)} placeholder="Government" />
+            <select
+              value={draft.government}
+              onChange={(e) => up('government', e.target.value)}
+              className="field"
+            >
+              <option value="">—</option>
+              {GOVERNMENTS.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </Section>
 
       <Section title="Core Numbers">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {num('Level', 'level')}
           {num('XP', 'xp')}
           {num('Size', 'size')}
           {num('Control DC', 'controlDc')}
           {num('Unrest', 'unrest')}
-          {num('Fame', 'fame')}
-          {num('Infamy', 'infamy')}
-          {num('Resource Points', 'resourcePoints')}
           {num('Consumption', 'consumption')}
-          {num('Event DC', 'eventDc')}
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:w-1/2">
-          <div>
-            <span className="label">Resource Dice · Count</span>
+        <div className="mt-3">
+          <span className="label">Resource Dice</span>
+          <div className="flex items-center gap-2">
             <NumberField
               value={draft.resourceDice.count}
               onChange={(v) => up('resourceDice', { ...draft.resourceDice, count: v })}
+              title="Count"
+              min={0}
             />
-          </div>
-          <div>
-            <span className="label">Resource Dice · Die</span>
-            <EditableText
+            <span className="text-sm text-zinc-400 dark:text-zinc-500">×</span>
+            <select
               value={draft.resourceDice.die}
-              onChange={(v) => up('resourceDice', { ...draft.resourceDice, die: v })}
-              placeholder="d6"
-            />
+              onChange={(e) => up('resourceDice', { ...draft.resourceDice, die: e.target.value })}
+              className="field w-20"
+              title="Die"
+            >
+              {['d4', 'd6', 'd8', 'd10', 'd12'].map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
           </div>
+        </div>
+        <label className="mt-3 flex items-center gap-1.5 text-sm">
+          <input
+            type="checkbox"
+            checked={draft.untrainedImprovisation}
+            onChange={(e) => up('untrainedImprovisation', e.target.checked)}
+            className="h-4 w-4 accent-amber-600"
+          />
+          <span>
+            Untrained Improvisation{' '}
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              (untrained skills use level/2 instead of 0)
+            </span>
+          </span>
+        </label>
+      </Section>
+
+      <Section title="Fame & Resource Points">
+        <div className="grid grid-cols-2 gap-3 sm:w-1/2">
+          {num('Fame/Infamy', 'fame')}
+          {num('Resource Points', 'resourcePoints')}
         </div>
       </Section>
 
@@ -156,22 +252,15 @@ export function KingdomPage() {
             <div key={k} className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
               <span className="label capitalize">{k}</span>
               <div className="grid grid-cols-2 gap-2">
-                <NumberField
+                <NumField
                   value={draft.abilities[k].score}
                   onChange={(v) => upAbility(k, { score: v })}
                   title="Score"
                 />
-                <NumberField
+                <NumField
                   value={draft.abilities[k].modifier}
                   onChange={(v) => upAbility(k, { modifier: v })}
                   title="Modifier"
-                />
-              </div>
-              <div className="mt-2">
-                <EditableText
-                  value={draft.abilities[k].notes}
-                  onChange={(v) => upAbility(k, { notes: v })}
-                  placeholder="Notes"
                 />
               </div>
             </div>
@@ -180,94 +269,135 @@ export function KingdomPage() {
       </Section>
 
       <Section title="Ruin">
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+            <span className="w-24" />
+            <span className="w-20 text-center">Value</span>
+            <span className="w-20 text-center">Threshold</span>
+            <span className="w-20 text-center">Penalty</span>
+          </div>
           {RUINS.map((k) => (
-            <div key={k} className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
-              <span className="label capitalize">{k}</span>
-              <div className="grid grid-cols-3 gap-2">
-                <NumberField
-                  value={draft.ruin[k].value}
-                  onChange={(v) => upRuin(k, { value: v })}
-                  title="Value"
-                />
-                <NumberField
-                  value={draft.ruin[k].threshold}
-                  onChange={(v) => upRuin(k, { threshold: v })}
-                  title="Threshold"
-                />
-                <NumberField
-                  value={draft.ruin[k].penalty}
-                  onChange={(v) => upRuin(k, { penalty: v })}
-                  title="Penalty"
-                />
-              </div>
+            <div key={k} className="flex items-center gap-3">
+              <span className="w-24 text-sm font-medium capitalize">{k}</span>
+              <NumField
+                value={draft.ruin[k].value}
+                onChange={(v) => upRuin(k, { value: v })}
+                title="Value"
+              />
+              <NumField
+                value={draft.ruin[k].threshold}
+                onChange={(v) => upRuin(k, { threshold: v })}
+                title="Threshold"
+              />
+              <NumField
+                value={draft.ruin[k].penalty}
+                onChange={(v) => upRuin(k, { penalty: v })}
+                title="Penalty"
+              />
             </div>
           ))}
         </div>
       </Section>
 
       <Section title="Commodities">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+            <span className="w-24" />
+            <span className="w-20 text-center">Current</span>
+            <span className="w-20 text-center">Maximum</span>
+          </div>
           {COMMODITIES.map((k) => (
-            <div key={k} className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
-              <span className="label capitalize">{k}</span>
-              <NumberField
+            <div key={k} className="flex items-center gap-3">
+              <span className="w-24 text-sm font-medium capitalize">{k}</span>
+              <NumField
                 value={draft.commodities[k].stored}
                 onChange={(v) => upCommodity(k, { stored: v })}
-                title="Stored"
+                title="Current"
               />
-              <div className="mt-2">
-                <NumberField
-                  value={draft.commodities[k].capacity}
-                  onChange={(v) => upCommodity(k, { capacity: v })}
-                  title="Capacity"
-                />
-              </div>
+              <NumField
+                value={draft.commodities[k].capacity}
+                onChange={(v) => upCommodity(k, { capacity: v })}
+                title="Maximum"
+              />
             </div>
           ))}
         </div>
       </Section>
 
       <Section title="Work Sites">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {WORK_SITES.map((k) => (
-            <div key={k} className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
-              <span className="label capitalize">{k}</span>
-              <NumberField
-                value={draft.workSites[k].count}
-                onChange={(v) => upWorkSite(k, { count: v })}
-                title="Count"
-              />
+        <div className="grid gap-3 sm:grid-cols-2">
+          {draft.workSites.map((site, i) => (
+            <div key={site.id} className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
+              <div className="flex items-center gap-2">
+                <select
+                  value={site.type}
+                  onChange={(e) => upWorkSite(i, { type: e.target.value as WorkSiteType })}
+                  className="field w-28 capitalize"
+                  title="Type"
+                >
+                  {WORK_SITE_TYPES.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  className="btn-ghost ml-auto px-2 py-1 text-xs"
+                  onClick={() => removeWorkSite(i)}
+                  title="Remove work site"
+                >
+                  ✕
+                </button>
+              </div>
               <div className="mt-2">
-                <NumberField
-                  value={draft.workSites[k].resourceHexes}
-                  onChange={(v) => upWorkSite(k, { resourceHexes: v })}
+                <span className="label">Resource hexes</span>
+                <NumField
+                  value={site.resourceHexes}
+                  onChange={(v) => upWorkSite(i, { resourceHexes: v })}
                   title="Resource hexes"
+                />
+              </div>
+              <div className="mt-2">
+                <EditableText
+                  value={site.location}
+                  onChange={(v) => upWorkSite(i, { location: v })}
+                  placeholder="Location"
+                />
+              </div>
+              <div className="mt-2">
+                <EditableText
+                  textarea
+                  value={site.comments}
+                  onChange={(v) => upWorkSite(i, { comments: v })}
+                  placeholder="Comments"
                 />
               </div>
             </div>
           ))}
         </div>
-      </Section>
-
-      <Section title="Notes">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div>
-            <span className="label">Notes</span>
-            <EditableText textarea value={draft.notes} onChange={(v) => up('notes', v)} />
-          </div>
-          <div>
-            <span className="label">GM Notes</span>
-            <EditableText textarea value={draft.gmNotes} onChange={(v) => up('gmNotes', v)} />
-          </div>
+        <div className="mt-3 flex items-center gap-2">
+          <span className="label">Add work site</span>
+          <select
+            value={newWorkSiteType}
+            onChange={(e) => setNewWorkSiteType(e.target.value as WorkSiteType)}
+            className="field w-28 capitalize"
+          >
+            {WORK_SITE_TYPES.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+          <button className="btn-ghost" onClick={addWorkSite}>
+            Add
+          </button>
         </div>
       </Section>
 
-      <div className="flex justify-end">
-        <button className="btn-primary" disabled={!dirty || mutate.isPending} onClick={save}>
-          {mutate.isPending ? 'Saving…' : 'Save'}
-        </button>
-      </div>
+      <Section title="Notes">
+        <span className="label">Notes</span>
+        <EditableText textarea rows={6} value={draft.notes} onChange={(v) => up('notes', v)} />
+      </Section>
 
       <ConflictDialog
         open={conflict !== null}

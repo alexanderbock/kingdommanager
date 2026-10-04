@@ -7,7 +7,14 @@ import './index.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { retry: 1, refetchOnWindowFocus: false, staleTime: 30_000 },
+    queries: {
+      // The dev server can still be booting when the page first loads;
+      // back off and retry instead of surfacing an error.
+      retry: 6,
+      retryDelay: (attempt) => Math.min(1000 * 2 ** (attempt - 1), 8000),
+      refetchOnWindowFocus: false,
+      staleTime: 30_000,
+    },
   },
 });
 

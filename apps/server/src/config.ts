@@ -3,6 +3,8 @@ export interface Config {
   host: string;
   basePath: string;
   dbPath: string;
+  /** Delete the database before opening it (used by the e2e suite). */
+  freshDb: boolean;
   webDist: string;
 }
 
@@ -20,6 +22,7 @@ export function loadConfig(): Config {
     host: process.env.HOST ?? '127.0.0.1',
     basePath: normalizeBasePath(process.env.BASE_PATH ?? '/'),
     dbPath: process.env.DB_PATH ?? './data/kingdom.sqlite',
+    freshDb: process.env.FRESH_DB === '1',
     // apps/server/src|dist -> ../../web/dist
     webDist: new URL('../../web/dist', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'),
   };

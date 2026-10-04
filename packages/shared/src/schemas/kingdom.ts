@@ -5,7 +5,6 @@ export const AbilityKey = z.enum(['culture', 'economy', 'loyalty', 'stability'])
 export const AbilityScore = z.object({
   score: Num,
   modifier: Num,
-  notes: z.string(),
 });
 
 export const RuinKey = z.enum(['corruption', 'crime', 'decay', 'strife']);
@@ -21,10 +20,13 @@ export const Commodity = z.object({
   capacity: Num,
 });
 
-export const WorkSiteKey = z.enum(['farmland', 'lumber', 'mine', 'quarry']);
+export const WorkSiteType = z.enum(['farmland', 'lumber', 'mine', 'quarry']);
 export const WorkSite = z.object({
-  count: Num,
+  id: z.string(),
+  type: WorkSiteType,
   resourceHexes: Num,
+  location: z.string(),
+  comments: z.string(),
 });
 
 /** Singleton kingdom record. Every number here is typed in by a person. */
@@ -39,7 +41,6 @@ export const KingdomSchema = z.object({
   controlDc: Num,
   unrest: Num,
   fame: Num,
-  infamy: Num,
   resourcePoints: Num,
   resourceDice: z.object({
     count: Num,
@@ -65,15 +66,10 @@ export const KingdomSchema = z.object({
     ore: Commodity,
     stone: Commodity,
   }),
-  workSites: z.object({
-    farmland: WorkSite,
-    lumber: WorkSite,
-    mine: WorkSite,
-    quarry: WorkSite,
-  }),
-  eventDc: Num,
+  workSites: z.array(WorkSite),
+  /** House rule: untrained kingdom skills use level/2 instead of 0. */
+  untrainedImprovisation: z.boolean(),
   notes: z.string(),
-  gmNotes: z.string(),
 });
 export type Kingdom = z.infer<typeof KingdomSchema>;
 
