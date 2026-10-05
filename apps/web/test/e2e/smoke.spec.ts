@@ -180,3 +180,28 @@ test('settlements: delete a settlement removes it', async ({ page }) => {
   await doomed.getByRole('button', { name: 'Delete' }).click();
   await expect(page.locator('.card')).toHaveCount(countBefore - 1);
 });
+test('armies page: add an army, edit the stat block, autosave persists', async ({ page }) => {
+  await page.goto('/armies');
+  await expect(page.getByRole('heading', { name: 'Armies' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Add army' }).click();
+  const dialog = page.getByRole('dialog', { name: 'New army' });
+  await dialog.getByLabel('Name').fill('Guard Company');
+  await dialog.getByLabel('Type').selectOption('infantry');
+  await dialog.getByRole('button', { name: 'Add army' }).click();
+
+  const card = page.locator('.card').first();
+  await expect(card.locator('input[aria-label="Army name"]')).toHaveValue('Guard Company');
+
+  // Fill in stat block numbers: level, max HP, and rout threshold (half of max HP).
+  await card.getByLabel('Level').fill('2');
+  await card.getByLabel('Max HP').fill('40');
+  await card.getByLabel('Rout threshold').fill('20');
+  await expect(card.getByText('✓', { exact: true })).toBeVisible({ timeout: 10_000 });
+
+  const list = await (await page.request.get('/api/armies')).json();
+  const army = list.find((a: any) => a.data.name === 'Guard Company');
+  expect(army.data.level).toBe(2);
+  expect(army.data.maxHp).toBe(40);
+  expect(army.data.routThreshold).toBe(20);
+});

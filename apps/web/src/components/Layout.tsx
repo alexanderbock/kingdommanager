@@ -8,6 +8,7 @@ const NAV = [
   { to: '/skills', label: 'Skills' },
   { to: '/leaders', label: 'Leaders' },
   { to: '/settlements', label: 'Settlements' },
+  { to: '/armies', label: 'Armies' },
 ];
 
 function ThemeToggle() {

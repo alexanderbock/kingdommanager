@@ -1,5 +1,6 @@
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
+import { ArmiesPage } from './pages/ArmiesPage';
 import { KingdomPage } from './pages/KingdomPage';
 import { LeadersPage } from './pages/LeadersPage';
 import { SettlementsPage } from './pages/SettlementsPage';
@@ -28,6 +29,7 @@ export function App() {
         <Route path="/skills" element={<SkillsPage />} />
         <Route path="/leaders" element={<LeadersPage />} />
         <Route path="/settlements" element={<SettlementsPage />} />
+        <Route path="/armies" element={<ArmiesPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

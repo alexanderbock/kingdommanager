@@ -286,3 +286,76 @@ describe('settlements', () => {
     expect(res.statusCode).toBe(400);
   });
 });
+
+describe('armies', () => {
+  const army = {
+    name: 'Guard Company',
+    type: 'infantry',
+    level: 2,
+    scouting: 3,
+    recruitmentDc: 12,
+    consumption: 2,
+    ac: 18,
+    maneuver: 4,
+    morale: 3,
+    hp: 40,
+    maxHp: 40,
+    routThreshold: 20,
+    attacks: [
+      { kind: 'melee', name: 'Longsword', bonus: 8, notes: '' },
+      { kind: 'ranged', name: 'Longbow', bonus: 7, notes: '' },
+    ],
+    tactics: ['Defensive Formation'],
+    gear: ['Light Armor'],
+    specialAbilities: [],
+    conditions: [],
+    location: 'New Halvong',
+    recruitedOnTurn: 1,
+    status: 'active',
+    notes: '',
+  };
+
+  it('POST /api/armies creates an army', async () => {
+    const res = await app.inject({ method: 'POST', url: '/api/armies', payload: { data: army } });
+    expect(res.statusCode).toBe(201);
+    expect(json(res).data.name).toBe('Guard Company');
+    const list = json(await app.inject({ method: 'GET', url: '/api/armies' }));
+    expect(list).toHaveLength(1);
+  });
+
+  it('PATCH updates, and a stale version returns 409', async () => {
+    const list = json(await app.inject({ method: 'GET', url: '/api/armies' }));
+    const a = list[0];
+    const ok = await app.inject({
+      method: 'PATCH',
+      url: `/api/armies/${a.id}`,
+      payload: { data: { ...a.data, hp: 30 }, version: a.version },
+    });
+    expect(ok.statusCode).toBe(200);
+    expect(json(ok).data.hp).toBe(30);
+
+    const stale = await app.inject({
+      method: 'PATCH',
+      url: `/api/armies/${a.id}`,
+      payload: { data: { ...a.data, hp: 10 }, version: a.version },
+    });
+    expect(stale.statusCode).toBe(409);
+    expect(json(stale).current.version).toBe(a.version + 1);
+  });
+
+  it('rejects an invalid army', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/armies',
+      payload: { data: { ...army, type: 'dragon' } },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('DELETE removes an army', async () => {
+    const list = json(await app.inject({ method: 'GET', url: '/api/armies' }));
+    const res = await app.inject({ method: 'DELETE', url: `/api/armies/${list[0].id}` });
+    expect(res.statusCode).toBe(204);
+    expect(json(await app.inject({ method: 'GET', url: '/api/armies' }))).toHaveLength(0);
+  });
+});
