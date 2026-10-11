@@ -18,6 +18,12 @@ export const ActivitySchema = z.object({
 });
 export type Activity = z.infer<typeof ActivitySchema>;
 
+/** A single option in an activity dropdown (stable key + display name). */
+export interface ActivityOption {
+  key: string;
+  name: string;
+}
+
 /** Read-only lookup table (display only, never used to fill in game numbers). */
 export const ReferenceTableSchema = z.object({
   key: z.string(),

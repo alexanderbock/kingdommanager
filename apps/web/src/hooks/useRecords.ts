@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { Kingdom, StoredRecord } from '@kingdom/shared';
+import type { ActivityOption, Kingdom, StoredRecord } from '@kingdom/shared';
 import { ApiError, apiFetch } from '../lib/api';
 
 /** Thrown when the server rejects a save with a version conflict (409). */
@@ -51,6 +51,13 @@ export function useList<T>(entity: string) {
   return useQuery({
     queryKey: [entity],
     queryFn: () => apiFetch<StoredRecord<T>[]>(`/${entity}`),
+  });
+}
+
+export function useLeadershipActivities() {
+  return useQuery({
+    queryKey: ['leadership-activities'],
+    queryFn: () => apiFetch<ActivityOption[]>('/leadership-activities'),
   });
 }
 

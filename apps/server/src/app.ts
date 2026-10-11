@@ -28,6 +28,7 @@ import { registerTurnRoutes } from './routes/turns.js';
 import { registerLogRoutes } from './routes/log.js';
 import { registerStructureRoutes } from './routes/structures.js';
 import { registerBackupRoutes } from './routes/backup.js';
+import { registerLeadershipRoutes } from './routes/leadership.js';
 
 /** Build the Fastify app (routes + static serving) without listening. */
 export async function buildApp(config: Config): Promise<FastifyInstance> {
@@ -41,6 +42,7 @@ export async function buildApp(config: Config): Promise<FastifyInstance> {
   registerSseRoutes(app, api);
   registerKingdomRoutes(app, api);
   registerStructureRoutes(app, api);
+  registerLeadershipRoutes(app, api);
   registerTurnRoutes(app, api);
   registerLogRoutes(app, api);
   registerBackupRoutes(app, api);
