@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import * as store from './store.js';
+import { turnTemplate } from './catalog.js';
 import type { StoredRecord } from '@kingdom/shared';
 
 export type StoredTurn = StoredRecord<any>;
@@ -10,16 +11,16 @@ export function findActiveTurn(): StoredTurn | null {
 }
 
 /**
- * Start the next turn (snapshots the enabled template). Returns an error
+ * Start the next turn with a step state for every enabled template step.
+ * The template itself is static (seed/turn-template.json). Returns an error
  * code instead of throwing; the caller decides transactionality.
  */
 export function startTurn(inGameDate: string): { code: number; error?: string; rec?: StoredTurn } {
   if (findActiveTurn()) return { code: 409, error: 'an active turn already exists' };
-  const template = store.getById('turn_template', 'turn-template');
-  if (!template) return { code: 400, error: 'turn template missing' };
+  const template = turnTemplate();
   const turns = store.listAll('turns');
   const number = turns.length ? Math.max(...turns.map((t) => t.data.number)) + 1 : 1;
-  const steps = [...template.data.steps]
+  const steps = [...template.steps]
     .filter((s: any) => s.enabled)
     .sort((a: any, b: any) => a.order - b.order);
   const stepState: Record<string, any> = {};
@@ -31,7 +32,6 @@ export function startTurn(inGameDate: string): { code: number; error?: string; r
     currentStepKey: steps[0]?.key ?? null,
     startedAt: new Date().toISOString(),
     completedAt: null,
-    template: { phases: template.data.phases, steps },
     stepState,
   };
   return { code: 201, rec: store.createRecord('turns', 'turns', randomUUID(), data, { number }) };

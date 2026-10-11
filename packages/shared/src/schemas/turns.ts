@@ -29,7 +29,7 @@ export const StepSchema = z.object({
 });
 export type Step = z.infer<typeof StepSchema>;
 
-/** Editable turn template (Settings). Snapshotted into each turn at start. */
+/** Turn template (seed/turn-template.json, read at runtime). */
 export const TurnTemplateSchema = z.object({
   phases: z.array(PhaseSchema),
   steps: z.array(StepSchema),
@@ -67,8 +67,6 @@ export const TurnSchema = z.object({
   currentStepKey: z.string().nullable(),
   startedAt: z.string(),
   completedAt: z.string().nullable(),
-  /** Snapshot of the enabled template at the time the turn started. */
-  template: TurnTemplateSchema,
   stepState: z.record(StepStateSchema),
 });
 export type Turn = z.infer<typeof TurnSchema>;

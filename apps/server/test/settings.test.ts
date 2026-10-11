@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { initDb, closeDb } from '../src/db.js';
-import { seedIfEmpty, seedSettlementsIfEmpty } from '../src/seed.js';
+import { seedIfEmpty } from '../src/seed.js';
 import { buildApp } from '../src/app.js';
 
 let app: FastifyInstance;
@@ -9,7 +9,6 @@ let app: FastifyInstance;
 beforeAll(async () => {
   initDb(':memory:');
   seedIfEmpty();
-  seedSettlementsIfEmpty();
   app = await buildApp({
     port: 0,
     host: '127.0.0.1',
@@ -86,10 +85,9 @@ describe('settings: reset', () => {
     expect(log.turns).toHaveLength(0);
     expect(json(await app.inject({ method: 'GET', url: '/api/armies' }))).toHaveLength(0);
 
-    // The seeded data is back: the starting village and the 16 skills.
+    // Defaults are back: no settlements, and the 16 skills from the catalog.
     const settlements = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
-    expect(settlements).toHaveLength(1);
-    expect(settlements[0].data.name).toBe('New Halvong');
+    expect(settlements).toHaveLength(0);
     expect(json(await app.inject({ method: 'GET', url: '/api/skills' }))).toHaveLength(16);
 
     // The reset is repeatable.

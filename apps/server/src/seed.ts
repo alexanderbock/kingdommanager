@@ -1,10 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { randomUUID } from 'node:crypto';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { getDb } from './db.js';
-import { createRecord, getById, listAll } from './store.js';
-import type { Kingdom, Settlement } from '@kingdom/shared';
+import { createRecord, getById } from './store.js';
+import type { Kingdom } from '@kingdom/shared';
 
 function defaultKingdom(): Kingdom {
   const zero = { score: null, modifier: null };
@@ -44,12 +40,11 @@ function defaultKingdom(): Kingdom {
   };
 }
 
-function readSeed(file: string): any {
-  const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'seed');
-  return JSON.parse(readFileSync(path.join(dir, file), 'utf8'));
-}
-
-/** Load seed JSON into the database on first run. */
+/**
+ * Create the kingdom singleton on first run. Rules content (skills,
+ * milestones, activities, ...) is not copied into the database: it is read
+ * from seed/*.json at runtime, and only user-entered values are stored.
+ */
 export function seedIfEmpty(): void {
   const db = getDb();
   const seeded = db.prepare("SELECT value FROM meta WHERE key = 'seeded'").get();
@@ -59,38 +54,6 @@ export function seedIfEmpty(): void {
     if (!getById('kingdom', 'kingdom')) {
       createRecord('kingdom', 'kingdom', 'kingdom', defaultKingdom());
     }
-    for (const skill of readSeed('skills.json')) {
-      createRecord('kingdom_skills', 'skills', skill.key, skill);
-    }
-    for (const leader of readSeed('leaders.json')) {
-      createRecord('leaders', 'leaders', leader.role, leader);
-    }
-    createRecord('turn_template', 'turn-template', 'turn-template', readSeed('turn-template.json'));
-    for (const activity of readSeed('activities.json')) {
-      createRecord('activities', 'activities', activity.key, activity);
-    }
-    for (const table of readSeed('reference.json')) {
-      createRecord('reference_tables', 'reference', table.key, table);
-    }
-    for (const milestone of readSeed('milestones.json')) {
-      createRecord('milestones', 'milestones', milestone.name, milestone);
-    }
-    for (const def of readSeed('structures.json')) {
-      createRecord('structure_defs', 'structure-defs', def.name, def);
-    }
     db.prepare("INSERT INTO meta (key, value) VALUES ('seeded', '1')").run();
   })();
-}
-
-/** Every database gets a starting village (also runs on already-seeded DBs). */
-export function seedSettlementsIfEmpty(): void {
-  if (listAll('settlements').length > 0) return;
-  const settlement: Settlement = {
-    name: 'New Halvong',
-    type: 'village',
-    grids: 1,
-    location: '',
-    buildings: [],
-  };
-  createRecord('settlements', 'settlements', randomUUID(), settlement);
 }

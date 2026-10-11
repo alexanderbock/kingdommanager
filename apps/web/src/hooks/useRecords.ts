@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ActivityOption, Kingdom, StoredRecord, TurnLogResponse } from '@kingdom/shared';
+import type { Kingdom, StoredRecord, TurnLogResponse } from '@kingdom/shared';
 import { ApiError, apiFetch } from '../lib/api';
 
 /** Thrown when the server rejects a save with a version conflict (409). */
@@ -113,10 +113,14 @@ export function useList<T>(entity: string) {
   });
 }
 
-export function useLeadershipActivities() {
+/**
+ * Static rules content (activities, turn template, ...). Served as plain JSON
+ * read from the server's seed files, not as stored records.
+ */
+export function useCatalog<T>(path: 'activities' | 'reference' | 'structure-defs' | 'turn-template') {
   return useQuery({
-    queryKey: ['leadership-activities'],
-    queryFn: () => apiFetch<ActivityOption[]>('/leadership-activities'),
+    queryKey: ['catalog', path],
+    queryFn: () => apiFetch<T>(`/${path}`),
   });
 }
 

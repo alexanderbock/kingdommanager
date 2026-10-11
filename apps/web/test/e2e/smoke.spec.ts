@@ -80,13 +80,12 @@ test('stale autosave shows the conflict dialog and force overwrite works', async
   expect(after.data.name).toBe('Test Kingdom 2');
 });
 
-test('settlements page: seeded village, add settlement, place buildings, overcrowding', async ({ page }) => {
+test('settlements page: empty by default, add settlement, place buildings, overcrowding', async ({ page }) => {
   await page.goto('/settlements');
   await expect(page.getByRole('heading', { name: 'Settlements', exact: true })).toBeVisible();
 
-  // The seeded village is present.
-  const nameInputs = page.locator('input[aria-label="Settlement name"]');
-  await expect(nameInputs.first()).toHaveValue('New Halvong');
+  // No settlement exists by default.
+  await expect(page.getByText('No settlements yet')).toBeVisible();
 
   // Add a town.
   await page.getByRole('button', { name: 'Add settlement' }).click();
@@ -94,7 +93,7 @@ test('settlements page: seeded village, add settlement, place buildings, overcro
   await dialog.getByLabel('Name').fill('Test Town');
   await dialog.getByLabel('Size').selectOption('town');
   await dialog.getByRole('button', { name: 'Add settlement' }).click();
-  await expect(page.locator('.card')).toHaveCount(2);
+  await expect(page.locator('.card')).toHaveCount(1);
 
   const card = page.locator('.card').last();
   await expect(card.locator('input[aria-label="Settlement name"]')).toHaveValue('Test Town');
@@ -282,8 +281,19 @@ test('turn page: step list, AoN links, activity pickers, finish turn', async ({ 
     data: { data: { ...ruler.data, isPC: true, vacant: false, holderName: 'Morgan' }, version: ruler.version },
     headers: { 'content-type': 'application/json' },
   });
-  const settlements = await (await page.request.get('/api/settlements')).json();
-  const village = settlements.find((s: any) => s.data.name === 'New Halvong');
+  // Set a Control DC for the activity steps to show.
+  const kingdom = await (await page.request.get('/api/kingdom')).json();
+  await page.request.patch('/api/kingdom', {
+    data: { data: { ...kingdom.data, controlDc: 17 }, version: kingdom.version },
+    headers: { 'content-type': 'application/json' },
+  });
+  // A settlement for the civic picker (none exists by default).
+  const created = await page.request.post('/api/settlements', {
+    data: { data: { name: 'New Halvong', type: 'village', grids: 1, location: '', buildings: [] } },
+    headers: { 'content-type': 'application/json' },
+  });
+  expect(created.status()).toBe(201);
+  const village = await created.json();
 
   await page.goto('/turn');
   await expect(page.getByRole('heading', { name: `Turn ${n}`, exact: true })).toBeVisible();
@@ -307,18 +317,41 @@ test('turn page: step list, AoN links, activity pickers, finish turn', async ({ 
     'href',
     'https://2e.aonprd.com/Rules.aspx?ID=1806',
   );
+  // The current Control DC is shown at the top of every activity step.
+  await expect(page.getByTestId('control-dc')).toContainText('Control DC: 17');
   const leaderCard = page.locator('[data-testid="activity-actor"]', { hasText: 'Morgan' });
-  await leaderCard.locator('select').first().selectOption('take-charge');
+  const rules = page.locator('[data-testid="activity-rules"]');
+  // The mouse wheel steps through the activity list while hovering the dropdown.
+  const firstActivity = leaderCard.locator('select').first();
+  await firstActivity.hover();
+  await page.mouse.wheel(0, 100);
+  await expect(firstActivity).toHaveValue('capital-investment');
+  await page.mouse.wheel(0, 100);
+  await expect(firstActivity).toHaveValue('celebrate-holiday');
+  await page.mouse.wheel(0, -100);
+  await expect(firstActivity).toHaveValue('capital-investment');
+  await expect(rules).toHaveAttribute('src', 'https://2e.aonprd.com/Actions.aspx?ID=1407');
+  await leaderCard.locator('select').first().selectOption('celebrate-holiday');
+  // The picked activity's rules page shows next to the picker...
+  await expect(rules).toHaveAttribute('src', 'https://2e.aonprd.com/Actions.aspx?ID=1395');
+  // ...follows the dropdown changed last...
+  await leaderCard.locator('select').nth(2).selectOption('capital-investment');
+  await expect(rules).toHaveAttribute('src', 'https://2e.aonprd.com/Actions.aspx?ID=1407');
+  await leaderCard.locator('select').first().selectOption('celebrate-holiday');
+  await expect(rules).toHaveAttribute('src', 'https://2e.aonprd.com/Actions.aspx?ID=1395');
+  // ...and hides once an outcome is chosen.
   await leaderCard.locator('select').nth(1).selectOption('success');
+  await expect(rules).toHaveCount(0);
   await expect
     .poll(async () => {
       const t = await (await page.request.get('/api/turns/active')).json();
       return t.data.stepState['leadership-activities'].activities;
     })
-    .toEqual([{ actorId: 'ruler', activityKey: 'take-charge', outcome: 'success' }]);
+    .toEqual([{ actorId: 'ruler', activityKey: 'celebrate-holiday', outcome: 'success' }]);
 
   // Region activities: one collective card with three slots.
   await nav.getByRole('button', { name: /Region Activities/ }).click();
+  await expect(page.getByTestId('control-dc')).toContainText('Control DC: 17');
   const partyCard = page.locator('[data-testid="activity-actor"]').first();
   await expect(partyCard.getByText('The party')).toBeVisible();
   await partyCard.locator('select').first().selectOption('claim-hex');
@@ -332,6 +365,7 @@ test('turn page: step list, AoN links, activity pickers, finish turn', async ({ 
 
   // Civic activities: one slot per settlement.
   await nav.getByRole('button', { name: /Civic Activities/ }).click();
+  await expect(page.getByTestId('control-dc')).toContainText('Control DC: 17');
   const townCard = page.locator('[data-testid="activity-actor"]', { hasText: 'New Halvong' });
   await townCard.locator('select').first().selectOption('build-structure');
   await townCard.locator('select').nth(1).selectOption('failure');
@@ -343,8 +377,8 @@ test('turn page: step list, AoN links, activity pickers, finish turn', async ({ 
     .toEqual([{ actorId: village.id, activityKey: 'build-structure', outcome: 'failure' }]);
 
   // Mark every step done, then finish the turn (which starts the next one).
-  for (const step of turn.data.template.steps) {
-    await page.request.patch(`/api/turns/${n}/steps/${step.key}`, {
+  for (const key of Object.keys(turn.data.stepState)) {
+    await page.request.patch(`/api/turns/${n}/steps/${key}`, {
       data: { done: true },
       headers: { 'content-type': 'application/json' },
     });
@@ -379,7 +413,7 @@ test('settings: reset the kingdom to its default state', async ({ page }) => {
   expect(log.activeTurnNumber).toBeNull();
   expect(log.turns).toHaveLength(0);
   const settlements = await (await page.request.get('/api/settlements')).json();
-  expect(settlements.map((s: any) => s.data.name)).toEqual(['New Halvong']);
+  expect(settlements).toEqual([]);
   // The page reloaded back to a working state.
   await expect(page.getByRole('heading', { name: 'Settings', exact: true })).toBeVisible();
 });

@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { ActivitySelectionSchema } from '@kingdom/shared';
 import { getDb } from '../db.js';
 import * as store from '../store.js';
+import { turnTemplate } from '../catalog.js';
 import { completeTurn, findActiveTurn, startTurn } from '../turn-service.js';
 
 const params = (req: any): Record<string, string> => req.params as Record<string, string>;
@@ -11,7 +12,7 @@ function findTurnByNumber(n: number) {
 }
 
 /**
- * Turn lifecycle: start (snapshots the enabled template), step state,
+ * Turn lifecycle: start (one step state per enabled template step), step state,
  * and completion. Log entries live in routes/log.ts; the change log in
  * routes/turn-log.ts.
  */
@@ -90,9 +91,10 @@ export function registerTurnRoutes(app: FastifyInstance, apiPrefix: string): voi
     if (turn.data.status === 'complete') {
       return reply.code(400).send({ error: 'turn is already complete' });
     }
-    const notDone = turn.data.template.steps
-      .filter((s: any) => !turn.data.stepState[s.key]?.done)
-      .map((s: any) => s.title);
+    const titles = new Map(turnTemplate().steps.map((s) => [s.key, s.title]));
+    const notDone = Object.entries(turn.data.stepState as Record<string, { done: boolean }>)
+      .filter(([, state]) => !state.done)
+      .map(([key]) => titles.get(key) ?? key);
     if (notDone.length) {
       return reply.code(400).send({ error: 'steps not done', steps: notDone });
     }

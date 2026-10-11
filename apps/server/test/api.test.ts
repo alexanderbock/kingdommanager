@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { initDb, closeDb } from '../src/db.js';
-import { seedIfEmpty, seedSettlementsIfEmpty } from '../src/seed.js';
+import { seedIfEmpty } from '../src/seed.js';
 import { buildApp } from '../src/app.js';
+import activitiesSeed from '../seed/activities.json';
 
 let app: FastifyInstance;
 
 beforeAll(async () => {
   initDb(':memory:');
   seedIfEmpty();
-  seedSettlementsIfEmpty();
   app = await buildApp({
     port: 0,
     host: '127.0.0.1',
@@ -42,11 +42,73 @@ describe('health and seed', () => {
     expect(skills.find((s: any) => s.data.key === 'agriculture')).toBeTruthy();
   });
 
-  it('seeds the 17-step turn template and 36 milestones', async () => {
+  it('serves the 17-step turn template and 36 milestones from the seed files', async () => {
     const template = json(await app.inject({ method: 'GET', url: '/api/turn-template' }));
-    expect(template.data.steps).toHaveLength(17);
+    expect(template.steps).toHaveLength(17);
     const milestones = json(await app.inject({ method: 'GET', url: '/api/milestones' }));
     expect(milestones).toHaveLength(36);
+    expect(milestones[0]).toMatchObject({
+      id: 'build-roads-for-the-first-time',
+      version: 0,
+      data: {
+        name: 'Build Roads for the first time',
+        xp: 20,
+        achieved: false,
+        achievedOnTurn: null,
+      },
+    });
+  });
+
+  it('serves the activity catalog with rules links', async () => {
+    const activities = json(await app.inject({ method: 'GET', url: '/api/activities' }));
+    // Served straight from the seed file (no database copy).
+    expect(activities).toEqual(activitiesSeed);
+    expect(activities.find((a: any) => a.key === 'capital-investment').link).toMatch(
+      /^https:\/\/2e\.aonprd\.com\//,
+    );
+    const gone = await app.inject({ method: 'GET', url: '/api/leadership-activities' });
+    expect(gone.statusCode).toBe(404);
+  });
+
+  it('stores only the state of a catalog entry and merges the static part on read', async () => {
+    const before = json(await app.inject({ method: 'GET', url: '/api/skills/arts' }));
+    expect(before.version).toBe(0);
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/api/skills/arts',
+      payload: {
+        data: { ...before.data, name: 'Renamed', proficiency: 'trained', total: 4 },
+        version: 0,
+      },
+    });
+    expect(res.statusCode).toBe(200);
+    const saved = json(res);
+    expect(saved.version).toBe(2);
+    expect(saved.data).toMatchObject({
+      key: 'arts',
+      name: 'Arts',
+      proficiency: 'trained',
+      total: 4,
+    });
+
+    // A stale version still conflicts.
+    const stale = await app.inject({
+      method: 'PATCH',
+      url: '/api/skills/arts',
+      payload: { data: saved.data, version: 0 },
+    });
+    expect(stale.statusCode).toBe(409);
+
+    const exported = json(await app.inject({ method: 'GET', url: '/api/export' }));
+    const row = exported.data.kingdom_skills.find((r: any) => r.id === 'arts');
+    expect(row.data).toEqual({ proficiency: 'trained', total: 4, breakdown: '', notes: '' });
+
+    const unknown = await app.inject({
+      method: 'PATCH',
+      url: '/api/skills/nope',
+      payload: { data: saved.data },
+    });
+    expect(unknown.statusCode).toBe(404);
   });
 });
 
@@ -91,11 +153,14 @@ describe('kingdom versioning', () => {
   });
 });
 
-
 describe('turn lifecycle', () => {
   it('starts a turn, logs a check with an RP change, and completes it', async () => {
     // Start
-    const start = await app.inject({ method: 'POST', url: '/api/turns', payload: { inGameDate: 'Day 1' } });
+    const start = await app.inject({
+      method: 'POST',
+      url: '/api/turns',
+      payload: { inGameDate: 'Day 1' },
+    });
     expect(start.statusCode).toBe(201);
     const turn = json(start);
     expect(turn.data.number).toBe(1);
@@ -160,10 +225,10 @@ describe('turn lifecycle', () => {
     expect(early.statusCode).toBe(400);
 
     // Mark every step done
-    for (const step of turn.data.template.steps) {
+    for (const key of Object.keys(turn.data.stepState)) {
       const res = await app.inject({
         method: 'PATCH',
-        url: `/api/turns/1/steps/${step.key}`,
+        url: `/api/turns/1/steps/${key}`,
         payload: { done: true },
       });
       expect(res.statusCode).toBe(200);
@@ -176,7 +241,7 @@ describe('turn lifecycle', () => {
     // Completed turns are read-only
     const completed = await app.inject({
       method: 'PATCH',
-      url: `/api/turns/1/steps/${turn.data.template.steps[0].key}`,
+      url: `/api/turns/1/steps/${Object.keys(turn.data.stepState)[0]}`,
       payload: { notes: 'too late' },
     });
     expect(completed.statusCode).toBe(400);
@@ -218,7 +283,11 @@ describe('export and import', () => {
 describe('turn step activities', () => {
   it('stores activity selections per step, validates outcomes, and locks on complete', async () => {
     // Turn 1 was completed by the lifecycle test; start turn 2.
-    const start = await app.inject({ method: 'POST', url: '/api/turns', payload: { inGameDate: 'Day 2' } });
+    const start = await app.inject({
+      method: 'POST',
+      url: '/api/turns',
+      payload: { inGameDate: 'Day 2' },
+    });
     expect(start.statusCode).toBe(201);
     const turn = json(start);
     expect(turn.data.number).toBe(2);
@@ -261,7 +330,9 @@ describe('turn step activities', () => {
       url: '/api/turns/2/steps/civic-activities',
       payload: {
         notes: 'built a bank',
-        activities: [{ actorId: 'new-halvong', activityKey: 'build-structure', outcome: 'failure' }],
+        activities: [
+          { actorId: 'new-halvong', activityKey: 'build-structure', outcome: 'failure' },
+        ],
       },
     });
     expect(both.statusCode).toBe(200);
@@ -270,10 +341,10 @@ describe('turn step activities', () => {
     expect(civic.activities).toHaveLength(1);
 
     // Complete the turn; selections become read-only.
-    for (const step of turn.data.template.steps) {
+    for (const key of Object.keys(turn.data.stepState)) {
       const res = await app.inject({
         method: 'PATCH',
-        url: `/api/turns/2/steps/${step.key}`,
+        url: `/api/turns/2/steps/${key}`,
         payload: { done: true },
       });
       expect(res.statusCode).toBe(200);
@@ -283,19 +354,18 @@ describe('turn step activities', () => {
     const locked = await app.inject({
       method: 'PATCH',
       url: '/api/turns/2/steps/leadership-activities',
-      payload: { activities: [{ actorId: 'ruler', activityKey: 'take-charge', outcome: 'success' }] },
+      payload: {
+        activities: [{ actorId: 'ruler', activityKey: 'take-charge', outcome: 'success' }],
+      },
     });
     expect(locked.statusCode).toBe(400);
   }, 30000);
 });
 
 describe('settlements', () => {
-  it('seeds a starting village', async () => {
+  it('starts with no settlements', async () => {
     const res = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
-    expect(res).toHaveLength(1);
-    expect(res[0].data.name).toBe('New Halvong');
-    expect(res[0].data.type).toBe('village');
-    expect(res[0].data.buildings).toEqual([]);
+    expect(res).toEqual([]);
   });
 
   it('POST /api/settlements creates a settlement', async () => {
@@ -309,7 +379,17 @@ describe('settlements', () => {
           grids: 1,
           location: 'near the river',
           buildings: [
-            { id: 'b1', name: 'Tavern', w: 2, h: 1, anchor: 0, notes: '', residential: false, image: '', link: '' },
+            {
+              id: 'b1',
+              name: 'Tavern',
+              w: 2,
+              h: 1,
+              anchor: 0,
+              notes: '',
+              residential: false,
+              image: '',
+              link: '',
+            },
           ],
         },
       },
@@ -319,7 +399,7 @@ describe('settlements', () => {
     expect(json(res).data.buildings).toHaveLength(1);
 
     const list = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
-    expect(list).toHaveLength(2);
+    expect(list).toHaveLength(1);
   });
 
   it('PATCH updates, and a stale version returns 409', async () => {
@@ -348,7 +428,7 @@ describe('settlements', () => {
     const res = await app.inject({ method: 'DELETE', url: `/api/settlements/${town.id}` });
     expect(res.statusCode).toBe(204);
     const after = json(await app.inject({ method: 'GET', url: '/api/settlements' }));
-    expect(after).toHaveLength(1);
+    expect(after).toHaveLength(0);
   });
 
   it('rejects an invalid settlement', async () => {

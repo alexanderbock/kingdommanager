@@ -9,6 +9,7 @@ import {
 import { getDb } from '../db.js';
 import * as store from '../store.js';
 import { resolveTarget, applyChangeToData } from '../changes.js';
+import { ensureStateRow } from '../catalog-state.js';
 
 const params = (req: any): Record<string, string> => req.params as Record<string, string>;
 
@@ -48,6 +49,7 @@ export function registerLogRoutes(app: FastifyInstance, apiPrefix: string): void
       for (const spec of p.changes ?? []) {
         const resolved = resolveTarget(spec.target);
         if (!resolved) return { code: 400, error: `unknown change target: ${spec.target}` };
+        if (resolved.id) ensureStateRow(resolved.table, resolved.id);
         const rec = resolved.id
           ? store.getById(resolved.table, resolved.id)
           : store.getById(resolved.table, 'kingdom');
@@ -131,6 +133,7 @@ export function registerLogRoutes(app: FastifyInstance, apiPrefix: string): void
       for (const change of [...entry.data.changes].reverse()) {
         const resolved = resolveTarget(change.target);
         if (!resolved) return { code: 400, error: `unknown change target: ${change.target}` };
+        if (resolved.id) ensureStateRow(resolved.table, resolved.id);
         const rec = resolved.id
           ? store.getById(resolved.table, resolved.id)
           : store.getById(resolved.table, 'kingdom');

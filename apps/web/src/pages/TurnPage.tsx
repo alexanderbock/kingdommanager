@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type {
-  ActivityOption,
   Activity,
   Leader,
   Settlement,
@@ -8,14 +7,16 @@ import type {
   StepState,
   StoredRecord,
   Turn,
+  TurnTemplate,
 } from '@kingdom/shared';
 import { ActivityPicker } from '../components/ActivityPicker';
 import {
   useActiveTurn,
   useAutoRefetchOnError,
   useAutosave,
+  useCatalog,
   useDraft,
-  useLeadershipActivities,
+  useKingdom,
   useList,
   useNextTurn,
   usePatchStep,
@@ -67,11 +68,15 @@ function ActiveTurnView({ turn }: { turn: Turn }) {
   const patchStep = usePatchStep();
   const leaders = useList<Leader>('leaders');
   const settlements = useList<Settlement>('settlements');
-  const activities = useList<Activity>('activities');
-  const leadershipActivities = useLeadershipActivities();
+  const kingdom = useKingdom();
+  const activities = useCatalog<Activity[]>('activities');
+  const template = useCatalog<TurnTemplate>('turn-template');
 
-  const steps = turn.template.steps;
-  const phases = [...turn.template.phases].sort((a, b) => a.order - b.order);
+  // The template is static; the turn holds a state for each step it started with.
+  const steps = (template.data?.steps ?? [])
+    .filter((s) => s.key in turn.stepState)
+    .sort((a, b) => a.order - b.order);
+  const phases = [...(template.data?.phases ?? [])].sort((a, b) => a.order - b.order);
   const currentKey = turn.currentStepKey ?? steps[0]?.key;
   const current = steps.find((s) => s.key === currentKey) ?? steps[0];
   const doneCount = steps.filter((s) => turn.stepState[s.key]?.done).length;
@@ -158,8 +163,8 @@ function ActiveTurnView({ turn }: { turn: Turn }) {
             onSelectStep={selectStep}
             leaders={leaders.data}
             settlements={settlements.data}
-            activities={(activities.data ?? []).filter((a) => a.data.enabled)}
-            leadershipActivities={leadershipActivities.data}
+            activities={(activities.data ?? []).filter((a) => a.enabled)}
+            controlDc={kingdom.data?.data.controlDc ?? null}
           />
         )}
       </div>
@@ -175,8 +180,9 @@ interface StepPanelProps {
   onSelectStep: (key: string) => void;
   leaders?: StoredRecord<Leader>[];
   settlements?: StoredRecord<Settlement>[];
-  activities: StoredRecord<Activity>[];
-  leadershipActivities?: ActivityOption[];
+  activities: Activity[];
+  /** Typed in on the Kingdom page; null when not set. */
+  controlDc: number | null;
 }
 
 function StepPanel({
@@ -188,7 +194,7 @@ function StepPanel({
   leaders,
   settlements,
   activities,
-  leadershipActivities,
+  controlDc,
 }: StepPanelProps) {
   const state: StepState = turn.stepState[step.key] ?? { done: false, checklist: {}, notes: '' };
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -213,10 +219,7 @@ function StepPanel({
 
   const links = linksForStep(step.key);
   const pickerMode = ACTIVITY_STEPS[step.key];
-  const pickerActivities: ActivityOption[] =
-    pickerMode === 'leadership'
-      ? (leadershipActivities ?? [])
-      : activities.filter((a) => a.data.category === pickerMode).map((a) => ({ key: a.data.key, name: a.data.name }));
+  const pickerActivities = activities.filter((a) => a.category === pickerMode);
   const idx = steps.findIndex((s) => s.key === step.key);
   const prev = steps[idx - 1];
   const next = steps[idx + 1];
@@ -229,6 +232,19 @@ function StepPanel({
           {state.done ? 'Reopen step' : 'Mark step done'}
         </button>
       </div>
+
+      {pickerMode && (
+        <p className="mb-3 text-sm" data-testid="control-dc">
+          <span className="font-semibold">Control DC: </span>
+          {controlDc != null ? (
+            <span className="font-semibold text-amber-700 dark:text-amber-400">{controlDc}</span>
+          ) : (
+            <span className="italic text-zinc-500 dark:text-zinc-400">
+              not set (enter it on the Kingdom page)
+            </span>
+          )}
+        </p>
+      )}
 
       {links.length > 0 && (
         <div className="mb-3 flex flex-wrap gap-1.5">

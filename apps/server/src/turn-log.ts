@@ -1,5 +1,6 @@
 import { getDb } from './db.js';
 import * as store from './store.js';
+import { catalogStateByEntity } from './catalog-state.js';
 import type { TurnLogChange, TurnLogEntry, TurnLogResponse, TurnLogTurn } from '@kingdom/shared';
 
 interface AuditRow {
@@ -23,7 +24,10 @@ function parseJson(value: string | null): any {
 }
 
 /** Human-readable name for a record of the given entity. */
-export function labelFor(entity: string, data: any): string {
+export function labelFor(entity: string, data: any, id: string | null = null): string {
+  // Catalog-backed records store only their state; the name is in the catalog.
+  const catalog = catalogStateByEntity(entity);
+  if (catalog && id != null) return catalog.label(catalog.defs().get(id), id);
   const name =
     data != null && typeof data === 'object' && typeof data.name === 'string' && data.name
       ? data.name
@@ -41,8 +45,6 @@ export function labelFor(entity: string, data: any): string {
       return name ? `Faction "${name}"` : 'Faction';
     case 'milestones':
       return name ? `Milestone "${name}"` : 'Milestone';
-    case 'structure-defs':
-      return name ? `Structure "${name}"` : 'Structure';
     case 'structures':
       return data?.customName ? `Structure "${data.customName}"` : 'Structure';
     case 'hexes':
@@ -55,16 +57,10 @@ export function labelFor(entity: string, data: any): string {
       return name ? `Feat "${name}"` : 'Feat';
     case 'modifiers':
       return name ? `Modifier "${name}"` : 'Modifier';
-    case 'activities':
-      return data?.name ? `Activity: ${data.name}` : 'Activity';
-    case 'reference':
-      return data?.name ? `Reference: ${data.name}` : 'Reference';
     case 'turns':
       return typeof data?.number === 'number' ? `Turn ${data.number}` : 'Turn';
     case 'log':
       return 'Log entry';
-    case 'turn-template':
-      return 'Turn template';
     default:
       return entity;
   }
@@ -145,7 +141,7 @@ export function listTurnLog(): TurnLogResponse {
             ids,
             action: 'delete',
             at: last.at,
-            label: labelFor(first.entity, before),
+            label: labelFor(first.entity, before, first.entity_id),
             changes: [],
           },
         });
@@ -159,7 +155,7 @@ export function listTurnLog(): TurnLogResponse {
             ids,
             action: 'create',
             at: last.at,
-            label: labelFor(first.entity, after),
+            label: labelFor(first.entity, after, first.entity_id),
             changes: [],
             values: after,
           },
@@ -194,7 +190,7 @@ export function listTurnLog(): TurnLogResponse {
             ids,
             action: 'update',
             at: lastTouch.at,
-            label: labelFor(first.entity, labelData),
+            label: labelFor(first.entity, labelData, first.entity_id),
             changes: [change],
           },
         });

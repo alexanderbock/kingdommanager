@@ -52,6 +52,18 @@ export function createRecord(
   return { id, version: 1, createdAt: now, updatedAt: now, data };
 }
 
+/**
+ * Insert a record without an audit row or broadcast. Used to materialize a
+ * catalog entry's default state right before its first real (audited) update,
+ * so the turn log shows a field change instead of a "created" entry.
+ */
+export function insertSilently(table: string, id: string, data: unknown): void {
+  const now = new Date().toISOString();
+  getDb()
+    .prepare(`INSERT INTO ${table} (id, version, created_at, updated_at, data) VALUES (?, 1, ?, ?, ?)`)
+    .run(id, now, now, JSON.stringify(data));
+}
+
 export type UpdateResult =
   | { status: 'ok'; record: StoredRecord }
   | { status: 'conflict'; current: StoredRecord }

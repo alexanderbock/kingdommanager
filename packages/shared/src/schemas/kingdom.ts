@@ -75,16 +75,25 @@ export type Kingdom = z.infer<typeof KingdomSchema>;
 
 export const Proficiency = z.enum(['untrained', 'trained', 'expert', 'master', 'legendary']);
 
-/** One of the 16 kingdom skills. `total` is typed in; `breakdown` is a free note, never parsed. */
-export const KingdomSkillSchema = z.object({
+/** Static skill definition (seed/skills.json, read at runtime). */
+export const KingdomSkillDefSchema = z.object({
   key: z.string(),
   name: z.string(),
   ability: AbilityKey,
+});
+export type KingdomSkillDef = z.infer<typeof KingdomSkillDefSchema>;
+
+/** The part of a skill stored in the database. `total` is typed in; `breakdown` is a free note, never parsed. */
+export const KingdomSkillStateSchema = z.object({
   proficiency: Proficiency,
   total: Num,
   breakdown: z.string(),
   notes: z.string(),
 });
+export type KingdomSkillState = z.infer<typeof KingdomSkillStateSchema>;
+
+/** One of the 16 kingdom skills: definition merged with its stored state. */
+export const KingdomSkillSchema = KingdomSkillDefSchema.merge(KingdomSkillStateSchema);
 export type KingdomSkill = z.infer<typeof KingdomSkillSchema>;
 
 export const LeaderRole = z.enum([
@@ -98,8 +107,8 @@ export const LeaderRole = z.enum([
   'viceroy',
 ]);
 
-export const LeaderSchema = z.object({
-  role: LeaderRole,
+/** The part of a leader stored in the database (the role is the record id). */
+export const LeaderStateSchema = z.object({
   holderName: z.string(),
   isPC: z.boolean(),
   invested: z.boolean(),
@@ -107,6 +116,9 @@ export const LeaderSchema = z.object({
   activitiesPerTurn: Num,
   notes: z.string(),
 });
+export type LeaderState = z.infer<typeof LeaderStateSchema>;
+
+export const LeaderSchema = z.object({ role: LeaderRole }).merge(LeaderStateSchema);
 export type Leader = z.infer<typeof LeaderSchema>;
 
 export const FeatSchema = z.object({

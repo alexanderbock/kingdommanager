@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { getDb } from '../db.js';
-import { seedIfEmpty, seedSettlementsIfEmpty } from '../seed.js';
+import { seedIfEmpty } from '../seed.js';
 import { broadcast } from '../sse.js';
 import { TABLES } from './backup.js';
 
@@ -13,7 +13,6 @@ export function registerSettingsRoutes(app: FastifyInstance, apiPrefix: string):
       getDb().prepare("DELETE FROM meta WHERE key = 'seeded'").run();
     })();
     seedIfEmpty();
-    seedSettlementsIfEmpty();
     broadcast({ entity: 'import', id: null, version: 0 });
     return { ok: true };
   });

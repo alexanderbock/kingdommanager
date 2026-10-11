@@ -26,7 +26,7 @@ export function SettingsPage() {
         <h2 className="mb-1 text-lg font-semibold">Reset</h2>
         <p className="mb-3 text-sm text-zinc-500 dark:text-zinc-400">
           Restore the kingdom to its default state: every record, turn, and turn log entry is
-          replaced with the initial seed data (an empty kingdom and the New Halvong village).
+          replaced with the initial seed data (an empty kingdom with no settlements).
         </p>
         <button className="btn-danger" onClick={onReset} disabled={reset.isPending}>
           {reset.isPending ? 'Resetting…' : 'Reset kingdom to defaults'}

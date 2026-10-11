@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { initDb, closeDb } from '../src/db.js';
-import { seedIfEmpty, seedSettlementsIfEmpty } from '../src/seed.js';
+import { seedIfEmpty } from '../src/seed.js';
 import { buildApp } from '../src/app.js';
 
 let app: FastifyInstance;
@@ -9,7 +9,6 @@ let app: FastifyInstance;
 beforeAll(async () => {
   initDb(':memory:');
   seedIfEmpty();
-  seedSettlementsIfEmpty();
   app = await buildApp({
     port: 0,
     host: '127.0.0.1',
@@ -18,6 +17,8 @@ beforeAll(async () => {
     webDist: 'nonexistent',
   });
   await app.ready();
+  // A settlement from setup (turn 0), deleted later in an active turn.
+  await createSettlement('New Halvong');
 });
 
 afterAll(async () => {
@@ -153,6 +154,24 @@ describe('turn log', () => {
     expect(entries.map((e: any) => e.changes[0].field)).toEqual(['resourcePoints', 'heartland', 'notes']);
     expect(entries[1].changes).toEqual([{ field: 'heartland', before: '', after: 'Water' }]);
     expect(entries[2].changes).toEqual([{ field: 'notes', before: '', after: 'a quiet kingdom' }]);
+  });
+
+  it('labels catalog-backed records from the catalog and logs a first save as an update', async () => {
+    const skill = json(await app.inject({ method: 'GET', url: '/api/skills/folklore' }));
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/api/skills/folklore',
+      payload: { data: { ...skill.data, proficiency: 'trained' }, version: skill.version },
+    });
+    expect(res.statusCode).toBe(200);
+    const log = await getLog();
+    const entries = log.turns[0].entries.filter((e: any) => e.entity === 'skills');
+    expect(entries).toHaveLength(1);
+    expect(entries[0].action).toBe('update');
+    expect(entries[0].label).toBe('Skill: Folklore');
+    expect(entries[0].changes).toEqual([
+      { field: 'proficiency', before: 'untrained', after: 'trained' },
+    ]);
   });
 
   it('keeps the label plain when the name itself changed', async () => {

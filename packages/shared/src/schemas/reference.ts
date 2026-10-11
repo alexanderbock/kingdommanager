@@ -3,8 +3,8 @@ import { Source } from './common.js';
 import { ActivityCategory } from './turns.js';
 
 /**
- * Kingdom activity reference entry. `summary` is a one-line summary with a page
- * reference; `details` is left for the GM to paste rule text into locally.
+ * Kingdom activity (seed/activities.json, read at runtime). `summary` is a
+ * one-line summary with a page reference; `details` is for full rule text.
  */
 export const ActivitySchema = z.object({
   key: z.string(),
@@ -14,15 +14,11 @@ export const ActivitySchema = z.object({
   summary: z.string(),
   details: z.string(),
   page: z.string(),
+  /** Rules page (Archives of Nethys), shown next to the activity picker. */
+  link: z.string().optional(),
   enabled: z.boolean(),
 });
 export type Activity = z.infer<typeof ActivitySchema>;
-
-/** A single option in an activity dropdown (stable key + display name). */
-export interface ActivityOption {
-  key: string;
-  name: string;
-}
 
 /** Read-only lookup table (display only, never used to fill in game numbers). */
 export const ReferenceTableSchema = z.object({

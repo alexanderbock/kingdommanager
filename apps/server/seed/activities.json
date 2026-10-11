@@ -249,6 +249,7 @@
     "summary": "Exploration or Wilderness, basic check (+1 DC per extra hex). Success: abandon, -1 Size per hex, +1 Unrest (crit: +1 RP per hex, no Unrest). Fail: +2 Unrest and DC 6 flat check or Squatters event. Crit fail: +3 Unrest and Bandit Activity event. Unrest doubles if a settlement is abandoned.",
     "details": "",
     "page": "KAP 518",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1371",
     "enabled": true
   },
   {
@@ -259,6 +260,7 @@
     "summary": "Engineering (untrained). Hex must be claimed. Spend RP by terrain (double if a river crosses, adding a Bridge), then basic check. Success: roads in the hex. Crit: also one adjacent claimed hex. Crit fail: +1 Unrest.",
     "details": "",
     "page": "KAP 523",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1390",
     "enabled": true
   },
   {
@@ -269,6 +271,7 @@
     "summary": "Exploration, Intrigue, Magic, or Wilderness. Hex must be reconnoitered, adjacent, and cleared. Spend 1 RP, basic check. Success: claim it, +1 Size, +10 XP. Crit: also take another Region activity. Crit fail: -1 to Stability checks. Limit 1/turn (2 at level 4, 3 at level 9).",
     "details": "",
     "page": "KAP 518",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1373",
     "enabled": true
   },
   {
@@ -279,6 +282,7 @@
     "summary": "Engineering (spend RP by terrain) to prepare for a settlement or remove an improvement, or Exploration vs. the level-based DC to remove monsters/hazards. +2 DC if the hex is unclaimed. Crit: refund half the RP, or 2 Luxuries from monsters. Crit fail: +1 Unrest.",
     "details": "",
     "page": "KAP 518",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1374",
     "enabled": true
   },
   {
@@ -289,6 +293,7 @@
     "summary": "Agriculture (untrained). Plains or hills in a settlement's influence. Plains: 1 RP vs. Control DC; hills: 2 RP vs. Control DC + 5. Success: 1 Farmland hex (crit: 2 adjacent). Crit fail: risk of Crop Failure events.",
     "details": "",
     "page": "KAP 522",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1383",
     "enabled": true
   },
   {
@@ -299,6 +304,7 @@
     "summary": "Engineering, Industry, Politics, or Scholarship, basic check. Hex must be cleared with no settlement. Crit: spend 1d6 RP. Success: 3d6 RP. Fail: 6d6 RP. Crit fail (or can't pay): no settlement. Starts as a village.",
     "details": "",
     "page": "KAP 519",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1375",
     "enabled": true
   },
   {
@@ -309,6 +315,7 @@
     "summary": "Engineering (untrained). Lumber camp (forest) or mine/quarry (hills, mountains). Spend RP by terrain, then basic check. Success: work site. Crit: doubled yields until end of next turn. Crit fail: +1 Unrest.",
     "details": "",
     "page": "KAP 524",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1392",
     "enabled": true
   },
   {
@@ -319,6 +326,7 @@
     "summary": "Defense (untrained). Claimed hex without a settlement. Spend RP by terrain, then basic check. Success: fortification, -1 Unrest. Crit: also refund half the RP. Crit fail: +1 Unrest.",
     "details": "",
     "page": "KAP 523",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1388",
     "enabled": true
   },
   {
@@ -329,6 +337,7 @@
     "summary": "Wilderness (untrained), basic check. Crit: 1d4 Food. Success: 1 Food. Crit fail: lose 1d4 Food (or +1 Unrest if none).",
     "details": "",
     "page": "KAP 530",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1411",
     "enabled": true
   },
   {
@@ -339,6 +348,7 @@
     "summary": "Boating (untrained). Requires a claimed hex with river or lake. Basic check. Crit: 1d4 Food. Success: 1 Food. Crit fail: +1 Unrest.",
     "details": "",
     "page": "KAP 522",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1387",
     "enabled": true
   },
   {
@@ -349,6 +359,7 @@
     "summary": "Agriculture (untrained), basic check. Crit: 1d4 Food. Success: 1 Food. Crit fail: lose 1d4 Food (or +1 Unrest if none).",
     "details": "",
     "page": "KAP 522",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1384",
     "enabled": true
   },
   {
@@ -359,6 +370,7 @@
     "summary": "Engineering (trained). Controlled hex next to a river or lake but without one. Spend RP by terrain, then basic check. Success: hex gains a river/lake feature (crit: also refund half the RP). Crit fail: +1 Unrest and a recurring Plague flat check until undone.",
     "details": "",
     "page": "KAP 524",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1393",
     "enabled": true
   },
   {
@@ -369,6 +381,7 @@
     "summary": "Uses the structure's skill. Choose contiguous lots, pay the RP and Commodity cost, then check. Also repairs damaged structures (half cost, +2 item bonus). Crit: refund half the Commodities. Fail: retry next turn without paying again. Crit fail: lots fill with Rubble.",
     "details": "",
     "page": "KAP 518",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1372",
     "enabled": true
   },
   {
@@ -379,6 +392,7 @@
     "summary": "Engineering (untrained), basic check to clear one occupied lot. Crit: clear a whole multi-lot structure or recover 1d6 lumber/stone/ore. Fail: lot stays Rubble. Crit fail: +1 Unrest.",
     "details": "",
     "page": "KAP 523",
+    "link": "https://2e.aonprd.com/Actions.aspx?ID=1391",
     "enabled": true
   }
 ]

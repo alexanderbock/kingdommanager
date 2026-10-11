@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
  * Bump when a change makes existing databases incompatible. The app is not
  * deployed, so instead of migrating, the local database file is deleted.
  */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 let db: Database.Database;
 
