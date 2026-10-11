@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ActivityOption, Kingdom, StoredRecord } from '@kingdom/shared';
+import type { ActivityOption, Kingdom, StoredRecord, TurnLogResponse } from '@kingdom/shared';
 import { ApiError, apiFetch } from '../lib/api';
 
 /** Thrown when the server rejects a save with a version conflict (409). */
@@ -44,6 +44,65 @@ export function useActiveTurn() {
     queryKey: ['turns', 'active'],
     queryFn: () => apiFetch<StoredRecord<any>>('/turns/active'),
     retry: false,
+  });
+}
+
+/** All turns, newest first. */
+export function useTurns() {
+  return useQuery({
+    queryKey: ['turns'],
+    queryFn: () => apiFetch<StoredRecord<any>[]>('/turns'),
+  });
+}
+
+/** Turn log: every change grouped by turn (setup/turn 0 excluded). */
+export function useTurnLog() {
+  return useQuery({
+    queryKey: ['turn-log'],
+    queryFn: () => apiFetch<TurnLogResponse>('/turn-log'),
+  });
+}
+
+/** Remove one log entry (all of its merged audit rows) from the turn log. */
+export function useDeleteTurnLogEntry() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (ids: number[]) =>
+      apiFetch<void>('/turn-log', { method: 'DELETE', body: JSON.stringify({ ids }) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['turn-log'] }),
+  });
+}
+
+/** Finish the active turn (if any) and start the next one. */
+export function useNextTurn() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (inGameDate?: string) =>
+      apiFetch<StoredRecord<any>>('/turn-log/next-turn', {
+        method: 'POST',
+        body: JSON.stringify({ inGameDate: inGameDate ?? '' }),
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['turn-log'] });
+      qc.invalidateQueries({ queryKey: ['turns'] });
+    },
+  });
+}
+
+/**
+ * PATCH one step of a turn (done, checklist, notes, activities,
+ * currentStepKey). The server applies the patch to the current version, so
+ * rapid successive saves never conflict.
+ */
+export function usePatchStep() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (args: { turnNumber: number; stepKey: string; patch: Record<string, unknown> }) =>
+      apiFetch<StoredRecord<any>>(`/turns/${args.turnNumber}/steps/${encodeURIComponent(args.stepKey)}`, {
+        method: 'PATCH',
+        body: JSON.stringify(args.patch),
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['turns'] }),
   });
 }
 

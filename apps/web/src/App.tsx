@@ -5,6 +5,9 @@ import { KingdomPage } from './pages/KingdomPage';
 import { LeadersPage } from './pages/LeadersPage';
 import { SettlementsPage } from './pages/SettlementsPage';
 import { SkillsPage } from './pages/SkillsPage';
+import { SettingsPage } from './pages/SettingsPage';
+import { TurnLogPage } from './pages/TurnLogPage';
+import { TurnPage } from './pages/TurnPage';
 
 function NotFound() {
   return (
@@ -25,11 +28,14 @@ export function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Navigate to="/kingdom" replace />} />
+        <Route path="/turn" element={<TurnPage />} />
         <Route path="/kingdom" element={<KingdomPage />} />
         <Route path="/skills" element={<SkillsPage />} />
         <Route path="/leaders" element={<LeadersPage />} />
         <Route path="/settlements" element={<SettlementsPage />} />
         <Route path="/armies" element={<ArmiesPage />} />
+        <Route path="/turn-log" element={<TurnLogPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

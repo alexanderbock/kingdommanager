@@ -174,12 +174,12 @@ describe('turn lifecycle', () => {
     expect(json(done).data.status).toBe('complete');
 
     // Completed turns are read-only
-    const frozen = await app.inject({
+    const completed = await app.inject({
       method: 'PATCH',
       url: `/api/turns/1/steps/${turn.data.template.steps[0].key}`,
       payload: { notes: 'too late' },
     });
-    expect(frozen.statusCode).toBe(400);
+    expect(completed.statusCode).toBe(400);
 
     // Summary includes the log entry with its change
     const summary = json(await app.inject({ method: 'GET', url: '/api/turns/1' }));
@@ -213,6 +213,80 @@ describe('export and import', () => {
     const res = await app.inject({ method: 'POST', url: '/api/import', payload: { app: 'nope' } });
     expect(res.statusCode).toBe(400);
   });
+});
+
+describe('turn step activities', () => {
+  it('stores activity selections per step, validates outcomes, and locks on complete', async () => {
+    // Turn 1 was completed by the lifecycle test; start turn 2.
+    const start = await app.inject({ method: 'POST', url: '/api/turns', payload: { inGameDate: 'Day 2' } });
+    expect(start.statusCode).toBe(201);
+    const turn = json(start);
+    expect(turn.data.number).toBe(2);
+
+    const ok = await app.inject({
+      method: 'PATCH',
+      url: '/api/turns/2/steps/leadership-activities',
+      payload: {
+        activities: [
+          { actorId: 'ruler', activityKey: 'take-charge', outcome: 'success' },
+          { actorId: 'party', activityKey: 'claim-hex', outcome: 'crit-success' },
+        ],
+      },
+    });
+    expect(ok.statusCode).toBe(200);
+    const saved = json(ok).data.stepState['leadership-activities'].activities;
+    expect(saved).toHaveLength(2);
+    expect(saved[0]).toEqual({ actorId: 'ruler', activityKey: 'take-charge', outcome: 'success' });
+
+    // An invalid outcome is rejected.
+    const bad = await app.inject({
+      method: 'PATCH',
+      url: '/api/turns/2/steps/leadership-activities',
+      payload: { activities: [{ actorId: 'ruler', activityKey: 'take-charge', outcome: 'meh' }] },
+    });
+    expect(bad.statusCode).toBe(400);
+
+    // An empty array clears the selections.
+    const clear = await app.inject({
+      method: 'PATCH',
+      url: '/api/turns/2/steps/leadership-activities',
+      payload: { activities: [] },
+    });
+    expect(clear.statusCode).toBe(200);
+    expect(json(clear).data.stepState['leadership-activities'].activities).toEqual([]);
+
+    // Activities and other step state can be patched together.
+    const both = await app.inject({
+      method: 'PATCH',
+      url: '/api/turns/2/steps/civic-activities',
+      payload: {
+        notes: 'built a bank',
+        activities: [{ actorId: 'new-halvong', activityKey: 'build-structure', outcome: 'failure' }],
+      },
+    });
+    expect(both.statusCode).toBe(200);
+    const civic = json(both).data.stepState['civic-activities'];
+    expect(civic.notes).toBe('built a bank');
+    expect(civic.activities).toHaveLength(1);
+
+    // Complete the turn; selections become read-only.
+    for (const step of turn.data.template.steps) {
+      const res = await app.inject({
+        method: 'PATCH',
+        url: `/api/turns/2/steps/${step.key}`,
+        payload: { done: true },
+      });
+      expect(res.statusCode).toBe(200);
+    }
+    const done = await app.inject({ method: 'POST', url: '/api/turns/2/complete' });
+    expect(done.statusCode).toBe(200);
+    const locked = await app.inject({
+      method: 'PATCH',
+      url: '/api/turns/2/steps/leadership-activities',
+      payload: { activities: [{ actorId: 'ruler', activityKey: 'take-charge', outcome: 'success' }] },
+    });
+    expect(locked.statusCode).toBe(400);
+  }, 30000);
 });
 
 describe('settlements', () => {

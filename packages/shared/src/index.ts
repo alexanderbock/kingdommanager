@@ -7,4 +7,5 @@ export * from './schemas/events.js';
 export * from './schemas/hexes.js';
 export * from './schemas/milestones.js';
 export * from './schemas/turns.js';
+export * from './turn-log.js';
 export * from './schemas/reference.js';

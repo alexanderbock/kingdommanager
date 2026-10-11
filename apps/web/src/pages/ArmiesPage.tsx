@@ -5,7 +5,7 @@ import { ConflictDialog } from '../components/ConflictDialog';
 import { EditableText } from '../components/EditableText';
 import { Modal } from '../components/Modal';
 import { NumberField } from '../components/NumberField';
-import { ApiError } from '../lib/api';
+import { describeSaveError } from '../lib/api';
 import {
   ConflictError,
   useAutoRefetchOnError,
@@ -32,20 +32,6 @@ type NumKey =
   | 'maxHp'
   | 'routThreshold'
   | 'recruitedOnTurn';
-
-/** Human-readable message for a failed save (validation details, etc.). */
-function describeSaveError(e: unknown): string {
-  if (e instanceof ApiError) {
-    const details = e.body?.details;
-    if (Array.isArray(details) && details.length > 0) {
-      return details
-        .map((d: any) => (d.path?.length ? `${d.path.join('.')}: ${d.message}` : d.message))
-        .join('; ');
-    }
-    return e.body?.error ? `server error: ${e.body.error}` : `server error (${e.status})`;
-  }
-  return e instanceof Error ? e.message : 'unknown error';
-}
 
 const ARMY_TYPES: ArmyTypeValue[] = ['infantry', 'cavalry', 'skirmisher', 'siege', 'other'];
 const TYPE_LABELS: Record<ArmyTypeValue, string> = {
@@ -219,9 +205,6 @@ function ArmyCard({ rec }: { rec: StoredRecord<Army> }) {
           {TYPE_LABELS[draft.type]} army
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-zinc-400 dark:text-zinc-500">
-            {dirty || mutate.isPending ? 'Saving…' : '✓'}
-          </span>
           <button
             className="btn-ghost px-2 py-0.5 text-xs text-red-600 dark:text-red-400"
             onClick={() => {

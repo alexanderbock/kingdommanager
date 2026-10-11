@@ -1,5 +1,5 @@
 import { getDb } from './db.js';
-import { audit } from './audit.js';
+import { audit, turnNumberFor } from './audit.js';
 import { broadcast } from './sse.js';
 import type { StoredRecord } from '@kingdom/shared';
 
@@ -47,7 +47,7 @@ export function createRecord(
   getDb()
     .prepare(`INSERT INTO ${table} (${cols}) VALUES (${placeholders})`)
     .run(id, now, now, JSON.stringify(data), ...extraCols.map((k) => extra[k]));
-  audit(entity, id, 'create', null, data);
+  audit(entity, id, 'create', null, data, turnNumberFor(entity, data));
   broadcast({ entity, id, version: 1 });
   return { id, version: 1, createdAt: now, updatedAt: now, data };
 }
@@ -79,7 +79,7 @@ export function updateRecord(
   getDb()
     .prepare(`UPDATE ${table} SET data = ?, version = ?, updated_at = ? WHERE id = ?`)
     .run(JSON.stringify(data), version, now, id);
-  audit(entity, id, 'update', current.data, data);
+  audit(entity, id, 'update', current.data, data, turnNumberFor(entity, data));
   broadcast({ entity, id, version });
   return { status: 'ok', record: { ...current, data, version, updatedAt: now } };
 }
@@ -88,7 +88,7 @@ export function deleteRecord(table: string, entity: string, id: string): boolean
   const current = getById(table, id);
   if (!current) return false;
   getDb().prepare(`DELETE FROM ${table} WHERE id = ?`).run(id);
-  audit(entity, id, 'delete', current.data, null);
+  audit(entity, id, 'delete', current.data, null, turnNumberFor(entity, current.data));
   broadcast({ entity, id, version: current.version + 1 });
   return true;
 }

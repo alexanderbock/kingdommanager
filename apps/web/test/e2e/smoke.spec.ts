@@ -53,10 +53,11 @@ test('stale autosave shows the conflict dialog and force overwrite works', async
   const nameInput = page.getByPlaceholder('Kingdom name');
   await expect(nameInput).toBeVisible();
 
-  // Type a name; autosave persists it.
+  // Type a name; autosave persists it in the background.
   await nameInput.fill('Test Kingdom');
-  await expect(page.getByText('Saving…', { exact: true })).toBeVisible();
-  await expect(page.getByText('Saved', { exact: true })).toBeVisible({ timeout: 10_000 });
+  await expect
+    .poll(async () => (await (await page.request.get('/api/kingdom')).json()).data.name)
+    .toBe('Test Kingdom');
 
   // Start a new edit and, before the debounced autosave fires, bump the
   // server version from "another client" so the pending edit goes stale.
@@ -133,7 +134,12 @@ test('settlements: force overwrite does not re-open the conflict via a racing au
 
   // Make an edit and let it autosave cleanly.
   await nameInput.fill('Race Test X');
-  await expect(card.getByText('✓', { exact: true })).toBeVisible({ timeout: 10_000 });
+  await expect
+    .poll(async () => {
+      const list = await (await page.request.get('/api/settlements')).json();
+      return list.some((s: any) => s.data.name === 'Race Test X');
+    })
+    .toBe(true);
 
   // Start a new edit, then bump the server version from "another client" so
   // the pending edit goes stale -> 409 -> conflict dialog.
@@ -197,11 +203,183 @@ test('armies page: add an army, edit the stat block, autosave persists', async (
   await card.getByLabel('Level').fill('2');
   await card.getByLabel('Max HP').fill('40');
   await card.getByLabel('Rout threshold').fill('20');
-  await expect(card.getByText('✓', { exact: true })).toBeVisible({ timeout: 10_000 });
+  await expect
+    .poll(async () => {
+      const list = await (await page.request.get('/api/armies')).json();
+      return list.find((a: any) => a.data.name === 'Guard Company')?.data;
+    })
+    .toMatchObject({ level: 2, maxHp: 40, routThreshold: 20 });
 
   const list = await (await page.request.get('/api/armies')).json();
   const army = list.find((a: any) => a.data.name === 'Guard Company');
   expect(army.data.level).toBe(2);
   expect(army.data.maxHp).toBe(40);
   expect(army.data.routThreshold).toBe(20);
+});
+
+test('turn log: setup is not logged, next-turn logs changes live', async ({ page }) => {
+  await page.goto('/turn-log');
+  await expect(page.getByRole('heading', { name: 'Turn Log', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start turn 1' })).toBeVisible();
+
+  // A setup change (turn 0) is not logged.
+  const res = await page.request.get('/api/kingdom');
+  const kingdom = await res.json();
+  await page.request.patch('/api/kingdom', {
+    data: { ...kingdom.data, notes: 'setup change' },
+    headers: { 'content-type': 'application/json' },
+  });
+  await expect(page.getByText('No turns yet.')).toBeVisible();
+
+  // Start turn 1; a change now is logged and appears live via SSE.
+  await page.getByRole('button', { name: 'Start turn 1' }).click();
+  await expect(page.getByRole('button', { name: 'Next turn' })).toBeVisible();
+  // No "Turn created" lifecycle entry: the active turn starts empty.
+  await expect(page.getByText('No changes yet this turn.')).toBeVisible();
+
+  const res2 = await page.request.get('/api/kingdom');
+  const kingdom2 = await res2.json();
+  await page.request.patch('/api/kingdom', {
+    data: { ...kingdom2.data, resourcePoints: 4 },
+    headers: { 'content-type': 'application/json' },
+  });
+  await expect(page.getByText(/resourcePoints/)).toBeVisible();
+
+  // A work site change lists only the added item, not the whole work site list.
+  const res3 = await page.request.get('/api/kingdom');
+  const kingdom3 = await res3.json();
+  await page.request.patch('/api/kingdom', {
+    data: {
+      ...kingdom3.data,
+      workSites: [
+        ...kingdom3.data.workSites,
+        { id: 'mine-2', type: 'mine', resourceHexes: 1, location: '', comments: '' },
+      ],
+    },
+    headers: { 'content-type': 'application/json' },
+  });
+  await page.getByText('show workSites').click();
+  const showBlock = page.locator('details:has(summary:text("show workSites")) pre');
+  await expect(showBlock).toContainText('added:');
+  await expect(showBlock).toContainText('type: mine');
+  await expect(showBlock).not.toContainText('farmland');
+});
+
+test('turn page: step list, AoN links, activity pickers, finish turn', async ({ page }) => {
+  // The turn-log test may have left turn 1 active; start one if not.
+  const active = await page.request.get('/api/turns/active');
+  if (active.status() === 404) {
+    const started = await page.request.post('/api/turn-log/next-turn', { data: {} });
+    expect(started.status()).toBe(201);
+  }
+  const turn = await (await page.request.get('/api/turns/active')).json();
+  const n = turn.data.number;
+
+  // Mark the ruler as a PC leader so the leadership picker has a card.
+  const leaders = await (await page.request.get('/api/leaders')).json();
+  const ruler = leaders.find((l: any) => l.id === 'ruler');
+  await page.request.patch('/api/leaders/ruler', {
+    data: { data: { ...ruler.data, isPC: true, vacant: false, holderName: 'Morgan' }, version: ruler.version },
+    headers: { 'content-type': 'application/json' },
+  });
+  const settlements = await (await page.request.get('/api/settlements')).json();
+  const village = settlements.find((s: any) => s.data.name === 'New Halvong');
+
+  await page.goto('/turn');
+  await expect(page.getByRole('heading', { name: `Turn ${n}`, exact: true })).toBeVisible();
+  await expect(page.getByText('0 of 16 steps done').first()).toBeVisible();
+
+  // Phases and steps are listed in order.
+  for (const phase of ['Upkeep', 'Commerce', 'Activity', 'Event']) {
+    await expect(page.getByText(phase, { exact: true })).toBeVisible();
+  }
+  const nav = page.getByRole('navigation', { name: 'Turn steps' });
+  await expect(nav.getByRole('button', { name: /Assign Leadership Roles/ })).toBeVisible();
+
+  // The current step shows its AoN rule links.
+  const firstLink = page.getByRole('link', { name: /Step 1: Assign Leadership Roles/ });
+  await expect(firstLink).toBeVisible();
+  await expect(firstLink).toHaveAttribute('href', 'https://2e.aonprd.com/Rules.aspx?ID=1796');
+
+  // Leadership activities: pick an activity and outcome for the PC leader.
+  await nav.getByRole('button', { name: /Leadership Activities/ }).click();
+  await expect(page.getByRole('link', { name: /Step 1: Leadership Activities/ })).toHaveAttribute(
+    'href',
+    'https://2e.aonprd.com/Rules.aspx?ID=1806',
+  );
+  const leaderCard = page.locator('[data-testid="activity-actor"]', { hasText: 'Morgan' });
+  await leaderCard.locator('select').first().selectOption('take-charge');
+  await leaderCard.locator('select').nth(1).selectOption('success');
+  await expect
+    .poll(async () => {
+      const t = await (await page.request.get('/api/turns/active')).json();
+      return t.data.stepState['leadership-activities'].activities;
+    })
+    .toEqual([{ actorId: 'ruler', activityKey: 'take-charge', outcome: 'success' }]);
+
+  // Region activities: one collective card with three slots.
+  await nav.getByRole('button', { name: /Region Activities/ }).click();
+  const partyCard = page.locator('[data-testid="activity-actor"]').first();
+  await expect(partyCard.getByText('The party')).toBeVisible();
+  await partyCard.locator('select').first().selectOption('claim-hex');
+  await partyCard.locator('select').nth(1).selectOption('crit-success');
+  await expect
+    .poll(async () => {
+      const t = await (await page.request.get('/api/turns/active')).json();
+      return t.data.stepState['region-activities'].activities;
+    })
+    .toEqual([{ actorId: 'party', activityKey: 'claim-hex', outcome: 'crit-success' }]);
+
+  // Civic activities: one slot per settlement.
+  await nav.getByRole('button', { name: /Civic Activities/ }).click();
+  const townCard = page.locator('[data-testid="activity-actor"]', { hasText: 'New Halvong' });
+  await townCard.locator('select').first().selectOption('build-structure');
+  await townCard.locator('select').nth(1).selectOption('failure');
+  await expect
+    .poll(async () => {
+      const t = await (await page.request.get('/api/turns/active')).json();
+      return t.data.stepState['civic-activities'].activities;
+    })
+    .toEqual([{ actorId: village.id, activityKey: 'build-structure', outcome: 'failure' }]);
+
+  // Mark every step done, then finish the turn (which starts the next one).
+  for (const step of turn.data.template.steps) {
+    await page.request.patch(`/api/turns/${n}/steps/${step.key}`, {
+      data: { done: true },
+      headers: { 'content-type': 'application/json' },
+    });
+  }
+  page.once('dialog', (d) => d.accept());
+  await page.getByRole('button', { name: `Finish turn ${n}` }).click();
+  await expect(page.getByRole('heading', { name: `Turn ${n + 1}`, exact: true })).toBeVisible();
+
+  // The new turn starts fresh: no activity selections carried over.
+  const next = await (await page.request.get('/api/turns/active')).json();
+  expect(next.data.number).toBe(n + 1);
+  expect(next.data.stepState['leadership-activities'].activities ?? []).toHaveLength(0);
+});
+
+test('settings: reset the kingdom to its default state', async ({ page }) => {
+  await page.goto('/settings');
+  await expect(page.getByRole('heading', { name: 'Settings', exact: true })).toBeVisible();
+
+  // Earlier tests left the kingdom modified.
+  const before = await (await page.request.get('/api/kingdom')).json();
+  expect(before.data.name).not.toBe('');
+
+  page.once('dialog', (d) => d.accept());
+  await page.getByRole('button', { name: 'Reset kingdom to defaults' }).click();
+
+  // The reset wipes and re-seeds the database; poll until it has landed.
+  await expect.poll(async () => {
+    const res = await page.request.get('/api/kingdom');
+    return (await res.json()).data.name;
+  }).toBe('');
+  const log = await (await page.request.get('/api/turn-log')).json();
+  expect(log.activeTurnNumber).toBeNull();
+  expect(log.turns).toHaveLength(0);
+  const settlements = await (await page.request.get('/api/settlements')).json();
+  expect(settlements.map((s: any) => s.data.name)).toEqual(['New Halvong']);
+  // The page reloaded back to a working state.
+  await expect(page.getByRole('heading', { name: 'Settings', exact: true })).toBeVisible();
 });

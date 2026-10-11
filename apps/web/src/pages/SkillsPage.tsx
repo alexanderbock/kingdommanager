@@ -4,6 +4,7 @@ import type { KingdomSkill, StoredRecord } from '@kingdom/shared';
 import { ConflictDialog } from '../components/ConflictDialog';
 import { EditableText } from '../components/EditableText';
 import { NumberField } from '../components/NumberField';
+import { describeSaveError } from '../lib/api';
 import {
   ConflictError,
   useAutoRefetchOnError,
@@ -49,14 +50,21 @@ function SkillRow({
   const { draft, setDraft, dirty, baseVersion, bumpBaseVersion } = useDraft(rec.data, rec.version);
   const mutate = usePatch<KingdomSkill>('skills', rec.id);
   const [conflict, setConflict] = useState<StoredRecord<KingdomSkill> | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const save = () => {
     if (!draft) return;
     mutate.mutate(
       { data: draft, version: baseVersion ?? rec.version },
       {
-        onSuccess: (saved) => bumpBaseVersion(saved.version),
-        onError: (e) => e instanceof ConflictError && setConflict(e.current),
+        onSuccess: (saved) => {
+          setSaveError(null);
+          bumpBaseVersion(saved.version);
+        },
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
       },
     );
   };
@@ -76,10 +84,14 @@ function SkillRow({
       { data: draft, version: conflict.version, force: true },
       {
         onSuccess: (saved) => {
+          setSaveError(null);
           bumpBaseVersion(saved.version);
           setConflict(null);
         },
-        onError: (e) => e instanceof ConflictError && setConflict(e.current),
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
       },
     );
   };
@@ -119,10 +131,12 @@ function SkillRow({
         <td className="py-2 pr-3">
           <EditableText value={draft.notes} onChange={(v) => up('notes', v)} placeholder="Notes" />
         </td>
-        <td className="py-2 text-right">
-          <span className="text-xs text-zinc-400 dark:text-zinc-500">
-            {dirty || mutate.isPending ? 'Saving…' : '✓'}
-          </span>
+        <td className="px-3 py-2 text-right">
+          {saveError && (
+            <span className="text-xs text-red-600 dark:text-red-400" title={saveError}>
+              Save failed
+            </span>
+          )}
         </td>
       </tr>
       <ConflictDialog
@@ -136,6 +150,7 @@ function SkillRow({
             );
             setDraft(conflict.data);
             setConflict(null);
+            setSaveError(null);
           }
         }}
         onForce={forceSave}

@@ -15,7 +15,7 @@ import { ConflictDialog } from '../components/ConflictDialog';
 import { EditableText } from '../components/EditableText';
 import { Modal } from '../components/Modal';
 import { NumberField } from '../components/NumberField';
-import { ApiError } from '../lib/api';
+import { describeSaveError } from '../lib/api';
 import {
   ConflictError,
   useAutoRefetchOnError,
@@ -28,20 +28,6 @@ import {
 } from '../hooks/useRecords';
 
 type SettlementType = Settlement['type'];
-
-/** Human-readable message for a failed save (validation details, etc.). */
-function describeSaveError(e: unknown): string {
-  if (e instanceof ApiError) {
-    const details = e.body?.details;
-    if (Array.isArray(details) && details.length > 0) {
-      return details
-        .map((d: any) => (d.path?.length ? `${d.path.join('.')}: ${d.message}` : d.message))
-        .join('; ');
-    }
-    return e.body?.error ? `server error: ${e.body.error}` : `server error (${e.status})`;
-  }
-  return e instanceof Error ? e.message : 'unknown error';
-}
 
 const SETTLEMENT_TYPES: SettlementType[] = ['village', 'town', 'city', 'metropolis'];
 const TYPE_LABELS: Record<SettlementType, string> = {
@@ -359,17 +345,11 @@ function SettlementCard({ rec }: { rec: StoredRecord<Settlement> }) {
           aria-label="Settlement name"
           onChange={(e) => up('name', e.target.value)}
         />
-        <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500">
-          {saveError ? (
-            <span className="text-red-600 dark:text-red-400" title={saveError}>
-              Save failed
-            </span>
-          ) : dirty || mutate.isPending ? (
-            'Saving…'
-          ) : (
-            '✓'
-          )}
-        </span>
+        {saveError && (
+          <span className="shrink-0 text-xs text-red-600 dark:text-red-400" title={saveError}>
+            Save failed
+          </span>
+        )}
         <button
           className="btn-ghost shrink-0 px-2 py-1 text-xs text-red-600 dark:text-red-400"
           onClick={removeSettlement}

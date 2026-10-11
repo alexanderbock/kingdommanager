@@ -26,8 +26,10 @@ import { registerCrud } from './routes/crud.js';
 import { registerKingdomRoutes } from './routes/kingdom.js';
 import { registerTurnRoutes } from './routes/turns.js';
 import { registerLogRoutes } from './routes/log.js';
+import { registerTurnLogRoutes } from './routes/turn-log.js';
 import { registerStructureRoutes } from './routes/structures.js';
 import { registerBackupRoutes } from './routes/backup.js';
+import { registerSettingsRoutes } from './routes/settings.js';
 import { registerLeadershipRoutes } from './routes/leadership.js';
 
 /** Build the Fastify app (routes + static serving) without listening. */
@@ -43,8 +45,10 @@ export async function buildApp(config: Config): Promise<FastifyInstance> {
   registerKingdomRoutes(app, api);
   registerStructureRoutes(app, api);
   registerLeadershipRoutes(app, api);
+  registerSettingsRoutes(app, api);
   registerTurnRoutes(app, api);
   registerLogRoutes(app, api);
+  registerTurnLogRoutes(app, api);
   registerBackupRoutes(app, api);
 
   registerCrud(app, api, { table: 'kingdom_skills', entity: 'skills', schema: KingdomSkillSchema, keyField: 'key' });

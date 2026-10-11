@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { Leader, StoredRecord } from '@kingdom/shared';
 import { ConflictDialog } from '../components/ConflictDialog';
 import { EditableText } from '../components/EditableText';
+import { describeSaveError } from '../lib/api';
 import {
   ConflictError,
   useAutoRefetchOnError,
@@ -17,14 +18,21 @@ function LeaderCard({ rec }: { rec: StoredRecord<Leader> }) {
   const { draft, setDraft, dirty, baseVersion, bumpBaseVersion } = useDraft(rec.data, rec.version);
   const mutate = usePatch<Leader>('leaders', rec.id);
   const [conflict, setConflict] = useState<StoredRecord<Leader> | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const save = () => {
     if (!draft) return;
     mutate.mutate(
       { data: draft, version: baseVersion ?? rec.version },
       {
-        onSuccess: (saved) => bumpBaseVersion(saved.version),
-        onError: (e) => e instanceof ConflictError && setConflict(e.current),
+        onSuccess: (saved) => {
+          setSaveError(null);
+          bumpBaseVersion(saved.version);
+        },
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
       },
     );
   };
@@ -41,10 +49,14 @@ function LeaderCard({ rec }: { rec: StoredRecord<Leader> }) {
       { data: draft, version: conflict.version, force: true },
       {
         onSuccess: (saved) => {
+          setSaveError(null);
           bumpBaseVersion(saved.version);
           setConflict(null);
         },
-        onError: (e) => e instanceof ConflictError && setConflict(e.current),
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
       },
     );
   };
@@ -71,10 +83,12 @@ function LeaderCard({ rec }: { rec: StoredRecord<Leader> }) {
         <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
           {draft.role}
         </h2>
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">
-          {dirty || mutate.isPending ? 'Saving…' : '✓'}
-        </span>
       </div>
+      {saveError && (
+        <p className="mb-3 rounded-md bg-red-600/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">
+          Save failed: {saveError}
+        </p>
+      )}
       <div className="space-y-3">
         <div>
           <span className="label">Holder</span>
@@ -109,6 +123,7 @@ function LeaderCard({ rec }: { rec: StoredRecord<Leader> }) {
             );
             setDraft(conflict.data);
             setConflict(null);
+            setSaveError(null);
           }
         }}
         onForce={forceSave}

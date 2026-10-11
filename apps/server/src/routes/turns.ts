@@ -1,7 +1,8 @@
 import type { FastifyInstance } from 'fastify';
-import { randomUUID } from 'node:crypto';
+import { ActivitySelectionSchema } from '@kingdom/shared';
 import { getDb } from '../db.js';
 import * as store from '../store.js';
+import { completeTurn, findActiveTurn, startTurn } from '../turn-service.js';
 
 const params = (req: any): Record<string, string> => req.params as Record<string, string>;
 
@@ -11,7 +12,8 @@ function findTurnByNumber(n: number) {
 
 /**
  * Turn lifecycle: start (snapshots the enabled template), step state,
- * and completion. Log entries live in routes/log.ts.
+ * and completion. Log entries live in routes/log.ts; the change log in
+ * routes/turn-log.ts.
  */
 export function registerTurnRoutes(app: FastifyInstance, apiPrefix: string): void {
   app.get(`${apiPrefix}/turns`, async () => {
@@ -19,7 +21,7 @@ export function registerTurnRoutes(app: FastifyInstance, apiPrefix: string): voi
   });
 
   app.get(`${apiPrefix}/turns/active`, async (req, reply) => {
-    const active = store.listAll('turns').find((t) => t.data.status === 'active');
+    const active = findActiveTurn();
     if (!active) return reply.code(404).send({ error: 'no active turn' });
     return active;
   });
@@ -36,31 +38,7 @@ export function registerTurnRoutes(app: FastifyInstance, apiPrefix: string): voi
 
   app.post(`${apiPrefix}/turns`, async (req, reply) => {
     const inGameDate = String((req.body as any)?.inGameDate ?? '');
-    const result = getDb().transaction(() => {
-      const turns = store.listAll('turns');
-      if (turns.some((t) => t.data.status === 'active')) {
-        return { code: 409, error: 'an active turn already exists' };
-      }
-      const template = store.getById('turn_template', 'turn-template');
-      if (!template) return { code: 400, error: 'turn template missing' };
-      const number = turns.length ? Math.max(...turns.map((t) => t.data.number)) + 1 : 1;
-      const steps = [...template.data.steps]
-        .filter((s: any) => s.enabled)
-        .sort((a: any, b: any) => a.order - b.order);
-      const stepState: Record<string, any> = {};
-      for (const s of steps) stepState[s.key] = { done: false, checklist: {}, notes: '' };
-      const data = {
-        number,
-        inGameDate,
-        status: 'active',
-        currentStepKey: steps[0]?.key ?? null,
-        startedAt: new Date().toISOString(),
-        completedAt: null,
-        template: { phases: template.data.phases, steps },
-        stepState,
-      };
-      return { code: 201, rec: store.createRecord('turns', 'turns', randomUUID(), data, { number }) };
-    })();
+    const result = getDb().transaction(() => startTurn(inGameDate))();
     if (result.code !== 201) return reply.code(result.code).send({ error: result.error });
     return reply.code(201).send(result.rec);
   });
@@ -82,6 +60,13 @@ export function registerTurnRoutes(app: FastifyInstance, apiPrefix: string): voi
       ns.checklist = { ...ns.checklist, ...body.checklist };
     }
     if (typeof body.notes === 'string') ns.notes = body.notes;
+    if (body.activities !== undefined) {
+      const parsed = ActivitySelectionSchema.array().safeParse(body.activities);
+      if (!parsed.success) {
+        return reply.code(400).send({ error: 'validation', details: parsed.error.flatten() });
+      }
+      ns.activities = parsed.data;
+    }
     if (typeof body.currentStepKey === 'string') next.currentStepKey = body.currentStepKey;
     next.stepState = { ...next.stepState, [key]: ns };
     const result = store.updateRecord(
@@ -111,23 +96,7 @@ export function registerTurnRoutes(app: FastifyInstance, apiPrefix: string): voi
     if (notDone.length) {
       return reply.code(400).send({ error: 'steps not done', steps: notDone });
     }
-    getDb().transaction(() => {
-      const next = { ...turn.data, status: 'complete', completedAt: new Date().toISOString() };
-      store.updateRecord('turns', 'turns', turn.id, next, turn.version, true);
-      // Reset per-turn civic flags on all settlements.
-      for (const s of store.listAll('settlements')) {
-        if (s.data.civicActivityUsedThisTurn) {
-          store.updateRecord(
-            'settlements',
-            'settlements',
-            s.id,
-            { ...s.data, civicActivityUsedThisTurn: false },
-            s.version,
-            true,
-          );
-        }
-      }
-    })();
+    getDb().transaction(() => completeTurn(turn))();
     return findTurnByNumber(turn.data.number);
   });
 }

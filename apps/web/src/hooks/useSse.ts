@@ -23,7 +23,11 @@ export function useSse(): void {
       es.onmessage = (ev) => {
         try {
           const msg = JSON.parse(ev.data);
-          if (msg && msg.entity) qc.invalidateQueries({ queryKey: [msg.entity] });
+          if (msg && msg.entity) {
+            qc.invalidateQueries({ queryKey: [msg.entity] });
+            // Every write is also a turn-log entry: keep the log live.
+            qc.invalidateQueries({ queryKey: ['turn-log'] });
+          }
         } catch {
           /* heartbeat or bad frame */
         }

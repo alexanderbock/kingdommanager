@@ -29,3 +29,17 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;
 }
+
+/** Human-readable message for a failed save (validation details, etc.). */
+export function describeSaveError(e: unknown): string {
+  if (e instanceof ApiError) {
+    const details = e.body?.details;
+    if (Array.isArray(details) && details.length > 0) {
+      return details
+        .map((d: any) => (d.path?.length ? `${d.path.join('.')}: ${d.message}` : d.message))
+        .join('; ');
+    }
+    return e.body?.error ? `server error: ${e.body.error}` : `server error (${e.status})`;
+  }
+  return e instanceof Error ? e.message : 'unknown error';
+}

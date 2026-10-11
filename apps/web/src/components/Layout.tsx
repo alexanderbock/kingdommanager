@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { useActiveTurn, useKingdom } from '../hooks/useRecords';
+import { useActiveTurn } from '../hooks/useRecords';
 import { useSse } from '../hooks/useSse';
 
 const NAV = [
+  { to: '/turn', label: 'Turn' },
   { to: '/kingdom', label: 'Kingdom' },
   { to: '/skills', label: 'Skills' },
   { to: '/leaders', label: 'Leaders' },
   { to: '/settlements', label: 'Settlements' },
   { to: '/armies', label: 'Armies' },
+  { to: '/turn-log', label: 'Turn Log' },
 ];
 
 function ThemeToggle() {
@@ -38,7 +40,6 @@ function ThemeToggle() {
 
 export function Layout() {
   useSse();
-  const { data: kingdom } = useKingdom();
   const { data: turn } = useActiveTurn();
 
   return (
@@ -50,9 +51,6 @@ export function Layout() {
             <span className="text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Kingdom Manager
             </span>
-            {kingdom?.data.name && (
-              <span className="truncate text-base font-bold">{kingdom.data.name}</span>
-            )}
           </div>
 
           <nav className="order-last w-full sm:order-none sm:w-auto">
@@ -87,6 +85,19 @@ export function Layout() {
                 No active turn
               </span>
             )}
+            <NavLink
+              to="/settings"
+              title="Settings"
+              className={({ isActive }) =>
+                `rounded-md px-2 text-lg transition-colors ${
+                  isActive
+                    ? 'bg-amber-600/15'
+                    : 'hover:bg-zinc-100 dark:hover:bg-zinc-900'
+                }`
+              }
+            >
+              ⚙️
+            </NavLink>
             <ThemeToggle />
           </div>
         </div>

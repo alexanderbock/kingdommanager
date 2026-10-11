@@ -3,7 +3,8 @@ import { getDb } from '../db.js';
 import * as store from '../store.js';
 import { broadcast } from '../sse.js';
 
-const TABLES = [
+/** Every data table in the database (meta/schema_migrations excluded). */
+export const TABLES = [
   'kingdom',
   'kingdom_skills',
   'leaders',
@@ -22,13 +23,17 @@ const TABLES = [
   'reference_tables',
   'turns',
   'log_entries',
+  'audit_log',
 ];
 
 /** Full database backup as one JSON document. */
 export function registerBackupRoutes(app: FastifyInstance, apiPrefix: string): void {
   app.get(`${apiPrefix}/export`, async () => {
     const data: Record<string, unknown[]> = {};
-    for (const t of TABLES) data[t] = store.listAll(t);
+    for (const t of TABLES) {
+      // audit_log rows are not StoredRecords; export them raw.
+      data[t] = t === 'audit_log' ? getDb().prepare('SELECT * FROM audit_log ORDER BY id ASC').all() : store.listAll(t);
+    }
     return { app: 'kingdom-manager', version: 1, exportedAt: new Date().toISOString(), data };
   });
 
@@ -40,23 +45,35 @@ export function registerBackupRoutes(app: FastifyInstance, apiPrefix: string): v
     }
     getDb().transaction(() => {
       for (const t of TABLES) getDb().prepare(`DELETE FROM ${t}`).run();
+      const insTurn = getDb().prepare(
+        `INSERT INTO turns (id, number, version, created_at, updated_at, data) VALUES (?, ?, ?, ?, ?, ?)`,
+      );
+      const insLog = getDb().prepare(
+        `INSERT INTO log_entries (id, turn_id, version, created_at, updated_at, data) VALUES (?, ?, ?, ?, ?, ?)`,
+      );
+      const insAudit = getDb().prepare(
+        `INSERT INTO audit_log (id, entity, entity_id, action, at, before_val, after_val, turn_number)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      );
       for (const t of TABLES) {
         const rows = body.data[t] ?? [];
-        const ins = getDb().prepare(
-          `INSERT INTO ${t} (id, version, created_at, updated_at, data) VALUES (?, ?, ?, ?, ?)`,
-        );
-        const insTurn = getDb().prepare(
-          `INSERT INTO turns (id, number, version, created_at, updated_at, data) VALUES (?, ?, ?, ?, ?, ?)`,
-        );
-        const insLog = getDb().prepare(
-          `INSERT INTO log_entries (id, turn_id, version, created_at, updated_at, data) VALUES (?, ?, ?, ?, ?, ?)`,
-        );
-        for (const r of rows) {
-          if (t === 'turns') {
+        if (t === 'turns') {
+          for (const r of rows) {
             insTurn.run(r.id, r.data.number, r.version, r.createdAt, r.updatedAt, JSON.stringify(r.data));
-          } else if (t === 'log_entries') {
+          }
+        } else if (t === 'log_entries') {
+          for (const r of rows) {
             insLog.run(r.id, r.data.turnId, r.version, r.createdAt, r.updatedAt, JSON.stringify(r.data));
-          } else {
+          }
+        } else if (t === 'audit_log') {
+          for (const r of rows) {
+            insAudit.run(r.id, r.entity, r.entity_id, r.action, r.at, r.before_val, r.after_val, r.turn_number);
+          }
+        } else {
+          const ins = getDb().prepare(
+            `INSERT INTO ${t} (id, version, created_at, updated_at, data) VALUES (?, ?, ?, ?, ?)`,
+          );
+          for (const r of rows) {
             ins.run(r.id, r.version, r.createdAt, r.updatedAt, JSON.stringify(r.data));
           }
         }

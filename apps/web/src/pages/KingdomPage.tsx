@@ -4,6 +4,7 @@ import type { Kingdom, StoredRecord } from '@kingdom/shared';
 import { ConflictDialog } from '../components/ConflictDialog';
 import { EditableText } from '../components/EditableText';
 import { NumberField } from '../components/NumberField';
+import { describeSaveError } from '../lib/api';
 import {
   ConflictError,
   useAutoRefetchOnError,
@@ -55,6 +56,7 @@ export function KingdomPage() {
   const { draft, setDraft, dirty, baseVersion, bumpBaseVersion } = useDraft(rec?.data, rec?.version);
   const mutate = usePatchKingdom();
   const [conflict, setConflict] = useState<StoredRecord<Kingdom> | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [newWorkSiteType, setNewWorkSiteType] = useState<WorkSiteType>('farmland');
 
   const save = () => {
@@ -64,8 +66,14 @@ export function KingdomPage() {
       {
         // A successful save means the server now holds exactly what we sent,
         // so it is safe to rebase newer local edits onto the new version.
-        onSuccess: (saved) => bumpBaseVersion(saved.version),
-        onError: (e) => e instanceof ConflictError && setConflict(e.current),
+        onSuccess: (saved) => {
+          setSaveError(null);
+          bumpBaseVersion(saved.version);
+        },
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
       },
     );
   };
@@ -127,6 +135,7 @@ export function KingdomPage() {
     qc.setQueryData(['kingdom'], conflict);
     setDraft(conflict.data);
     setConflict(null);
+    setSaveError(null);
   };
   const forceSave = () => {
     if (!conflict) return;
@@ -134,10 +143,14 @@ export function KingdomPage() {
       { data: draft, version: conflict.version, force: true },
       {
         onSuccess: (saved) => {
+          setSaveError(null);
           bumpBaseVersion(saved.version);
           setConflict(null);
         },
-        onError: (e) => e instanceof ConflictError && setConflict(e.current),
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
       },
     );
   };
@@ -153,10 +166,13 @@ export function KingdomPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Kingdom</h1>
-        <span className="text-xs text-zinc-500 dark:text-zinc-400">
-          {dirty || mutate.isPending ? 'Saving…' : 'Saved'}
-        </span>
       </div>
+
+      {saveError && (
+        <p className="rounded-md bg-red-600/10 px-3 py-2 text-sm text-red-700 dark:text-red-400">
+          Save failed: {saveError}
+        </p>
+      )}
 
       <Section title="Basics">
         <div className="grid gap-3 sm:grid-cols-2">
@@ -350,11 +366,11 @@ export function KingdomPage() {
                 </button>
               </div>
               <div className="mt-2">
-                <span className="label">Resource hexes</span>
+                <span className="label">Resources</span>
                 <NumField
                   value={site.resourceHexes}
                   onChange={(v) => upWorkSite(i, { resourceHexes: v })}
-                  title="Resource hexes"
+                  title="Resources"
                 />
               </div>
               <div className="mt-2">
