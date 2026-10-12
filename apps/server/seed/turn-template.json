@@ -28,7 +28,6 @@
       "title": "Adjust Unrest",
       "guidance": "Add Unrest from vacancies, overcrowding, secondary territories and war. Check the kingdom's Unrest thresholds and the Ruin thresholds, and note any effects.\nHouse rule: +1 Unrest if the kingdom's secondary territories include an unconnected settlement (freehold rule).",
       "checklist": [
-        { "key": "vacancies", "label": "Unrest from vacancies" },
         { "key": "overcrowding", "label": "Unrest from overcrowding" },
         { "key": "secondary", "label": "Unrest from secondary territories" },
         { "key": "war", "label": "Unrest from war" },
@@ -46,8 +45,7 @@
       "guidance": "Roll the kingdom's resource dice and enter the RP gained. Collect commodities produced by work sites, respecting storage capacity.",
       "checklist": [
         { "key": "roll-dice", "label": "Roll Resource Dice, enter RP gained" },
-        { "key": "commodities", "label": "Collect commodities from work sites" },
-        { "key": "capacity", "label": "Respect storage capacity" }
+        { "key": "commodities", "label": "Collect commodities from work sites" }
       ],
       "allowsActivities": null,
       "enabled": true
@@ -57,7 +55,7 @@
       "phaseKey": "upkeep",
       "order": 4,
       "title": "Pay Consumption",
-      "guidance": "The kingdom's consumption is a typed value on the kingdom sheet. Pay it in Food; if food is short, record the shortfall and the resulting Unrest.",
+      "guidance": "The kingdom's consumption is a typed value on the kingdom sheet. Pay it in Food; if food is short, record the shortfall and the resulting Unrest.\n\nKingdom Consumption = settlement Consumption total + army Consumption total - Farmland hexes influenced by settlements + modifiers from kingdom events\n\nSpend Food Commodities equal to your kingdom's Consumption. If you can't or choose not to spend this Commodity cost, you can either spend 5 RP per point of unpaid Consumption or increase Unrest by 1d4.",
       "checklist": [
         { "key": "pay", "label": "Enter consumption paid in Food" },
         { "key": "shortfall", "label": "Record any shortfall and resulting Unrest" }
@@ -70,7 +68,7 @@
       "phaseKey": "commerce",
       "order": 5,
       "title": "Collect Taxes",
-      "guidance": "Log the Collect Taxes Trade check.\nHouse rule: the Bank gives a +1 item bonus to Collect Taxes.",
+      "guidance": "You can Collect Taxes (page 530) once per Kingdom turn to attempt to bolster your Economy-based checks for the remainder of the Kingdom turn. If you don't attempt to Collect Taxes, you can instead attempt a DC 11 flat check; on a success, reduce Unrest by 1.",
       "checklist": [{ "key": "trade-check", "label": "Log the Trade check" }],
       "allowsActivities": null,
       "enabled": true
@@ -80,7 +78,7 @@
       "phaseKey": "commerce",
       "order": 6,
       "title": "Approve Expenses",
-      "guidance": "Improve Lifestyle or Tap Treasury, if chosen.",
+      "guidance": "You can draw upon the kingdom's funds to enhance the standard of living for its citizens by attempting the Improve Lifestyle activity (page 527) or you can attempt a withdrawal from the kingdom's funds using the Tap Treasury activity",
       "checklist": [{ "key": "lifestyle", "label": "Improve Lifestyle or Tap Treasury, if chosen" }],
       "allowsActivities": null,
       "enabled": true
@@ -90,7 +88,7 @@
       "phaseKey": "commerce",
       "order": 7,
       "title": "Tap Commodities",
-      "guidance": "Trade Commodities, if chosen.",
+      "guidance": "If your kingdom has any stockpiles of Commodities, you can attempt the Trade Commodities activity to bolster your RP for the turn.",
       "checklist": [{ "key": "trade", "label": "Trade Commodities, if chosen" }],
       "allowsActivities": null,
       "enabled": true
@@ -100,7 +98,7 @@
       "phaseKey": "commerce",
       "order": 8,
       "title": "Manage Trade Agreements",
-      "guidance": "Log a check per trade agreement. Town Hall/Castle/Palace item bonuses apply (see the structure catalog).",
+      "guidance": "If you've established trade agreements, you can use the Manage Trade Agreements activity.",
       "checklist": [{ "key": "checks", "label": "Log check per agreement" }],
       "allowsActivities": null,
       "enabled": true
