@@ -23,5 +23,8 @@
     "globals": "^15.12.0",
     "prettier": "^3.4.0",
     "typescript-eslint": "^8.15.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true
   }
 }

@@ -1,18 +1,18 @@
 [
-  { "key": "agriculture", "name": "Agriculture", "ability": "economy" },
+  { "key": "agriculture", "name": "Agriculture", "ability": "stability" },
   { "key": "arts", "name": "Arts", "ability": "culture" },
-  { "key": "boating", "name": "Boating", "ability": "stability" },
+  { "key": "boating", "name": "Boating", "ability": "economy" },
   { "key": "defense", "name": "Defense", "ability": "stability" },
-  { "key": "engineering", "name": "Engineering", "ability": "economy" },
-  { "key": "exploration", "name": "Exploration", "ability": "stability" },
+  { "key": "engineering", "name": "Engineering", "ability": "stability" },
+  { "key": "exploration", "name": "Exploration", "ability": "economy" },
   { "key": "folklore", "name": "Folklore", "ability": "culture" },
   { "key": "industry", "name": "Industry", "ability": "economy" },
-  { "key": "intrigue", "name": "Intrigue", "ability": "culture" },
+  { "key": "intrigue", "name": "Intrigue", "ability": "loyalty" },
   { "key": "magic", "name": "Magic", "ability": "culture" },
-  { "key": "politics", "name": "Politics", "ability": "stability" },
+  { "key": "politics", "name": "Politics", "ability": "loyalty" },
   { "key": "scholarship", "name": "Scholarship", "ability": "culture" },
   { "key": "statecraft", "name": "Statecraft", "ability": "loyalty" },
   { "key": "trade", "name": "Trade", "ability": "economy" },
   { "key": "warfare", "name": "Warfare", "ability": "loyalty" },
-  { "key": "wilderness", "name": "Wilderness", "ability": "loyalty" }
+  { "key": "wilderness", "name": "Wilderness", "ability": "stability" }
 ]

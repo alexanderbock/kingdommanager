@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import type { Building, Settlement, StoredRecord } from '@kingdom/shared';
+import type {
+  Building,
+  Defense,
+  Settlement,
+  SettlementBorder,
+  SettlementSide,
+  StoredRecord,
+} from '@kingdom/shared';
 import {
   blockCells,
   buildingCells,
@@ -8,6 +15,8 @@ import {
   fitsPlacement,
   overcrowdingFor,
   rectCells,
+  SETTLEMENT_SIDES,
+  settlementBorders,
   settlementGrid,
   type SettlementGrid,
 } from '@kingdom/shared';
@@ -35,6 +44,12 @@ const TYPE_LABELS: Record<SettlementType, string> = {
   town: 'Town (4 blocks)',
   city: 'City (9 blocks)',
   metropolis: 'Metropolis (9 blocks × N)',
+};
+const SIDE_LABELS: Record<SettlementSide, string> = {
+  north: 'North',
+  west: 'West',
+  south: 'South',
+  east: 'East',
 };
 
 /** A new building's details, before the user picks where to place it. */
@@ -119,6 +134,8 @@ function AddSettlementModal({
       grids: type === 'metropolis' ? Math.max(1, grids) : 1,
       location,
       buildings: [],
+      notes: '',
+      borders: settlementBorders({}),
     });
     setName('');
     setType('village');
@@ -189,6 +206,7 @@ function SettlementCard({ rec }: { rec: StoredRecord<Settlement> }) {
   const [conflict, setConflict] = useState<StoredRecord<Settlement> | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [modal, setModal] = useState<{ building: Building | null } | null>(null);
+  const [defenseSide, setDefenseSide] = useState<SettlementSide | null>(null);
   const [placing, setPlacing] = useState<BuildingDetails | null>(null);
   const [hoverAnchor, setHoverAnchor] = useState<number | null>(null);
   const deletedRef = useRef(false);
@@ -266,6 +284,14 @@ function SettlementCard({ rec }: { rec: StoredRecord<Settlement> }) {
     setDraft((d) => (d ? pruneTo({ ...d, type, grids: type === 'metropolis' ? d.grids : 1 }) : d));
   const upGrids = (n: number) =>
     setDraft((d) => (d && d.type === 'metropolis' ? pruneTo({ ...d, grids: Math.max(1, n) }) : d));
+
+  const borders = settlementBorders(draft);
+  const upBorder = (side: SettlementSide, patch: Partial<SettlementBorder>) =>
+    setDraft((d) => {
+      if (!d) return d;
+      const current = settlementBorders(d);
+      return { ...d, borders: { ...current, [side]: { ...current[side], ...patch } } };
+    });
 
   const addBuilding = (b: Building) =>
     setDraft((d) => (d ? { ...d, buildings: [...d.buildings, b] } : d));
@@ -385,6 +411,16 @@ function SettlementCard({ rec }: { rec: StoredRecord<Settlement> }) {
           <EditableText value={draft.location} onChange={(v) => up('location', v)} placeholder="Location" />
         </label>
       </div>
+      <label className="block">
+        <span className="label">Notes</span>
+        <EditableText
+          textarea
+          rows={3}
+          value={draft.notes ?? ''}
+          onChange={(v) => up('notes', v)}
+          placeholder="Notes"
+        />
+      </label>
 
       {occ.occupiedBlocks > 0 &&
         (occ.overcrowded ? (
@@ -399,111 +435,124 @@ function SettlementCard({ rec }: { rec: StoredRecord<Settlement> }) {
         ))}
 
       <div>
-        <div
-          className="grid gap-1"
-          style={{ gridTemplateColumns: `repeat(${grid.cols}, minmax(0, 1fr))` }}
-          onMouseLeave={() => setHoverAnchor(null)}
-        >
-          {/* 2×2 block outlines (behind the cells) */}
-          {Array.from({ length: grid.blocks }, (_, bi) => {
-            const a = blockCells(grid, bi)[0];
-            const col = a % grid.cols;
-            const row = Math.floor(a / grid.cols);
-            return (
-              <div
-                key={`block-${bi}`}
-                aria-hidden
-                style={{ gridColumn: `${col + 1} / span 2`, gridRow: `${row + 1} / span 2` }}
-                className="pointer-events-none z-10 rounded-md border-2 border-zinc-300 dark:border-zinc-600"
-              />
-            );
-          })}
-          {/* lots */}
-          {Array.from({ length: grid.totalCells }, (_, i) => {
-            const b = cellBuilding.get(i);
-            const col = i % grid.cols;
-            const row = Math.floor(i / grid.cols);
-            return (
-              <button
-                key={i}
-                type="button"
-                aria-label={`Lot ${row + 1}.${col + 1}`}
-                aria-hidden={b ? true : undefined}
-                tabIndex={b ? -1 : 0}
-                style={{ gridColumn: col + 1, gridRow: row + 1 }}
-                onMouseEnter={() => {
-                  if (placing) setHoverAnchor(i);
-                }}
-                onClick={() => {
-                  if (placing) tryPlace(i);
-                  else if (b) setModal({ building: b });
-                }}
-                className={`aspect-square rounded-sm ${
-                  b
-                    ? ''
-                    : 'bg-zinc-100 hover:bg-amber-200/70 dark:bg-zinc-800/60 dark:hover:bg-amber-500/30'
-                } ${placing ? 'cursor-crosshair' : ''}`}
-              />
-            );
-          })}
-          {/* buildings (span their w×h rectangle) */}
-          {draft.buildings.map((b) => {
-            const { anchor, w, h } = buildingRect(b, grid);
-            const col = anchor % grid.cols;
-            const row = Math.floor(anchor / grid.cols);
-            const sw = Math.min(w, grid.cols - col);
-            const sh = Math.min(h, grid.rows - row);
-            const img = b.image ?? '';
-            return (
-              <button
-                key={b.id}
-                type="button"
-                style={{ gridColumn: `${col + 1} / span ${sw}`, gridRow: `${row + 1} / span ${sh}` }}
-                title={`${b.name}${b.residential ? ' (residential)' : ''}${
-                  b.notes ? ` — ${b.notes}` : ''
-                }`}
-                onClick={() => {
-                  if (!placing) setModal({ building: b });
-                }}
-                className={`relative z-20 overflow-hidden rounded-sm border-2 text-xs font-semibold text-white ${
-                  b.residential ? 'border-amber-600 bg-amber-500/70' : 'border-sky-600 bg-sky-500/70'
-                } ${placing ? 'pointer-events-none' : ''}`}
-              >
-                {img && <img src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />}
-                {img ? (
-                  <span className="absolute bottom-0 left-0 m-0.5 rounded bg-black/50 px-1 text-[10px] leading-tight">
-                    {b.name.charAt(0).toUpperCase()}
-                  </span>
-                ) : (
-                  <span className="flex h-full w-full items-center justify-center">
-                    {b.name.charAt(0).toUpperCase()}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-          {/* placement preview */}
-          {placing && hoverAnchor !== null && (() => {
-            const col = hoverAnchor % grid.cols;
-            const row = Math.floor(hoverAnchor / grid.cols);
-            const valid = !placementError(hoverAnchor, placing.w, placing.h);
-            const sw = Math.min(placing.w, grid.cols - col);
-            const sh = Math.min(placing.h, grid.rows - row);
-            return (
-              <div
-                aria-hidden
-                style={{ gridColumn: `${col + 1} / span ${sw}`, gridRow: `${row + 1} / span ${sh}` }}
-                className={`pointer-events-none z-30 rounded-sm border-2 ${
-                  valid ? 'border-green-500 bg-green-500/25' : 'border-red-500 bg-red-500/25'
-                }`}
-              />
-            );
-          })()}
+        {/* urban grid framed by its four sides (bridges and defenses) */}
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-1">
+          {SETTLEMENT_SIDES.map((side) => (
+            <SideBar
+              key={side}
+              side={side}
+              border={borders[side]}
+              onToggleBridge={() => upBorder(side, { bridge: !borders[side].bridge })}
+              onEditDefense={() => setDefenseSide(side)}
+            />
+          ))}
+          <div
+            className="col-start-2 row-start-2 grid gap-1"
+            style={{ gridTemplateColumns: `repeat(${grid.cols}, minmax(0, 1fr))` }}
+            onMouseLeave={() => setHoverAnchor(null)}
+          >
+            {/* 2×2 block outlines (behind the cells) */}
+            {Array.from({ length: grid.blocks }, (_, bi) => {
+              const a = blockCells(grid, bi)[0];
+              const col = a % grid.cols;
+              const row = Math.floor(a / grid.cols);
+              return (
+                <div
+                  key={`block-${bi}`}
+                  aria-hidden
+                  style={{ gridColumn: `${col + 1} / span 2`, gridRow: `${row + 1} / span 2` }}
+                  className="pointer-events-none z-10 rounded-md border-2 border-zinc-300 dark:border-zinc-600"
+                />
+              );
+            })}
+            {/* lots */}
+            {Array.from({ length: grid.totalCells }, (_, i) => {
+              const b = cellBuilding.get(i);
+              const col = i % grid.cols;
+              const row = Math.floor(i / grid.cols);
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`Lot ${row + 1}.${col + 1}`}
+                  aria-hidden={b ? true : undefined}
+                  tabIndex={b ? -1 : 0}
+                  style={{ gridColumn: col + 1, gridRow: row + 1 }}
+                  onMouseEnter={() => {
+                    if (placing) setHoverAnchor(i);
+                  }}
+                  onClick={() => {
+                    if (placing) tryPlace(i);
+                    else if (b) setModal({ building: b });
+                  }}
+                  className={`aspect-square rounded-sm ${
+                    b
+                      ? ''
+                      : 'bg-zinc-100 hover:bg-amber-200/70 dark:bg-zinc-800/60 dark:hover:bg-amber-500/30'
+                  } ${placing ? 'cursor-crosshair' : ''}`}
+                />
+              );
+            })}
+            {/* buildings (span their w×h rectangle) */}
+            {draft.buildings.map((b) => {
+              const { anchor, w, h } = buildingRect(b, grid);
+              const col = anchor % grid.cols;
+              const row = Math.floor(anchor / grid.cols);
+              const sw = Math.min(w, grid.cols - col);
+              const sh = Math.min(h, grid.rows - row);
+              const img = b.image ?? '';
+              return (
+                <button
+                  key={b.id}
+                  type="button"
+                  style={{ gridColumn: `${col + 1} / span ${sw}`, gridRow: `${row + 1} / span ${sh}` }}
+                  title={`${b.name}${b.residential ? ' (residential)' : ''}${
+                    b.notes ? ` — ${b.notes}` : ''
+                  }`}
+                  onClick={() => {
+                    if (!placing) setModal({ building: b });
+                  }}
+                  className={`relative z-20 overflow-hidden rounded-sm border-2 text-xs font-semibold text-white ${
+                    b.residential ? 'border-amber-600 bg-amber-500/70' : 'border-sky-600 bg-sky-500/70'
+                  } ${placing ? 'pointer-events-none' : ''}`}
+                >
+                  {img && <img src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />}
+                  {img ? (
+                    <span className="absolute bottom-0 left-0 m-0.5 line-clamp-2 break-words rounded bg-black/50 px-1 text-left text-[10px] leading-tight">
+                      {b.name}
+                    </span>
+                  ) : (
+                    <span className="flex h-full w-full items-center justify-center overflow-hidden break-words p-0.5 text-center text-[10px] leading-tight">
+                      {b.name}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+            {/* placement preview */}
+            {placing && hoverAnchor !== null && (() => {
+              const col = hoverAnchor % grid.cols;
+              const row = Math.floor(hoverAnchor / grid.cols);
+              const valid = !placementError(hoverAnchor, placing.w, placing.h);
+              const sw = Math.min(placing.w, grid.cols - col);
+              const sh = Math.min(placing.h, grid.rows - row);
+              return (
+                <div
+                  aria-hidden
+                  style={{ gridColumn: `${col + 1} / span ${sw}`, gridRow: `${row + 1} / span ${sh}` }}
+                  className={`pointer-events-none z-30 rounded-sm border-2 ${
+                    valid ? 'border-green-500 bg-green-500/25' : 'border-red-500 bg-red-500/25'
+                  }`}
+                />
+              );
+            })()}
+          </div>
         </div>
         <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
           Each block is a 2×2 of lots. <span className="text-amber-600 dark:text-amber-400">■</span>{' '}
-          residential · <span className="text-sky-600 dark:text-sky-400">■</span> other — click a
-          building to edit it.
+          residential · <span className="text-sky-600 dark:text-sky-400">■</span> other ·{' '}
+          <span className="text-rose-600 dark:text-rose-400">■</span> defense — click a building to
+          edit it, or a side to toggle a bridge or add a defense.
         </p>
       </div>
 
@@ -625,7 +674,172 @@ function SettlementCard({ rec }: { rec: StoredRecord<Settlement> }) {
           onClose={() => setModal(null)}
         />
       )}
+      {defenseSide && (
+        <DefenseModal
+          key={defenseSide}
+          side={defenseSide}
+          defense={borders[defenseSide].defense}
+          onSave={(d) => {
+            upBorder(defenseSide, { defense: d });
+            setDefenseSide(null);
+          }}
+          onRemove={() => {
+            upBorder(defenseSide, { defense: null });
+            setDefenseSide(null);
+          }}
+          onClose={() => setDefenseSide(null)}
+        />
+      )}
     </div>
+  );
+}
+
+/** Where each side's bar sits in the 3×3 frame around the lot grid. */
+const SIDE_PLACEMENT: Record<SettlementSide, string> = {
+  north: 'col-start-2 row-start-1',
+  // W and E use vertical text, where a flex row already runs top to bottom.
+  west: 'col-start-1 row-start-2 [writing-mode:vertical-rl] rotate-180',
+  south: 'col-start-2 row-start-3',
+  east: 'col-start-3 row-start-2 [writing-mode:vertical-rl]',
+};
+
+/** One side of the urban grid: a bridge toggle and an optional defensive structure. */
+function SideBar({
+  side,
+  border,
+  onToggleBridge,
+  onEditDefense,
+}: {
+  side: SettlementSide;
+  border: SettlementBorder;
+  onToggleBridge: () => void;
+  onEditDefense: () => void;
+}) {
+  const label = SIDE_LABELS[side];
+  const d = border.defense;
+  return (
+    <div className={`flex items-center justify-center gap-1 text-xs ${SIDE_PLACEMENT[side]}`}>
+      <button
+        type="button"
+        aria-pressed={border.bridge}
+        title={`${label}: ${border.bridge ? 'bridge (click to remove)' : 'no bridge (click to add)'}`}
+        onClick={onToggleBridge}
+        className={`rounded-sm border px-1.5 py-0.5 font-medium ${
+          border.bridge
+            ? 'border-zinc-600 bg-zinc-500/70 text-white'
+            : 'border-dashed border-zinc-300 text-zinc-400 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800'
+        }`}
+      >
+        Bridge
+      </button>
+      {d ? (
+        <span className="flex items-center gap-1 rounded-sm border-2 border-rose-600 bg-rose-500/70 px-1.5 py-0.5 font-semibold text-white">
+          <button
+            type="button"
+            title={`${label} defense${d.notes ? ` — ${d.notes}` : ''}`}
+            onClick={onEditDefense}
+          >
+            {d.name}
+          </button>
+          {d.link && (
+            <a href={d.link} target="_blank" rel="noreferrer" title={d.link} className="hover:underline">
+              ↗
+            </a>
+          )}
+        </span>
+      ) : (
+        <button
+          type="button"
+          title={`Add a defensive structure on the ${side} side`}
+          onClick={onEditDefense}
+          className="rounded-sm border border-dashed border-zinc-300 px-1.5 py-0.5 text-zinc-400 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800"
+        >
+          + Defense
+        </button>
+      )}
+    </div>
+  );
+}
+
+/** Create or edit the defensive structure on one side of a settlement. */
+function DefenseModal({
+  side,
+  defense,
+  onSave,
+  onRemove,
+  onClose,
+}: {
+  side: SettlementSide;
+  defense: Defense | null;
+  onSave: (d: Defense) => void;
+  onRemove: () => void;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState(defense?.name ?? '');
+  const [link, setLink] = useState(defense?.link ?? '');
+  const [notes, setNotes] = useState(defense?.notes ?? '');
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = () => {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      setError('Name is required.');
+      return;
+    }
+    onSave({ name: trimmed, link: link.trim(), notes });
+  };
+
+  return (
+    <Modal open title={`${SIDE_LABELS[side]} defense`} onClose={onClose}>
+      <div className="space-y-3">
+        <label className="block">
+          <span className="label">Name</span>
+          <input
+            className="field"
+            value={name}
+            placeholder="e.g. Wall, Gate"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <label className="block">
+          <span className="label">Link</span>
+          <input
+            className="field"
+            value={link}
+            placeholder="https://… (e.g. an Archives of Nethys page)"
+            onChange={(e) => setLink(e.target.value)}
+          />
+        </label>
+        <label className="block">
+          <span className="label">Notes</span>
+          <textarea
+            className="field"
+            rows={2}
+            value={notes}
+            placeholder="Notes"
+            onChange={(e) => setNotes(e.target.value)}
+          />
+        </label>
+        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            {defense && (
+              <button className="btn-ghost text-red-600 dark:text-red-400" onClick={onRemove}>
+                Remove
+              </button>
+            )}
+          </div>
+          <div className="flex gap-2">
+            <button className="btn-ghost" onClick={onClose}>
+              Cancel
+            </button>
+            <button className="btn-primary" onClick={submit}>
+              {defense ? 'Save defense' : 'Add defense'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Modal>
   );
 }
 

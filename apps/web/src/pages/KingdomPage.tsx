@@ -20,8 +20,8 @@ type CommodityKey = keyof Kingdom['commodities'];
 type WorkSiteType = Kingdom['workSites'][number]['type'];
 
 const ABILITIES: AbilityKey[] = ['culture', 'economy', 'loyalty', 'stability'];
-const RUINS: RuinKey[] = ['corruption', 'crime', 'decay', 'strife'];
-const COMMODITIES: CommodityKey[] = ['food', 'lumber', 'luxuries', 'ore', 'stone'];
+const RUINS: RuinKey[] = ['corruption', 'crime', 'strife', 'decay'];
+const COMMODITIES: CommodityKey[] = ['food', 'luxuries', 'lumber', 'ore', 'stone'];
 const WORK_SITE_TYPES: WorkSiteType[] = ['farmland', 'lumber', 'mine', 'quarry'];
 const GOVERNMENTS = ['Despotism', 'Feudalism', 'Oligarchy', 'Republic', 'Thaumocracy', 'Yeomanry'];
 

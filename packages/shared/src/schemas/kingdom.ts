@@ -7,7 +7,7 @@ export const AbilityScore = z.object({
   modifier: Num,
 });
 
-export const RuinKey = z.enum(['corruption', 'crime', 'decay', 'strife']);
+export const RuinKey = z.enum(['corruption', 'crime', 'strife', 'decay']);
 export const RuinScore = z.object({
   value: Num,
   threshold: Num,
@@ -102,7 +102,7 @@ export const LeaderRole = z.enum([
   'general',
   'emissary',
   'magister',
-  'marshal',
+  'warden',
   'treasurer',
   'viceroy',
 ]);

@@ -40,6 +40,33 @@ export const BuildingSchema = z.union([
 ]);
 export type Building = z.infer<typeof BuildingSchema>;
 
+export const SettlementSide = z.enum(['north', 'west', 'south', 'east']);
+export type SettlementSide = z.infer<typeof SettlementSide>;
+
+/** A defensive structure (wall, gate…) on one side of the urban grid. */
+export const DefenseSchema = z.object({
+  name: z.string(),
+  /** Optional external link (e.g. an Archives of Nethys page). */
+  link: z.string().optional(),
+  notes: z.string().optional(),
+});
+export type Defense = z.infer<typeof DefenseSchema>;
+
+export const SettlementBorderSchema = z.object({
+  bridge: z.boolean(),
+  /** null = no defensive structure on this side. */
+  defense: DefenseSchema.nullable(),
+});
+export type SettlementBorder = z.infer<typeof SettlementBorderSchema>;
+
+export const SettlementBordersSchema = z.object({
+  north: SettlementBorderSchema,
+  west: SettlementBorderSchema,
+  south: SettlementBorderSchema,
+  east: SettlementBorderSchema,
+});
+export type SettlementBorders = z.infer<typeof SettlementBordersSchema>;
+
 export const SettlementSchema = z.object({
   name: z.string(),
   /** village = 1 block, town = 4, city = 9, metropolis = 9 per grid. */
@@ -48,6 +75,9 @@ export const SettlementSchema = z.object({
   grids: Int,
   location: z.string(),
   buildings: z.array(BuildingSchema),
+  /** Optional: older records predate notes and borders (see settlementBorders). */
+  notes: z.string().optional(),
+  borders: SettlementBordersSchema.optional(),
 });
 export type Settlement = z.infer<typeof SettlementSchema>;
 

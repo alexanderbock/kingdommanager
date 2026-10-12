@@ -1,4 +1,4 @@
-import type { Building, Settlement } from './schemas/settlements.js';
+import type { Building, Settlement, SettlementBorders, SettlementSide } from './schemas/settlements.js';
 
 type SettlementType = Settlement['type'];
 
@@ -114,4 +114,13 @@ export function overcrowdingFor(settlement: Pick<Settlement, 'type' | 'grids' | 
     for (const c of cells) occupied.add(blockOfCell(grid, c));
   }
   return { occupiedBlocks: occupied.size, residentialLots, overcrowded: residentialLots < occupied.size };
+}
+/** The four sides of the urban grid, in display order. */
+export const SETTLEMENT_SIDES: SettlementSide[] = ['north', 'west', 'south', 'east'];
+
+/** A settlement's borders; older records without any get four empty sides. */
+export function settlementBorders(settlement: Pick<Settlement, 'borders'>): SettlementBorders {
+  if (settlement.borders) return settlement.borders;
+  const empty = () => ({ bridge: false, defense: null });
+  return { north: empty(), west: empty(), south: empty(), east: empty() };
 }

@@ -42,7 +42,7 @@ test('proficiency bonus updates as soon as the dropdown changes', async ({ page 
 test('leaders page lists all 8 roles', async ({ page }) => {
   await page.goto('/leaders');
   await expect(page.getByRole('heading', { name: 'Leaders' })).toBeVisible();
-  const roles = ['ruler', 'counselor', 'general', 'emissary', 'magister', 'marshal', 'treasurer', 'viceroy'];
+  const roles = ['ruler', 'counselor', 'general', 'emissary', 'magister', 'warden', 'treasurer', 'viceroy'];
   for (const role of roles) {
     await expect(page.getByRole('heading', { name: role, exact: true })).toBeVisible();
   }
