@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type {
   Activity,
+  KingdomSkill,
   Leader,
   Settlement,
   Step,
@@ -68,6 +69,7 @@ function ActiveTurnView({ turn }: { turn: Turn }) {
   const patchStep = usePatchStep();
   const leaders = useList<Leader>('leaders');
   const settlements = useList<Settlement>('settlements');
+  const skills = useList<KingdomSkill>('skills');
   const kingdom = useKingdom();
   const activities = useCatalog<Activity[]>('activities');
   const template = useCatalog<TurnTemplate>('turn-template');
@@ -165,6 +167,7 @@ function ActiveTurnView({ turn }: { turn: Turn }) {
             settlements={settlements.data}
             activities={(activities.data ?? []).filter((a) => a.enabled)}
             controlDc={kingdom.data?.data.controlDc ?? null}
+            skills={skills.data}
           />
         )}
       </div>
@@ -183,6 +186,8 @@ interface StepPanelProps {
   activities: Activity[];
   /** Typed in on the Kingdom page; null when not set. */
   controlDc: number | null;
+  /** Shown with their totals on the activity steps. */
+  skills?: StoredRecord<KingdomSkill>[];
 }
 
 function StepPanel({
@@ -195,6 +200,7 @@ function StepPanel({
   settlements,
   activities,
   controlDc,
+  skills,
 }: StepPanelProps) {
   const state: StepState = turn.stepState[step.key] ?? { done: false, checklist: {}, notes: '' };
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -244,6 +250,28 @@ function StepPanel({
             </span>
           )}
         </p>
+      )}
+
+      {pickerMode && skills && (
+        <div className="mb-3" data-testid="skill-totals">
+          <h3 className="label">Skill bonuses</h3>
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-sm sm:grid-cols-3 xl:grid-cols-4">
+            {[...skills]
+              .sort((a, b) => a.data.name.localeCompare(b.data.name))
+              .map((rec) => (
+                <div key={rec.id} className="flex justify-between gap-2">
+                  <dt className="text-zinc-600 dark:text-zinc-300">{rec.data.name}</dt>
+                  <dd className="font-semibold tabular-nums">
+                    {rec.data.total == null ? (
+                      <span className="font-normal text-zinc-400 dark:text-zinc-500">—</span>
+                    ) : (
+                      `${rec.data.total >= 0 ? '+' : ''}${rec.data.total}`
+                    )}
+                  </dd>
+                </div>
+              ))}
+          </dl>
+        </div>
       )}
 
       {links.length > 0 && (
