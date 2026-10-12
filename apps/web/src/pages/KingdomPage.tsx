@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import type { Kingdom, StoredRecord } from '@kingdom/shared';
+import type { Kingdom, Milestone, StoredRecord } from '@kingdom/shared';
 import { ConflictDialog } from '../components/ConflictDialog';
 import { EditableText } from '../components/EditableText';
 import { NumberField } from '../components/NumberField';
@@ -9,8 +9,11 @@ import {
   ConflictError,
   useAutoRefetchOnError,
   useAutosave,
+  useActiveTurn,
   useDraft,
   useKingdom,
+  useList,
+  usePatch,
   usePatchKingdom,
 } from '../hooks/useRecords';
 
@@ -47,6 +50,125 @@ function NumField({
   title?: string;
 }) {
   return <NumberField min={0} value={value} onChange={onChange} title={title} />;
+}
+
+function MilestoneRow({ rec, activeTurn }: { rec: StoredRecord<Milestone>; activeTurn: number | null }) {
+  const qc = useQueryClient();
+  const { draft, setDraft, dirty, baseVersion, bumpBaseVersion } = useDraft(rec.data, rec.version);
+  const mutate = usePatch<Milestone>('milestones', rec.id);
+  const [conflict, setConflict] = useState<StoredRecord<Milestone> | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  const save = () => {
+    if (!draft) return;
+    mutate.mutate(
+      { data: draft, version: baseVersion ?? rec.version },
+      {
+        onSuccess: (saved) => {
+          setSaveError(null);
+          bumpBaseVersion(saved.version);
+        },
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
+      },
+    );
+  };
+  useAutosave({ draft, dirty, isPending: mutate.isPending, paused: conflict !== null, save });
+
+  if (!draft) return null;
+
+  // Checking a milestone records the active turn; unchecking clears it.
+  const toggle = (achieved: boolean) =>
+    setDraft((d) => (d ? { ...d, achieved, achievedOnTurn: achieved ? activeTurn : null } : d));
+
+  const forceSave = () => {
+    if (!conflict) return;
+    mutate.mutate(
+      { data: draft, version: conflict.version, force: true },
+      {
+        onSuccess: (saved) => {
+          setSaveError(null);
+          bumpBaseVersion(saved.version);
+          setConflict(null);
+        },
+        onError: (e) => {
+          if (e instanceof ConflictError) setConflict(e.current);
+          else setSaveError(describeSaveError(e));
+        },
+      },
+    );
+  };
+
+  return (
+    <li className="flex items-center gap-3 py-1.5">
+      <label className="flex flex-1 items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={draft.achieved}
+          onChange={(e) => toggle(e.target.checked)}
+          className="h-4 w-4 accent-amber-600"
+        />
+        <span className={draft.achieved ? 'text-zinc-500 line-through dark:text-zinc-400' : ''}>
+          {draft.name}
+        </span>
+      </label>
+      {saveError && (
+        <span className="text-xs text-red-600 dark:text-red-400" title={saveError}>
+          Save failed
+        </span>
+      )}
+      {draft.achieved && draft.achievedOnTurn !== null && (
+        <span className="text-xs text-zinc-500 dark:text-zinc-400">Turn {draft.achievedOnTurn}</span>
+      )}
+      <span className="w-14 text-right text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{draft.xp} XP</span>
+      <ConflictDialog
+        open={conflict !== null}
+        title={`Milestone "${draft.name}"`}
+        current={conflict}
+        onAcceptServer={() => {
+          if (conflict) {
+            qc.setQueryData<StoredRecord<Milestone>[]>(['milestones'], (list) =>
+              list ? list.map((r) => (r.id === conflict.id ? conflict : r)) : list,
+            );
+            setDraft(conflict.data);
+            setConflict(null);
+            setSaveError(null);
+          }
+        }}
+        onForce={forceSave}
+      />
+    </li>
+  );
+}
+
+function MilestonesSection() {
+  const { data, isLoading, error, isFetching, refetch } = useList<Milestone>('milestones');
+  useAutoRefetchOnError(error, isFetching, refetch);
+  const { data: turn } = useActiveTurn();
+  const activeTurn: number | null = turn?.data.number ?? null;
+
+  let body: ReactNode;
+  if (isLoading) body = <p className="text-sm text-zinc-500">Loading milestones…</p>;
+  else if (error || !data) body = <p className="text-sm text-red-600 dark:text-red-400">Could not load milestones.</p>;
+  else {
+    const achieved = data.filter((r) => r.data.achieved);
+    const xp = achieved.reduce((sum, r) => sum + r.data.xp, 0);
+    body = (
+      <>
+        <p className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
+          {achieved.length} / {data.length} achieved · {xp} XP earned
+        </p>
+        <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+          {data.map((rec) => (
+            <MilestoneRow key={rec.id} rec={rec} activeTurn={activeTurn} />
+          ))}
+        </ul>
+      </>
+    );
+  }
+  return <Section title="Milestones">{body}</Section>;
 }
 
 export function KingdomPage() {
@@ -414,6 +536,8 @@ export function KingdomPage() {
         <span className="label">Notes</span>
         <EditableText textarea rows={6} value={draft.notes} onChange={(v) => up('notes', v)} />
       </Section>
+
+      <MilestonesSection />
 
       <ConflictDialog
         open={conflict !== null}
