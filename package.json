@@ -12,7 +12,7 @@
     "typecheck": "npm run typecheck -w @kingdom/shared -w @kingdom/server -w @kingdom/web",
     "test": "npm run test -w @kingdom/server",
     "test:e2e": "npm run test:e2e -w @kingdom/web",
-    "start": "node apps/server/dist/index.js",
+    "start": "node --env-file-if-exists=.env apps/server/dist/index.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
